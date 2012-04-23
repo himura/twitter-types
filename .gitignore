@@ -1,6 +1,28 @@
-dist
-cabal-dev
+# General
+\#*#
+.*~
+*~
+.#*
+*.swp
+.DS_Store
+.gdb_history
+TAGS
+# Object files, etc
+*.a
 *.o
+*.so
 *.hi
+*.p_hi
 *.chi
 *.chs.h
+*.tix
+.hpc
+a.out
+# autotool
+autom4te.cache
+stamp-h1
+# misc
+*.sqlite
+Main
+dist/
+cabal-dev/
