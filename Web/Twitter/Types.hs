@@ -1,8 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
 
 module Web.Twitter.Types
-       ( TwitterTypesException(..)
-       , DateString
+       ( DateString
        , UserId
        , Friends
        , URLString
@@ -30,16 +29,8 @@ module Web.Twitter.Types
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Text as T
-import Data.ByteString (ByteString)
-import Data.Typeable
 import Control.Applicative
 import Control.Monad
-import Control.Exception
-
-data TwitterTypesException = ParserException SomeException [ByteString]
-                           | TwitterErrorMessage T.Text Value
-                           deriving (Show, Typeable)
-instance Exception TwitterTypesException
 
 type DateString   = String
 type UserId       = Integer
@@ -58,12 +49,12 @@ data StreamingAPI = SStatus Status
                   | SUnknown Value
                   deriving (Show, Eq)
 
-checkError :: Object -> Parser a
+checkError :: Object -> Parser ()
 checkError o = do
   err <- o .:? "error"
   case err of
-    Just msg -> throw $ TwitterErrorMessage msg (Object o)
-    Nothing -> mzero
+    Just msg -> fail msg
+    Nothing -> return ()
 
 instance FromJSON StreamingAPI where
   parseJSON v@(Object _) =
@@ -94,7 +85,7 @@ data Status =
   } deriving (Show, Eq)
 
 instance FromJSON Status where
-  parseJSON (Object o) = checkError o <|>
+  parseJSON (Object o) = checkError o >>
     Status <$> o .:  "created_at"
            <*> o .:  "id"
            <*> o .:  "text"
@@ -119,7 +110,7 @@ data SearchStatus =
   } deriving (Show, Eq)
 
 instance FromJSON SearchStatus where
-  parseJSON (Object o) = checkError o <|>
+  parseJSON (Object o) = checkError o >>
     SearchStatus <$> o .:  "created_at"
                  <*> o .:  "id"
                  <*> o .:  "text"
@@ -141,7 +132,7 @@ data RetweetedStatus =
   } deriving (Show, Eq)
 
 instance FromJSON RetweetedStatus where
-  parseJSON (Object o) = checkError o <|>
+  parseJSON (Object o) = checkError o >>
     RetweetedStatus <$> o .:  "created_at"
                     <*> o .:  "id"
                     <*> o .:  "text"
@@ -161,7 +152,7 @@ data EventTarget = ETUser User | ETStatus Status | ETList List | ETUnknown Value
                  deriving (Show, Eq)
 
 instance FromJSON EventTarget where
-  parseJSON v@(Object o) = checkError o <|>
+  parseJSON v@(Object o) = checkError o >>
     ETUser <$> parseJSON v <|>
     ETStatus <$> parseJSON v <|>
     ETList <$> parseJSON v <|>
@@ -178,7 +169,7 @@ data Event =
   } deriving (Show, Eq)
 
 instance FromJSON Event where
-  parseJSON (Object o) = checkError o <|>
+  parseJSON (Object o) = checkError o >>
     Event <$> o .:  "created_at"
           <*> o .:? "target_object"
           <*> o .:  "event"
@@ -193,7 +184,7 @@ data Delete =
   } deriving (Show, Eq)
 
 instance FromJSON Delete where
-  parseJSON (Object o) = checkError o <|> do
+  parseJSON (Object o) = checkError o >> do
     s <- o .: "delete" >>= (.: "status")
     Delete <$> s .: "id"
            <*> s .: "user_id"
@@ -217,7 +208,7 @@ data User =
   } deriving (Show, Eq)
 
 instance FromJSON User where
-  parseJSON (Object o) = checkError o <|>
+  parseJSON (Object o) = checkError o >>
     User <$> o .:  "id"
          <*> o .:  "name"
          <*> o .:  "screen_name"
@@ -245,7 +236,7 @@ data List =
   } deriving (Show, Eq)
 
 instance FromJSON List where
-  parseJSON (Object o) = checkError o <|>
+  parseJSON (Object o) = checkError o >>
     List <$> o .:  "id"
          <*> o .:  "name"
          <*> o .:  "full_name"

@@ -41,3 +41,13 @@ case_parseStatusIncludeEntities = withJSON statusEntityJson $ \obj -> do
   let ent = fromMaybe (Entities [] [] []) $ statusEntities obj
   (map entityIndices . enHashTags) ent @?= [[32,42]]
   (hashTagText . entityBody . head . enHashTags) ent @?= "tcdisrupt"
+
+case_parseErrorMsg :: Assertion
+case_parseErrorMsg =
+  case parseStatus errorMsgJson of
+    Left str -> "Not authorized" @=? str
+    Right _ -> assertFailure "errorMsgJson should be parsed as an error."
+  where
+    parseStatus :: Value -> Either String Status
+    parseStatus = parseEither parseJSON
+
