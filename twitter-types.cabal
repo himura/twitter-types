@@ -28,3 +28,26 @@ library
 
   exposed-modules:
     Web.Twitter.Types
+
+test-suite tests
+  type:              exitcode-stdio-1.0
+  hs-source-dirs:    tests, .
+  main-is:           TypesTest.hs
+  build-depends:
+      base >= 4.0 && < 5
+    , template-haskell
+    , test-framework >= 0.3.3 && < 0.7
+    -- , test-framework-quickcheck2
+    , test-framework-th-prime
+    , test-framework-hunit
+    -- , test-framework-doctest
+    , HUnit
+    -- , QuickCheck
+    , shakespeare-text
+    , http-types
+    , aeson
+    , attoparsec
+    , bytestring
+    , text
+
+  ghc-options:       -Wall
