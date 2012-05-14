@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
 
 module Web.Twitter.Types
-       ( TwitterException(..)
+       ( TwitterTypesException(..)
        , DateString
        , UserId
        , Friends
@@ -27,7 +27,6 @@ module Web.Twitter.Types
        )
        where
 
-import qualified Network.HTTP.Types as HT
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Text as T
@@ -37,12 +36,10 @@ import Control.Applicative
 import Control.Monad
 import Control.Exception
 
-data TwitterException = HTTPStatusCodeException HT.Status
-                      | ParserException SomeException [ByteString]
-                      | TwitterErrorMessage T.Text Value
-                      | MissingCredential
-                      deriving (Show, Typeable)
-instance Exception TwitterException
+data TwitterTypesException = ParserException SomeException [ByteString]
+                           | TwitterErrorMessage T.Text Value
+                           deriving (Show, Typeable)
+instance Exception TwitterTypesException
 
 type DateString   = String
 type UserId       = Integer
