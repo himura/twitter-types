@@ -37,12 +37,9 @@ test-suite tests
       base >= 4.0 && < 5
     , template-haskell
     , test-framework >= 0.3.3 && < 0.7
-    -- , test-framework-quickcheck2
     , test-framework-th-prime
     , test-framework-hunit
-    -- , test-framework-doctest
     , HUnit
-    -- , QuickCheck
     , shakespeare-text
     , http-types
     , aeson
