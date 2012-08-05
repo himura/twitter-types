@@ -4,7 +4,7 @@ module Web.Twitter.Types
        ( DateString
        , UserId
        , Friends
-       , URLString
+       , URIString
        , UserName
        , StatusId
        , LanguageCode
@@ -29,15 +29,16 @@ module Web.Twitter.Types
 
 import Data.Aeson
 import Data.Aeson.Types (Parser)
-import Data.Text as T
+import Data.Text (Text)
+import Data.ByteString (ByteString)
 import Control.Applicative
 import Control.Monad
 
 type DateString   = String
 type UserId       = Integer
 type Friends      = [UserId]
-type URLString    = String
-type UserName     = T.Text
+type URIString    = ByteString
+type UserName     = Text
 type StatusId     = Integer
 type LanguageCode = String
 
@@ -74,8 +75,8 @@ data Status =
   Status
   { statusCreatedAt     :: DateString
   , statusId            :: StatusId
-  , statusText          :: T.Text
-  , statusSource        :: String
+  , statusText          :: Text
+  , statusSource        :: Text
   , statusTruncated     :: Bool
   , statusEntities      :: Maybe Entities
   , statusInReplyTo     :: Maybe StatusId
@@ -104,9 +105,9 @@ data SearchResult body =
   SearchResult
   { searchResultCompletedIn :: Float
   , searchResultMaxId :: StatusId
-  , searchResultNextPage :: Maybe String
-  , searchResultQuery :: String
-  , searchResultRefreshUrl :: String
+  , searchResultNextPage :: Maybe URIString
+  , searchResultQuery :: URIString
+  , searchResultRefreshUrl :: URIString
   , searchResultResults :: body
   , searchResultResultsPerPage :: Int
   , searchResultSinceId :: Integer
@@ -129,8 +130,8 @@ data SearchStatus =
   SearchStatus
   { searchStatusCreatedAt     :: DateString
   , searchStatusId            :: StatusId
-  , searchStatusText          :: T.Text
-  , searchStatusSource        :: String
+  , searchStatusText          :: Text
+  , searchStatusSource        :: Text
   , searchStatusUserId        :: UserId
   , searchStatusUserName      :: UserName
   } deriving (Show, Eq)
@@ -149,8 +150,8 @@ data RetweetedStatus =
   RetweetedStatus
   { rsCreatedAt       :: DateString
   , rsId              :: StatusId
-  , rsText            :: T.Text
-  , rsSource          :: String
+  , rsText            :: Text
+  , rsSource          :: Text
   , rsTruncated       :: Bool
   , rsEntities        :: Maybe Entities
   , rsUser            :: User
@@ -189,7 +190,7 @@ data Event =
   Event
   { evCreatedAt       :: DateString
   , evTargetObject    :: Maybe EventTarget
-  , evEvent           :: String
+  , evEvent           :: Text
   , evTarget          :: EventTarget
   , evSource          :: EventTarget
   } deriving (Show, Eq)
@@ -220,11 +221,11 @@ data User =
   User
   { userId              :: UserId
   , userName            :: UserName
-  , userScreenName      :: String
-  , userDescription     :: Maybe T.Text
-  , userLocation        :: Maybe T.Text
-  , userProfileImageURL :: Maybe URLString
-  , userURL             :: Maybe URLString
+  , userScreenName      :: Text
+  , userDescription     :: Maybe Text
+  , userLocation        :: Maybe Text
+  , userProfileImageURL :: Maybe URIString
+  , userURL             :: Maybe URIString
   , userProtected       :: Maybe Bool
   , userFollowers       :: Maybe Int
   , userFriends         :: Maybe Int
@@ -253,11 +254,11 @@ instance FromJSON User where
 data List =
   List
   { listId :: Int
-  , listName :: String
-  , listFullName :: String
+  , listName :: Text
+  , listFullName :: Text
   , listMemberCount :: Int
   , listSubscriberCount :: Int
-  , listMode :: String
+  , listMode :: Text
   , listUser :: User
   } deriving (Show, Eq)
 
@@ -274,7 +275,7 @@ instance FromJSON List where
 
 data HashTagEntity =
   HashTagEntity
-  { hashTagText :: T.Text -- ^ The Hashtag text
+  { hashTagText :: Text -- ^ The Hashtag text
   } deriving (Show, Eq)
 
 instance FromJSON HashTagEntity where
@@ -293,9 +294,9 @@ instance FromJSON UserEntity where
 
 data URLEntity =
   URLEntity
-  { ueURL      :: URLString -- ^ The URL that was extracted
-  , ueExpanded :: URLString -- ^ The fully resolved URL (only for t.co links)
-  , ueDisplay  :: T.Text    -- ^ Not a URL but a string to display instead of the URL (only for t.co links)
+  { ueURL      :: URIString -- ^ The URL that was extracted
+  , ueExpanded :: URIString -- ^ The fully resolved URL (only for t.co links)
+  , ueDisplay  :: Text    -- ^ Not a URL but a string to display instead of the URL (only for t.co links)
   } deriving (Show, Eq)
 
 instance FromJSON URLEntity where
