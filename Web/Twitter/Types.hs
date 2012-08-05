@@ -57,12 +57,12 @@ checkError o = do
     Nothing -> return ()
 
 instance FromJSON StreamingAPI where
-  parseJSON v@(Object _) =
+  parseJSON v@(Object o) =
     SRetweetedStatus <$> js <|>
     SStatus <$> js <|>
     SEvent <$> js <|>
     SDelete <$> js <|>
-    SFriends <$> js <|>
+    SFriends <$> (o .: "friends") <|>
     return (SUnknown v)
     where
       js :: FromJSON a => Parser a
