@@ -13,6 +13,7 @@ module Web.Twitter.Types
        , SearchResult(..)
        , SearchStatus(..)
        , RetweetedStatus(..)
+       , DirectMessage(..)
        , EventTarget(..)
        , Event(..)
        , Delete(..)
@@ -168,6 +169,32 @@ instance FromJSON RetweetedStatus where
                     <*> o .:? "entities"
                     <*> o .:  "user"
                     <*> o .:  "retweeted_status"
+  parseJSON _ = mzero
+
+data DirectMessage =
+  DirectMessage
+  { dmCreatedAt          :: DateString
+  , dmSenderScreenName   :: Text
+  , dmSender             :: User
+  , dmText               :: Text
+  , dmRecipientScreeName :: Text
+  , dmId                 :: StatusId
+  , dmRecipient          :: User
+  , dmRecipientId        :: UserId
+  , dmSenderId           :: UserId
+  } deriving (Show, Eq)
+
+instance FromJSON DirectMessage where
+  parseJSON (Object o) = checkError o >>
+    DirectMessage <$> o .:  "created_at"
+                  <*> o .:  "sender_screen_name"
+                  <*> o .:  "sender"
+                  <*> o .:  "text"
+                  <*> o .:  "recipient_screen_name"
+                  <*> o .:  "id"
+                  <*> o .:  "recipient"
+                  <*> o .:  "recipient_id"
+                  <*> o .:  "sender_id"
   parseJSON _ = mzero
 
 data EventType = Favorite | Unfavorite
