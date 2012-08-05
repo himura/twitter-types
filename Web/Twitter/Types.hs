@@ -337,4 +337,3 @@ instance FromJSON a => FromJSON (Entity a) where
     Entity <$> parseJSON v
            <*> o .: "indices"
   parseJSON _ = mzero
-
