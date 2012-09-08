@@ -78,7 +78,7 @@ data Status =
   , statusId            :: StatusId
   , statusText          :: Text
   , statusSource        :: Text
-  , statusTruncated     :: Maybe Text
+  , statusTruncated     :: Bool
   , statusEntities      :: Maybe Entities
   , statusInReplyTo     :: Maybe StatusId
   , statusInReplyToUser :: Maybe UserId
