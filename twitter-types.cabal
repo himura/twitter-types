@@ -25,6 +25,7 @@ library
     , aeson >= 0.3.2.2
     , bytestring
     , text
+    , unordered-containers
 
   exposed-modules:
     Web.Twitter.Types
@@ -46,5 +47,6 @@ test-suite tests
     , attoparsec
     , bytestring
     , text
+    , unordered-containers
 
   ghc-options:       -Wall
