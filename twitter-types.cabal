@@ -25,6 +25,7 @@ library
     , aeson >= 0.3.2.2
     , bytestring
     , text
+    , unordered-containers
 
   exposed-modules:
     Web.Twitter.Types
@@ -36,7 +37,7 @@ test-suite tests
   build-depends:
       base >= 4.0 && < 5
     , template-haskell
-    , test-framework >= 0.3.3 && < 0.7
+    , test-framework >= 0.3.3
     , test-framework-th-prime
     , test-framework-hunit
     , HUnit
@@ -46,5 +47,6 @@ test-suite tests
     , attoparsec
     , bytestring
     , text
+    , unordered-containers
 
   ghc-options:       -Wall

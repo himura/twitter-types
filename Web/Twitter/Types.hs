@@ -24,6 +24,8 @@ module Web.Twitter.Types
        , HashTagEntity(..)
        , UserEntity(..)
        , URLEntity(..)
+       , MediaEntity(..)
+       , MediaSize(..)
        , checkError
        )
        where
@@ -32,6 +34,7 @@ import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Text (Text)
 import Data.ByteString (ByteString)
+import Data.HashMap.Strict (HashMap)
 import Control.Applicative
 import Control.Monad
 
@@ -333,12 +336,47 @@ instance FromJSON URLEntity where
               <*> o .:  "display_url"
   parseJSON _ = mzero
 
+data MediaEntity =
+  MediaEntity
+  { meType :: Text
+  , meId :: StatusId
+  , meSizes :: HashMap Text MediaSize
+  , meMediaURL :: URIString
+  , meMediaURLHttps :: URIString
+  , meURL :: URLEntity
+  } deriving (Show, Eq)
+
+instance FromJSON MediaEntity where
+  parseJSON v@(Object o) =
+    MediaEntity <$> o .: "type"
+                <*> o .: "id"
+                <*> o .: "sizes"
+                <*> o .: "media_url"
+                <*> o .: "media_url_https"
+                <*> parseJSON v
+  parseJSON _ = mzero
+
+data MediaSize =
+  MediaSize
+  { msWidth :: Int
+  , msHeight :: Int
+  , msResize :: Text
+  } deriving (Show, Eq)
+
+instance FromJSON MediaSize where
+  parseJSON (Object o) =
+    MediaSize <$> o .: "w"
+              <*> o .: "h"
+              <*> o .: "resize"
+  parseJSON _ = mzero
+
 -- | Entity handling.
 data Entities =
   Entities
   { enHashTags     :: [Entity HashTagEntity]
   , enUserMentions :: [Entity UserEntity]
   , enURLs         :: [Entity URLEntity]
+  , enMedia        :: Maybe [Entity MediaEntity]
   } deriving (Show, Eq)
 
 instance FromJSON Entities where
@@ -346,6 +384,7 @@ instance FromJSON Entities where
     Entities <$> o .:  "hashtags"
              <*> o .:  "user_mentions"
              <*> o .:  "urls"
+             <*> o .:? "media"
   parseJSON _ = mzero
 
 -- | The character positions the Entity was extracted from
