@@ -12,6 +12,7 @@ module Web.Twitter.Types
        , Status(..)
        , SearchResult(..)
        , SearchStatus(..)
+       , SearchMetadata(..)
        , RetweetedStatus(..)
        , DirectMessage(..)
        , EventTarget(..)
@@ -107,27 +108,15 @@ instance FromJSON Status where
 
 data SearchResult body =
   SearchResult
-  { searchResultCompletedIn :: Float
-  , searchResultMaxId :: StatusId
-  , searchResultNextPage :: Maybe URIString
-  , searchResultQuery :: URIString
-  , searchResultRefreshUrl :: URIString
-  , searchResultResults :: body
-  , searchResultResultsPerPage :: Int
-  , searchResultSinceId :: Integer
+  { searchResultStatuses :: body
+  , searchResultSearchMetadata :: SearchMetadata
   } deriving (Show, Eq)
 
 instance FromJSON body =>
          FromJSON (SearchResult body) where
   parseJSON (Object o) = checkError o >>
-    SearchResult <$> o .:  "completed_in"
-                 <*> o .:  "max_id"
-                 <*> o .:? "next_page"
-                 <*> o .:  "query"
-                 <*> o .:  "refresh_url"
-                 <*> o .:  "results"
-                 <*> o .:  "results_per_page"
-                 <*> o .:  "since_id"
+    SearchResult <$> o .:  "statuses"
+                 <*> o .:  "search_metadata"
   parseJSON _ = mzero
 
 data SearchStatus =
@@ -136,8 +125,7 @@ data SearchStatus =
   , searchStatusId            :: StatusId
   , searchStatusText          :: Text
   , searchStatusSource        :: Text
-  , searchStatusUserId        :: UserId
-  , searchStatusUserName      :: UserName
+  , searchStatusUser          :: User
   } deriving (Show, Eq)
 
 instance FromJSON SearchStatus where
@@ -146,8 +134,33 @@ instance FromJSON SearchStatus where
                  <*> o .:  "id"
                  <*> o .:  "text"
                  <*> o .:  "source"
-                 <*> o .:  "from_user_id"
-                 <*> o .:  "from_user"
+                 <*> o .:  "user"
+  parseJSON _ = mzero
+
+data SearchMetadata =
+  SearchMetadata
+  { searchMetadataMaxId         :: StatusId
+  , searchMetadataSinceId       :: StatusId
+  , searchMetadataRefreshUrl    :: URIString
+  , searchMetadataNextResults   :: URIString
+  , searchMetadataCount         :: Int
+  , searchMetadataCompletedIn   :: Maybe Float
+  , searchMetadataSinceIdStr    :: String
+  , searchMetadataQuery         :: String
+  , searchMetadataMaxIdStr      :: String
+  } deriving (Show, Eq)
+
+instance FromJSON SearchMetadata where
+  parseJSON (Object o) = checkError o >>
+    SearchMetadata <$> o .:  "max_id"
+                   <*> o .:  "since_id"
+                   <*> o .:  "refresh_url"
+                   <*> o .:  "next_results"
+                   <*> o .:  "count"
+                   <*> o .:? "completed_in"
+                   <*> o .:  "since_id_str"
+                   <*> o .:  "query"
+                   <*> o .:  "max_id_str"
   parseJSON _ = mzero
 
 data RetweetedStatus =
