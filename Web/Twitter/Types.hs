@@ -142,7 +142,7 @@ data SearchMetadata =
   { searchMetadataMaxId         :: StatusId
   , searchMetadataSinceId       :: StatusId
   , searchMetadataRefreshUrl    :: URIString
-  , searchMetadataNextResults   :: URIString
+  , searchMetadataNextResults   :: Maybe URIString
   , searchMetadataCount         :: Int
   , searchMetadataCompletedIn   :: Maybe Float
   , searchMetadataSinceIdStr    :: String
@@ -155,7 +155,7 @@ instance FromJSON SearchMetadata where
     SearchMetadata <$> o .:  "max_id"
                    <*> o .:  "since_id"
                    <*> o .:  "refresh_url"
-                   <*> o .:  "next_results"
+                   <*> o .:? "next_results"
                    <*> o .:  "count"
                    <*> o .:? "completed_in"
                    <*> o .:  "since_id_str"
