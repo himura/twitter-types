@@ -116,6 +116,8 @@ module Web.Twitter.Types.Lens
 
        , entityBody
        , entityIndices
+
+       , AsStatus(..)
        )
        where
 
