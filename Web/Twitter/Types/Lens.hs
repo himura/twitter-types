@@ -185,8 +185,6 @@ name f record = (\newVal -> record { TT.name = newVal }) <$> (f (TT.name record)
 name :: Lens ((s) a) ((s) b) (a) (b);\
 name f record = (\newVal -> record { TT.name = newVal }) <$> (f (TT.name record))
 
-#define STATUS_SIMPLE_LENS(name, type) SIMPLE_LENS(name, TT.Status, type)
-
 SIMPLE_LENS(statusCreatedAt           , Status,  DateString                   )
 SIMPLE_LENS(statusId                  , Status,  StatusId                     )
 SIMPLE_LENS(statusText                , Status,  Text                         )
