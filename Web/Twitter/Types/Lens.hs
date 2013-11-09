@@ -271,29 +271,27 @@ SIMPLE_LENS(enMedia                   , Entities,  Maybe [Entity MediaEntity] )
 TYPECHANGE_LENS(entityBody            , Entity                                )
 SIMPLE_LENS(entityIndices             , Entity a,  EntityIndices              )
 
-class AsText s where
+class AsStatus s where
     text :: Lens' s Text
-
-instance AsText Status where text = statusText
-instance AsText SearchStatus where text = searchStatusText
-instance AsText RetweetedStatus where text = rsText
-instance AsText DirectMessage where text = dmText
-
-class AsUser s where
     user :: Lens' s User
-
-instance AsUser Status where user = statusUser
-instance AsUser SearchStatus where user = searchStatusUser
-instance AsUser RetweetedStatus where user = rsUser
--- PENDING: AsUser DirectMessage
---   instance AsUser DirectMessage where user = dmSender
--- or
---   instance AsUser DirectMessage where user = dmRecipient
-
-class AsCreatedAt s where
     created_at :: Lens' s DateString
 
-instance AsCreatedAt Status where created_at = statusCreatedAt
-instance AsCreatedAt SearchStatus where created_at = searchStatusCreatedAt
-instance AsCreatedAt RetweetedStatus where created_at = rsCreatedAt
-instance AsCreatedAt DirectMessage where created_at = dmCreatedAt
+instance AsStatus Status where
+    text = statusText
+    user = statusUser
+    created_at = statusCreatedAt
+
+instance AsStatus SearchStatus where
+    text = searchStatusText
+    user = searchStatusUser
+    created_at = searchStatusCreatedAt
+
+instance AsStatus RetweetedStatus where
+    text = rsText
+    user = rsUser
+    created_at = rsCreatedAt
+
+instance AsStatus DirectMessage where
+    text = dmText
+    user = dmSender
+    created_at = dmCreatedAt
