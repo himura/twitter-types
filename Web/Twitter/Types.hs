@@ -21,6 +21,7 @@ module Web.Twitter.Types
        , User(..)
        , List(..)
        , Entities(..)
+       , EntityIndices
        , Entity(..)
        , HashTagEntity(..)
        , UserEntity(..)
