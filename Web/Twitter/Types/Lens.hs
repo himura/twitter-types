@@ -156,7 +156,8 @@ type Lens' s a = Lens s s a a
 
 #define SIMPLE_LENS(name, s, a) \
 name :: Lens' (s) (a);\
-name f record = (\newVal -> record { TT.name = newVal }) <$> (f (TT.name record))
+name f record = (\newVal -> record { TT.name = newVal }) <$> (f (TT.name record));\
+{-# INLINE name #-}
 
 #define TYPECHANGE_LENS(name, s) \
 name :: Lens ((s) a) ((s) b) (a) (b);\
@@ -269,3 +270,4 @@ SIMPLE_LENS(enMedia                   , Entities,  Maybe [Entity MediaEntity] )
 
 TYPECHANGE_LENS(entityBody            , Entity                                )
 SIMPLE_LENS(entityIndices             , Entity a,  EntityIndices              )
+
