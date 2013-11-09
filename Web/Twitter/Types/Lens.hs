@@ -1,15 +1,33 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RankNTypes, CPP #-}
 
 module Web.Twitter.Types.Lens
-       ( TT.DateString
-       , TT.UserId
-       , TT.Friends
-       , TT.URIString
-       , TT.UserName
-       , TT.StatusId
-       , TT.LanguageCode
-       , TT.StreamingAPI(..)
-       , TT.Status
+       ( DateString
+       , UserId
+       , Friends
+       , URIString
+       , UserName
+       , StatusId
+       , LanguageCode
+       , StreamingAPI(..)
+       , Status
+       , SearchResult
+       , SearchStatus
+       , SearchMetadata
+       , RetweetedStatus
+       , DirectMessage
+       , EventTarget(..)
+       , Event
+       , Delete
+       , User
+       , List
+       , Entities
+       , EntityIndices
+       , Entity
+       , HashTagEntity
+       , UserEntity(..)
+       , URLEntity
+       , MediaEntity
+       , MediaSize
 
        , statusCreatedAt
        , statusId
@@ -126,10 +144,12 @@ import qualified Web.Twitter.Types as TT
 import Web.Twitter.Types
        ( DateString
        , UserId
+       , Friends
        , URIString
        , UserName
        , StatusId
        , LanguageCode
+       , StreamingAPI
        , Status
        , SearchResult
        , SearchStatus
