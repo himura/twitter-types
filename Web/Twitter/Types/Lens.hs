@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RankNTypes, CPP #-}
+{-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RankNTypes, CPP, FlexibleInstances #-}
 
 module Web.Twitter.Types.Lens
        ( DateString
@@ -140,6 +140,7 @@ module Web.Twitter.Types.Lens
        , entityIndices
 
        , AsStatus(..)
+       , AsUser(..)
        )
        where
 
@@ -323,3 +324,23 @@ instance AsStatus DirectMessage where
     text = dmText
     user = dmSender
     created_at = dmCreatedAt
+
+class AsUser u where
+    user_id :: Lens' u UserId
+    name :: Lens' u UserName
+    screen_name :: Lens' u Text
+
+instance AsUser User where
+    user_id = userId
+    name = userName
+    screen_name = userScreenName
+
+instance AsUser UserEntity where
+    user_id = userEntityUserId
+    name = userEntityUserName
+    screen_name = userEntityUserScreenName
+
+instance AsUser (Entity UserEntity) where
+    user_id = entityBody.userEntityUserId
+    name = entityBody.userEntityUserName
+    screen_name = entityBody.userEntityUserScreenName
