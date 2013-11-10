@@ -301,26 +301,31 @@ TYPECHANGE_LENS(entityBody            , Entity                                )
 SIMPLE_LENS(entityIndices             , Entity a,  EntityIndices              )
 
 class AsStatus s where
+    status_id :: Lens' s StatusId
     text :: Lens' s Text
     user :: Lens' s User
     created_at :: Lens' s DateString
 
 instance AsStatus Status where
+    status_id = statusId
     text = statusText
     user = statusUser
     created_at = statusCreatedAt
 
 instance AsStatus SearchStatus where
+    status_id = searchStatusId
     text = searchStatusText
     user = searchStatusUser
     created_at = searchStatusCreatedAt
 
 instance AsStatus RetweetedStatus where
+    status_id = rsId
     text = rsText
     user = rsUser
     created_at = rsCreatedAt
 
 instance AsStatus DirectMessage where
+    status_id = dmId
     text = dmText
     user = dmSender
     created_at = dmCreatedAt
