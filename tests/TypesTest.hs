@@ -86,10 +86,10 @@ case_parseEntityHashTag = withJSON (fj [st|{"symbols":[],"urls":[{"indices":[32,
     ueExpanded urlEntity @?= "http://www.youtube.com/watch?v=oHg5SJYRHA0"
     ueDisplay urlEntity @?= "youtube.com/watch?v=oHg5SJ\x2026"
 
-    let UserEntity mentionsUser = entityBody . head . enUserMentions $ entity
-    userName mentionsUser @?= "Twitter API"
-    userScreenName mentionsUser @?= "twitterapi"
-    userId mentionsUser @?= 6253282
+    let mentionsUser = entityBody . head . enUserMentions $ entity
+    userEntityUserName mentionsUser @?= "Twitter API"
+    userEntityUserScreenName mentionsUser @?= "twitterapi"
+    userEntityUserId mentionsUser @?= 6253282
 
     let HashTagEntity hashtag = entityBody . head . enHashTags $ entity
     hashtag @?= "lol"
