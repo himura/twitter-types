@@ -390,15 +390,15 @@ data Entities =
   { enHashTags     :: [Entity HashTagEntity]
   , enUserMentions :: [Entity UserEntity]
   , enURLs         :: [Entity URLEntity]
-  , enMedia        :: Maybe [Entity MediaEntity]
+  , enMedia        :: [Entity MediaEntity]
   } deriving (Show, Eq)
 
 instance FromJSON Entities where
   parseJSON (Object o) =
-    Entities <$> o .:  "hashtags"
-             <*> o .:  "user_mentions"
-             <*> o .:  "urls"
-             <*> o .:? "media"
+    Entities <$> (o .: "hashtags" <|> return mzero)
+             <*> (o .: "user_mentions" <|> return mzero)
+             <*> (o .: "urls" <|> return mzero)
+             <*> (o .: "media" <|> return mzero)
   parseJSON _ = mzero
 
 -- | The character positions the Entity was extracted from

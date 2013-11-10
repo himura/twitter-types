@@ -286,7 +286,7 @@ SIMPLE_LENS(msResize                  , MediaSize,  Text                      )
 SIMPLE_LENS(enHashTags                , Entities,  [Entity HashTagEntity]     )
 SIMPLE_LENS(enUserMentions            , Entities,  [Entity UserEntity]        )
 SIMPLE_LENS(enURLs                    , Entities,  [Entity URLEntity]         )
-SIMPLE_LENS(enMedia                   , Entities,  Maybe [Entity MediaEntity] )
+SIMPLE_LENS(enMedia                   , Entities,  [Entity MediaEntity]       )
 
 TYPECHANGE_LENS(entityBody            , Entity                                )
 SIMPLE_LENS(entityIndices             , Entity a,  EntityIndices              )
