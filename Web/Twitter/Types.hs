@@ -400,10 +400,10 @@ data Entities =
 
 instance FromJSON Entities where
   parseJSON (Object o) =
-    Entities <$> (o .: "hashtags" <|> return mzero)
-             <*> (o .: "user_mentions" <|> return mzero)
-             <*> (o .: "urls" <|> return mzero)
-             <*> (o .: "media" <|> return mzero)
+    Entities <$> o .:? "hashtags" .!= []
+             <*> o .:? "user_mentions" .!= []
+             <*> o .:? "urls" .!= []
+             <*> o .:? "media" .!= []
   parseJSON _ = mzero
 
 -- | The character positions the Entity was extracted from
