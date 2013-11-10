@@ -24,7 +24,7 @@ module Web.Twitter.Types.Lens
        , EntityIndices
        , Entity
        , HashTagEntity
-       , UserEntity(..)
+       , UserEntity
        , URLEntity
        , MediaEntity
        , MediaSize
@@ -111,6 +111,10 @@ module Web.Twitter.Types.Lens
        , listUser
 
        , hashTagText
+
+       , userEntityUserId
+       , userEntityUserName
+       , userEntityUserScreenName
 
        , ueURL
        , ueExpanded
@@ -267,6 +271,10 @@ SIMPLE_LENS(listMode                  , List,  Text                           )
 SIMPLE_LENS(listUser                  , List,  User                           )
 
 SIMPLE_LENS(hashTagText               , HashTagEntity,  Text                  )
+
+SIMPLE_LENS(userEntityUserId          , UserEntity,  UserId                   )
+SIMPLE_LENS(userEntityUserName        , UserEntity,  UserName                 )
+SIMPLE_LENS(userEntityUserScreenName  , UserEntity,  Text                     )
 
 SIMPLE_LENS(ueURL                     , URLEntity,  URIString                 )
 SIMPLE_LENS(ueExpanded                , URLEntity,  URIString                 )

@@ -327,14 +327,19 @@ instance FromJSON HashTagEntity where
     HashTagEntity <$> o .: "text"
   parseJSON _ = mzero
 
--- | The 'UserEntity' is just a wrapper around 'User' which is
---   a bit wasteful, and should probably be replaced by just
---   storing the id, name and screen name here.
-data UserEntity = UserEntity User
-                deriving (Show, Eq)
+data UserEntity =
+  UserEntity
+  { userEntityUserId              :: UserId
+  , userEntityUserName            :: UserName
+  , userEntityUserScreenName      :: Text
+  } deriving (Show, Eq)
 
 instance FromJSON UserEntity where
-  parseJSON = (UserEntity <$>) . parseJSON
+  parseJSON (Object o) =
+    UserEntity <$> o .:  "id"
+               <*> o .:  "name"
+               <*> o .:  "screen_name"
+  parseJSON _ = mzero
 
 data URLEntity =
   URLEntity
