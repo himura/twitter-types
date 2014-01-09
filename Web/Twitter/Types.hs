@@ -35,7 +35,6 @@ module Web.Twitter.Types
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Text (Text)
-import Data.ByteString (ByteString)
 import Data.HashMap.Strict (HashMap)
 import Control.Applicative
 import Control.Monad
@@ -43,7 +42,7 @@ import Control.Monad
 type DateString   = String
 type UserId       = Integer
 type Friends      = [UserId]
-type URIString    = ByteString
+type URIString    = Text
 type UserName     = Text
 type StatusId     = Integer
 type LanguageCode = String
