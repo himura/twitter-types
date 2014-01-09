@@ -23,7 +23,6 @@ library
       base >= 4 && < 5
     , http-types
     , aeson >= 0.3.2.2
-    , bytestring
     , text
     , unordered-containers
 
@@ -46,7 +45,6 @@ test-suite tests
     , http-types
     , aeson
     , attoparsec
-    , bytestring
     , text
     , unordered-containers
 
