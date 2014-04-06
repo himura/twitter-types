@@ -39,6 +39,7 @@ module Web.Twitter.Types.Lens
        , statusInReplyToUser
        , statusFavorite
        , statusRetweetCount
+       , statusRetweet
        , statusUser
 
        , searchResultStatuses
@@ -200,6 +201,7 @@ SIMPLE_LENS(statusInReplyTo           , Status,  Maybe StatusId               )
 SIMPLE_LENS(statusInReplyToUser       , Status,  Maybe UserId                 )
 SIMPLE_LENS(statusFavorite            , Status,  Maybe Bool                   )
 SIMPLE_LENS(statusRetweetCount        , Status,  Maybe Integer                )
+SIMPLE_LENS(statusRetweet             , Status,  Maybe Status                 )
 SIMPLE_LENS(statusUser                , Status,  User                         )
 
 TYPECHANGE_LENS(searchResultStatuses  , SearchResult                          )
