@@ -41,7 +41,7 @@ test-suite tests
     , test-framework-th-prime
     , test-framework-hunit
     , HUnit
-    , shakespeare-text
+    , shakespeare
     , http-types
     , aeson
     , attoparsec
