@@ -28,6 +28,8 @@ module Web.Twitter.Types.Lens
        , URLEntity
        , MediaEntity
        , MediaSize
+       , Place
+       , BoundingBox
 
        , statusCreatedAt
        , statusId
