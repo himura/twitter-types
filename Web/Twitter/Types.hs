@@ -28,6 +28,8 @@ module Web.Twitter.Types
        , URLEntity(..)
        , MediaEntity(..)
        , MediaSize(..)
+       , Place(..)
+       , BoundingBox(..)
        , checkError
        )
        where
@@ -90,6 +92,7 @@ data Status =
   , statusRetweetCount  :: Maybe Integer
   , statusUser          :: User
   , statusRetweet       :: Maybe Status
+  , statusPlace         :: Maybe Place
   } deriving (Show, Eq)
 
 instance FromJSON Status where
@@ -106,6 +109,7 @@ instance FromJSON Status where
            <*> o .:? "retweet_count"
            <*> o .:  "user"
            <*> o .:? "retweeted_status"
+           <*> o .:? "place"
   parseJSON _ = mzero
 
 data SearchResult body =
@@ -388,6 +392,44 @@ instance FromJSON MediaSize where
     MediaSize <$> o .: "w"
               <*> o .: "h"
               <*> o .: "resize"
+  parseJSON _ = mzero
+
+data Place =
+  Place
+  { placeAttributes   :: HashMap Text Text
+  , placeBoundingBox  :: BoundingBox
+  , placeCountry      :: Text
+  , placeCountryCode  :: Text
+  , placeFullName     :: Text
+  , placeId           :: Text
+  , placeName         :: Text
+  , placeType         :: Text
+  , placeUrl          :: Text
+  } deriving (Show, Eq)
+
+instance FromJSON Place where
+  parseJSON (Object o) =
+    Place <$> o .: "attributes"
+          <*> o .: "bounding_box"
+          <*> o .: "country"
+          <*> o .: "country_code"
+          <*> o .: "full_name"
+          <*> o .: "id"
+          <*> o .: "name"
+          <*> o .: "place_type"
+          <*> o .: "url"
+  parseJSON _ = mzero
+
+data BoundingBox =
+  BoundingBox
+  { boundingBoxCoordinates  :: [[[Double]]]
+  , boundingBoxType         :: Text
+  } deriving (Show, Eq)
+
+instance FromJSON BoundingBox where
+  parseJSON (Object o) =
+    BoundingBox <$> o .: "coordinates"
+                <*> o .: "type"
   parseJSON _ = mzero
 
 -- | Entity handling.
