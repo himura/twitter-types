@@ -28,6 +28,8 @@ module Web.Twitter.Types.Lens
        , URLEntity
        , MediaEntity
        , MediaSize
+       , Place
+       , BoundingBox
 
        , statusCreatedAt
        , statusId
@@ -41,6 +43,7 @@ module Web.Twitter.Types.Lens
        , statusRetweetCount
        , statusRetweet
        , statusUser
+       , statusPlace
 
        , searchResultStatuses
        , searchResultSearchMetadata
@@ -132,6 +135,19 @@ module Web.Twitter.Types.Lens
        , msHeight
        , msResize
 
+       , placeAttributes
+       , placeBoundingBox
+       , placeCountry
+       , placeCountryCode
+       , placeFullName
+       , placeId
+       , placeName
+       , placeType
+       , placeUrl
+
+       , boundingBoxCoordinates
+       , boundingBoxType
+
        , enHashTags
        , enUserMentions
        , enURLs
@@ -175,6 +191,8 @@ import Web.Twitter.Types
        , URLEntity
        , MediaEntity
        , MediaSize
+       , Place
+       , BoundingBox
        )
 import Data.Text (Text)
 import Data.HashMap.Strict (HashMap)
@@ -203,6 +221,7 @@ SIMPLE_LENS(statusFavorite            , Status,  Maybe Bool                   )
 SIMPLE_LENS(statusRetweetCount        , Status,  Maybe Integer                )
 SIMPLE_LENS(statusRetweet             , Status,  Maybe Status                 )
 SIMPLE_LENS(statusUser                , Status,  User                         )
+SIMPLE_LENS(statusPlace               , Status,  Maybe Place                  )
 
 TYPECHANGE_LENS(searchResultStatuses  , SearchResult                          )
 SIMPLE_LENS(searchResultSearchMetadata, SearchResult body,  SearchMetadata    )
@@ -293,6 +312,19 @@ SIMPLE_LENS(meURL                     , MediaEntity,  URLEntity               )
 SIMPLE_LENS(msWidth                   , MediaSize,  Int                       )
 SIMPLE_LENS(msHeight                  , MediaSize,  Int                       )
 SIMPLE_LENS(msResize                  , MediaSize,  Text                      )
+
+SIMPLE_LENS(placeAttributes           , Place,  HashMap Text Text             )
+SIMPLE_LENS(placeBoundingBox          , Place,  BoundingBox                   )
+SIMPLE_LENS(placeCountry              , Place,  Text                          )
+SIMPLE_LENS(placeCountryCode          , Place,  Text                          )
+SIMPLE_LENS(placeFullName             , Place,  Text                          )
+SIMPLE_LENS(placeId                   , Place,  Text                          )
+SIMPLE_LENS(placeName                 , Place,  Text                          )
+SIMPLE_LENS(placeType                 , Place,  Text                          )
+SIMPLE_LENS(placeUrl                  , Place,  Text                          )
+
+SIMPLE_LENS(boundingBoxCoordinates    , BoundingBox,  [[[Double]]]            )
+SIMPLE_LENS(boundingBoxType           , BoundingBox,  Text                    )
 
 SIMPLE_LENS(enHashTags                , Entities,  [Entity HashTagEntity]     )
 SIMPLE_LENS(enUserMentions            , Entities,  [Entity UserEntity]        )
