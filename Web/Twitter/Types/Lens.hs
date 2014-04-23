@@ -200,10 +200,11 @@ import Data.HashMap.Strict (HashMap)
 type Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t
 type SimpleLens s a = Lens s s a a
 
+#define HASHSIGN #
 #define SIMPLE_LENS(name, s, a) \
 name :: SimpleLens (s) (a);\
 name f record = (\newVal -> record { TT.name = newVal }) <$> (f (TT.name record));\
-{-# INLINE name #-}
+{-HASHSIGN INLINE name HASHSIGN-}
 
 #define TYPECHANGE_LENS(name, s) \
 name :: Lens ((s) a) ((s) b) (a) (b);\
