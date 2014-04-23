@@ -198,10 +198,10 @@ import Data.Text (Text)
 import Data.HashMap.Strict (HashMap)
 
 type Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t
-type LensTmp s a = Lens s s a a
+type SimpleLens s a = Lens s s a a
 
 #define SIMPLE_LENS(name, s, a) \
-name :: LensTmp (s) (a);\
+name :: SimpleLens (s) (a);\
 name f record = (\newVal -> record { TT.name = newVal }) <$> (f (TT.name record));\
 {-# INLINE name #-}
 
@@ -335,10 +335,10 @@ TYPECHANGE_LENS(entityBody            , Entity                                )
 SIMPLE_LENS(entityIndices             , Entity a,  EntityIndices              )
 
 class AsStatus s where
-    status_id :: LensTmp s StatusId
-    text :: LensTmp s Text
-    user :: LensTmp s User
-    created_at :: LensTmp s DateString
+    status_id :: SimpleLens s StatusId
+    text :: SimpleLens s Text
+    user :: SimpleLens s User
+    created_at :: SimpleLens s DateString
 
 instance AsStatus Status where
     status_id = statusId
@@ -365,9 +365,9 @@ instance AsStatus DirectMessage where
     created_at = dmCreatedAt
 
 class AsUser u where
-    user_id :: LensTmp u UserId
-    name :: LensTmp u UserName
-    screen_name :: LensTmp u Text
+    user_id :: SimpleLens u UserId
+    name :: SimpleLens u UserName
+    screen_name :: SimpleLens u Text
 
 instance AsUser User where
     user_id = userId
