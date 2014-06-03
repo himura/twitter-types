@@ -93,6 +93,7 @@ data Status =
   , statusUser          :: User
   , statusRetweet       :: Maybe Status
   , statusPlace         :: Maybe Place
+  , statusFavoriteCount :: Integer
   } deriving (Show, Eq)
 
 instance FromJSON Status where
@@ -110,6 +111,7 @@ instance FromJSON Status where
            <*> o .:  "user"
            <*> o .:? "retweeted_status"
            <*> o .:? "place"
+           <*> ( ( o .:? "favorite_count" ) >>= return . maybe 0 id )
   parseJSON _ = mzero
 
 data SearchResult body =

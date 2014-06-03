@@ -44,6 +44,7 @@ module Web.Twitter.Types.Lens
        , statusRetweet
        , statusUser
        , statusPlace
+       , statusFavoriteCount
 
        , searchResultStatuses
        , searchResultSearchMetadata
@@ -223,6 +224,7 @@ SIMPLE_LENS(statusRetweetCount        , Status,  Maybe Integer                )
 SIMPLE_LENS(statusRetweet             , Status,  Maybe Status                 )
 SIMPLE_LENS(statusUser                , Status,  User                         )
 SIMPLE_LENS(statusPlace               , Status,  Maybe Place                  )
+SIMPLE_LENS(statusFavoriteCount       , Status,  Integer                      )
 
 TYPECHANGE_LENS(searchResultStatuses  , SearchResult                          )
 SIMPLE_LENS(searchResultSearchMetadata, SearchResult body,  SearchMetadata    )
