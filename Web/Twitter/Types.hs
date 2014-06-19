@@ -115,7 +115,7 @@ instance FromJSON Status where
            <*> o .:  "user"
            <*> o .:? "retweeted_status"
            <*> o .:? "place"
-           <*> ( ( o .:? "favorite_count" ) >>= return . maybe 0 id )
+           <*> o .:? "favorite_count" .!= 0
            <*> o .:? "lang"
            <*> o .:? "possibly_sensitive"
   parseJSON _ = mzero
