@@ -93,3 +93,14 @@ case_parseEntityHashTag = withJSON (fj [st|{"symbols":[],"urls":[{"indices":[32,
 
     let HashTagEntity hashtag = entityBody . head . enHashTags $ entity
     hashtag @?= "lol"
+
+case_parseExtendedEntities :: Assertion
+case_parseExtendedEntities = withJSON mediaExtendedEntityJson $ \obj -> do
+    let entities = statusExtendedEntities obj
+    assert $ isJust entities
+    let Just ent = entities
+        media = enMedia ent
+    length media @?= 4
+    let me = entityBody $ head media
+    ueURL (meURL me) @?= "http://t.co/qOjPwmgLKO"
+    meMediaURL me @?= "http://pbs.twimg.com/media/BqgdlpaCQAA5OSu.jpg"

@@ -80,20 +80,21 @@ instance FromJSON StreamingAPI where
 
 data Status =
   Status
-  { statusCreatedAt     :: DateString
-  , statusId            :: StatusId
-  , statusText          :: Text
-  , statusSource        :: Text
-  , statusTruncated     :: Bool
-  , statusEntities      :: Maybe Entities
-  , statusInReplyTo     :: Maybe StatusId
-  , statusInReplyToUser :: Maybe UserId
-  , statusFavorite      :: Maybe Bool
-  , statusRetweetCount  :: Maybe Integer
-  , statusUser          :: User
-  , statusRetweet       :: Maybe Status
-  , statusPlace         :: Maybe Place
-  , statusFavoriteCount :: Integer
+  { statusCreatedAt        :: DateString
+  , statusId               :: StatusId
+  , statusText             :: Text
+  , statusSource           :: Text
+  , statusTruncated        :: Bool
+  , statusEntities         :: Maybe Entities
+  , statusExtendedEntities :: Maybe Entities
+  , statusInReplyTo        :: Maybe StatusId
+  , statusInReplyToUser    :: Maybe UserId
+  , statusFavorite         :: Maybe Bool
+  , statusRetweetCount     :: Maybe Integer
+  , statusUser             :: User
+  , statusRetweet          :: Maybe Status
+  , statusPlace            :: Maybe Place
+  , statusFavoriteCount    :: Integer
   } deriving (Show, Eq)
 
 instance FromJSON Status where
@@ -104,6 +105,7 @@ instance FromJSON Status where
            <*> o .:  "source"
            <*> o .:  "truncated"
            <*> o .:? "entities"
+           <*> o .:? "extended_entities"
            <*> o .:? "in_reply_to_status_id"
            <*> o .:? "in_reply_to_user_id"
            <*> o .:? "favorited"

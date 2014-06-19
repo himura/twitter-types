@@ -37,6 +37,7 @@ module Web.Twitter.Types.Lens
        , statusSource
        , statusTruncated
        , statusEntities
+       , statusExtendedEntities
        , statusInReplyTo
        , statusInReplyToUser
        , statusFavorite
@@ -217,6 +218,7 @@ SIMPLE_LENS(statusText                , Status,  Text                         )
 SIMPLE_LENS(statusSource              , Status,  Text                         )
 SIMPLE_LENS(statusTruncated           , Status,  Bool                         )
 SIMPLE_LENS(statusEntities            , Status,  Maybe Entities               )
+SIMPLE_LENS(statusExtendedEntities    , Status,  Maybe Entities               )
 SIMPLE_LENS(statusInReplyTo           , Status,  Maybe StatusId               )
 SIMPLE_LENS(statusInReplyToUser       , Status,  Maybe UserId                 )
 SIMPLE_LENS(statusFavorite            , Status,  Maybe Bool                   )
