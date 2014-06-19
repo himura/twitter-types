@@ -28,6 +28,7 @@ module Web.Twitter.Types.Lens
        , URLEntity
        , MediaEntity
        , MediaSize
+       , Coordinates
        , Place
        , BoundingBox
 
@@ -139,6 +140,9 @@ module Web.Twitter.Types.Lens
        , msHeight
        , msResize
 
+       , coordinates
+       , coordinatesType
+
        , placeAttributes
        , placeBoundingBox
        , placeCountry
@@ -195,6 +199,7 @@ import Web.Twitter.Types
        , URLEntity
        , MediaEntity
        , MediaSize
+       , Coordinates
        , Place
        , BoundingBox
        )
@@ -321,6 +326,9 @@ SIMPLE_LENS(meURL                     , MediaEntity,  URLEntity               )
 SIMPLE_LENS(msWidth                   , MediaSize,  Int                       )
 SIMPLE_LENS(msHeight                  , MediaSize,  Int                       )
 SIMPLE_LENS(msResize                  , MediaSize,  Text                      )
+
+SIMPLE_LENS(coordinates               , Coordinates,  [Double]                )
+SIMPLE_LENS(coordinatesType           , Coordinates,  Text                    )
 
 SIMPLE_LENS(placeAttributes           , Place,  HashMap Text Text             )
 SIMPLE_LENS(placeBoundingBox          , Place,  BoundingBox                   )

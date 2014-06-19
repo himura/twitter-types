@@ -28,6 +28,7 @@ module Web.Twitter.Types
        , URLEntity(..)
        , MediaEntity(..)
        , MediaSize(..)
+       , Coordinates(..)
        , Place(..)
        , BoundingBox(..)
        , checkError
@@ -97,6 +98,7 @@ data Status =
   , statusFavoriteCount      :: Integer
   , statusLang               :: Maybe Text
   , statusPossiblySensitive  :: Maybe Bool
+  , statusCoordinates        :: Maybe Coordinates
   } deriving (Show, Eq)
 
 instance FromJSON Status where
@@ -118,6 +120,7 @@ instance FromJSON Status where
            <*> o .:? "favorite_count" .!= 0
            <*> o .:? "lang"
            <*> o .:? "possibly_sensitive"
+           <*> o .:? "coordinates"
   parseJSON _ = mzero
 
 data SearchResult body =
@@ -400,6 +403,18 @@ instance FromJSON MediaSize where
     MediaSize <$> o .: "w"
               <*> o .: "h"
               <*> o .: "resize"
+  parseJSON _ = mzero
+
+data Coordinates =
+  Coordinates
+  { coordinates :: [Double]
+  , coordinatesType :: Text
+  } deriving (Show, Eq)
+
+instance FromJSON Coordinates where
+  parseJSON (Object o) =
+    Coordinates <$> o .: "coordinates"
+                <*> o .: "type"
   parseJSON _ = mzero
 
 data Place =
