@@ -4,7 +4,7 @@
 module Fixtures where
 
 import Data.Aeson
-import Data.Attoparsec
+import Data.Attoparsec.ByteString
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import Data.Maybe (fromJust)
