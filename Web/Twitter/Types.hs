@@ -143,6 +143,7 @@ data SearchStatus =
   , searchStatusText          :: Text
   , searchStatusSource        :: Text
   , searchStatusUser          :: User
+  , searchStatusCoordinates   :: Maybe Coordinates
   } deriving (Show, Eq)
 
 instance FromJSON SearchStatus where
@@ -152,6 +153,7 @@ instance FromJSON SearchStatus where
                  <*> o .:  "text"
                  <*> o .:  "source"
                  <*> o .:  "user"
+                 <*> o .:? "coordinates"
   parseJSON _ = mzero
 
 data SearchMetadata =
@@ -190,6 +192,7 @@ data RetweetedStatus =
   , rsEntities        :: Maybe Entities
   , rsUser            :: User
   , rsRetweetedStatus :: Status
+  , rsCoordinates     :: Maybe Coordinates
   } deriving (Show, Eq)
 
 instance FromJSON RetweetedStatus where
@@ -202,6 +205,7 @@ instance FromJSON RetweetedStatus where
                     <*> o .:? "entities"
                     <*> o .:  "user"
                     <*> o .:  "retweeted_status"
+                    <*> o .:? "coordinates"
   parseJSON _ = mzero
 
 data DirectMessage =
@@ -215,6 +219,7 @@ data DirectMessage =
   , dmRecipient          :: User
   , dmRecipientId        :: UserId
   , dmSenderId           :: UserId
+  , dmCoordinates        :: Maybe Coordinates
   } deriving (Show, Eq)
 
 instance FromJSON DirectMessage where
@@ -228,6 +233,7 @@ instance FromJSON DirectMessage where
                   <*> o .:  "recipient"
                   <*> o .:  "recipient_id"
                   <*> o .:  "sender_id"
+                  <*> o .:? "coordinates"
   parseJSON _ = mzero
 
 data EventType = Favorite | Unfavorite
