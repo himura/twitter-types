@@ -16,7 +16,7 @@ import qualified Data.HashMap.Strict as M
 import Data.Maybe
 
 import Fixtures
-loadFixtureTH 'parseJSONValue
+loadFixturesTH 'parseJSONValue
 
 main :: IO ()
 main = $(defaultMainGenerator)

@@ -33,8 +33,8 @@ loadFixture conv filename = conv <$> T.readFile (fixturePath </> filename)
 fixture :: (T.Text -> a) -> String -> a
 fixture conv = unsafePerformIO . loadFixture conv
 
-loadFixtureTH :: Name -> Q [Dec]
-loadFixtureTH convFn = do
+loadFixturesTH :: Name -> Q [Dec]
+loadFixturesTH convFn = do
     files <- runIO $ filter (\fn -> takeExtension fn == ".json") <$> getDirectoryContents fixturePath
     concat <$> mapM genEachDefs files
   where
