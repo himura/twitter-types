@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -8,7 +8,6 @@ import Web.Twitter.Types
 import Test.Framework.TH.Prime
 import Test.Framework.Providers.HUnit
 import Test.HUnit
-import Text.Shakespeare.Text
 
 import Data.Aeson hiding (Error)
 import Data.Aeson.Types (parseEither)
@@ -69,7 +68,7 @@ case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
   assert $ M.member "large" sizes
 
 case_parseEmptyEntity :: Assertion
-case_parseEmptyEntity = withJSON (parseJSONValue [st|{}|]) $ \entity -> do
+case_parseEmptyEntity = withJSON (parseJSONValue "{}") $ \entity -> do
     length (enHashTags entity) @?= 0
     length (enUserMentions entity) @?= 0
     length (enURLs entity) @?= 0
