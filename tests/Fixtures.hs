@@ -8,7 +8,6 @@ module Fixtures where
 import Language.Haskell.TH
 import Data.Aeson
 import Data.Attoparsec.ByteString
-import Data.Char
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import qualified Data.Text.IO as T
@@ -38,21 +37,13 @@ fixture = unsafePerformIO . loadFixture
 errorMsgJson :: Value
 errorMsgJson = fj [st|{"request":"\/1\/statuses\/user_timeline.json","error":"Not authorized"}|]
 
-snakeToLowerCamel :: String -> String
-snakeToLowerCamel [] = []
-snakeToLowerCamel ('_':[]) = []
-snakeToLowerCamel ('_':x:xs) = toUpper x : snakeToLowerCamel xs
-snakeToLowerCamel str = f ++ snakeToLowerCamel next
-  where (f, next) = span (/= '_') str
-
 loadFixtureTH :: Q [Dec]
 loadFixtureTH = do
     files <- runIO $ filter (\fn -> takeExtension fn == ".json") <$> getDirectoryContents fixturePath
     concat <$> mapM genEachDefs files
   where
     genEachDefs filename = do
-        let bn = dropExtension filename
-            funN = mkName $ snakeToLowerCamel bn
+        let funN = mkName $ "fixture_" ++ dropExtension filename
         sigdef <- sigD funN (conT ''Value)
         bind <- valD (varP funN) (normalB [|fixture $(litE (stringL filename))|]) []
         return [ sigdef, bind ]
