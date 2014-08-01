@@ -51,6 +51,7 @@ test-suite tests
     , attoparsec
     , text
     , unordered-containers
+    , filepath
   other-modules:
     Fixtures
 
