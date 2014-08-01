@@ -16,7 +16,7 @@ import qualified Data.HashMap.Strict as M
 import Data.Maybe
 
 import Fixtures
-loadFixtureTH
+loadFixtureTH 'parseJSONValue
 
 main :: IO ()
 main = $(defaultMainGenerator)
@@ -69,7 +69,7 @@ case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
   assert $ M.member "large" sizes
 
 case_parseEmptyEntity :: Assertion
-case_parseEmptyEntity = withJSON (fj [st|{}|]) $ \entity -> do
+case_parseEmptyEntity = withJSON (parseJSONValue [st|{}|]) $ \entity -> do
     length (enHashTags entity) @?= 0
     length (enUserMentions entity) @?= 0
     length (enURLs entity) @?= 0
