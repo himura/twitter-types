@@ -209,7 +209,6 @@ import Web.Twitter.Types
        )
 import Data.Text (Text)
 import Data.HashMap.Strict (HashMap)
-import Data.Maybe as M
 
 type Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t
 type SimpleLens s a = Lens s s a a
