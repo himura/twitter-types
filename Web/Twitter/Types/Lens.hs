@@ -49,6 +49,7 @@ module Web.Twitter.Types.Lens
        , statusFavoriteCount
        , statusLang
        , statusPossiblySensitive
+       , statusCoordinates
 
        , searchResultStatuses
        , searchResultSearchMetadata
@@ -58,6 +59,7 @@ module Web.Twitter.Types.Lens
        , searchStatusText
        , searchStatusSource
        , searchStatusUser
+       , searchStatusCoordinates
 
        , searchMetadataMaxId
        , searchMetadataSinceId
@@ -77,6 +79,7 @@ module Web.Twitter.Types.Lens
        , rsEntities
        , rsUser
        , rsRetweetedStatus
+       , rsCoordinates
 
        , dmCreatedAt
        , dmSenderScreenName
@@ -87,6 +90,7 @@ module Web.Twitter.Types.Lens
        , dmRecipient
        , dmRecipientId
        , dmSenderId
+       , dmCoordinates
 
        , evCreatedAt
        , evTargetObject
@@ -205,6 +209,7 @@ import Web.Twitter.Types
        )
 import Data.Text (Text)
 import Data.HashMap.Strict (HashMap)
+import Data.Maybe as M
 
 type Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t
 type SimpleLens s a = Lens s s a a
@@ -236,6 +241,7 @@ SIMPLE_LENS(statusPlace               , Status,  Maybe Place                  )
 SIMPLE_LENS(statusFavoriteCount       , Status,  Integer                      )
 SIMPLE_LENS(statusLang                , Status,  Maybe Text                   )
 SIMPLE_LENS(statusPossiblySensitive   , Status,  Maybe Bool                   )
+SIMPLE_LENS(statusCoordinates         , Status,  Maybe Coordinates            )
 
 TYPECHANGE_LENS(searchResultStatuses  , SearchResult                          )
 SIMPLE_LENS(searchResultSearchMetadata, SearchResult body,  SearchMetadata    )
@@ -245,6 +251,7 @@ SIMPLE_LENS(searchStatusId            , SearchStatus,  StatusId               )
 SIMPLE_LENS(searchStatusText          , SearchStatus,  Text                   )
 SIMPLE_LENS(searchStatusSource        , SearchStatus,  Text                   )
 SIMPLE_LENS(searchStatusUser          , SearchStatus,  User                   )
+SIMPLE_LENS(searchStatusCoordinates   , SearchStatus,  Maybe Coordinates      )
 
 SIMPLE_LENS(searchMetadataMaxId       , SearchMetadata,  StatusId             )
 SIMPLE_LENS(searchMetadataSinceId     , SearchMetadata,  StatusId             )
@@ -264,6 +271,7 @@ SIMPLE_LENS(rsTruncated               , RetweetedStatus,  Bool                )
 SIMPLE_LENS(rsEntities                , RetweetedStatus,  Maybe Entities      )
 SIMPLE_LENS(rsUser                    , RetweetedStatus,  User                )
 SIMPLE_LENS(rsRetweetedStatus         , RetweetedStatus,  Status              )
+SIMPLE_LENS(rsCoordinates             , RetweetedStatus,  Maybe Coordinates   )
 
 SIMPLE_LENS(dmCreatedAt               , DirectMessage,  DateString            )
 SIMPLE_LENS(dmSenderScreenName        , DirectMessage,  Text                  )
@@ -274,6 +282,7 @@ SIMPLE_LENS(dmId                      , DirectMessage,  StatusId              )
 SIMPLE_LENS(dmRecipient               , DirectMessage,  User                  )
 SIMPLE_LENS(dmRecipientId             , DirectMessage,  UserId                )
 SIMPLE_LENS(dmSenderId                , DirectMessage,  UserId                )
+SIMPLE_LENS(dmCoordinates             , DirectMessage,  Maybe Coordinates     )
 
 SIMPLE_LENS(evCreatedAt               , Event,  DateString                    )
 SIMPLE_LENS(evTargetObject            , Event,  Maybe EventTarget             )
@@ -356,30 +365,36 @@ class AsStatus s where
     text :: SimpleLens s Text
     user :: SimpleLens s User
     created_at :: SimpleLens s DateString
-
+    geolocation :: SimpleLens s (Maybe Coordinates)
+    
 instance AsStatus Status where
     status_id = statusId
     text = statusText
     user = statusUser
     created_at = statusCreatedAt
+    geolocation = (statusCoordinates)
+    
 
 instance AsStatus SearchStatus where
     status_id = searchStatusId
     text = searchStatusText
     user = searchStatusUser
     created_at = searchStatusCreatedAt
+    geolocation = searchStatusCoordinates
 
 instance AsStatus RetweetedStatus where
     status_id = rsId
     text = rsText
     user = rsUser
     created_at = rsCreatedAt
+    geolocation = rsCoordinates
 
 instance AsStatus DirectMessage where
     status_id = dmId
     text = dmText
     user = dmSender
     created_at = dmCreatedAt
+    geolocation = dmCoordinates
 
 class AsUser u where
     user_id :: SimpleLens u UserId
