@@ -30,14 +30,14 @@ withJSON js f = either assertFailure id $ do
   return $ f o
 
 case_parseStatus :: Assertion
-case_parseStatus = withJSON statusJson $ \obj -> do
+case_parseStatus = withJSON fixture_status01 $ \obj -> do
   statusId obj @?= 112652479837110273
   statusRetweetCount obj @?= Just 0
   (userScreenName . statusUser) obj @?= "imeoin"
   statusEntities obj @?= Nothing
 
 case_parseStatusIncludeEntities :: Assertion
-case_parseStatusIncludeEntities = withJSON statusEntityJson $ \obj -> do
+case_parseStatusIncludeEntities = withJSON fixture_status_with_entity $ \obj -> do
   statusId obj @?= 112652479837110273
   statusRetweetCount obj @?= Just 0
   (userScreenName . statusUser) obj @?= "imeoin"
@@ -47,7 +47,7 @@ case_parseStatusIncludeEntities = withJSON statusEntityJson $ \obj -> do
 
 case_parseErrorMsg :: Assertion
 case_parseErrorMsg =
-  case parseStatus errorMsgJson of
+  case parseStatus fixture_error_not_authorized of
     Left str -> "Not authorized" @=? str
     Right _ -> assertFailure "errorMsgJson should be parsed as an error."
   where
@@ -55,7 +55,7 @@ case_parseErrorMsg =
     parseStatus = parseEither parseJSON
 
 case_parseMediaEntity :: Assertion
-case_parseMediaEntity = withJSON mediaEntityJson $ \obj -> do
+case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
   let entities = statusEntities obj
   assert $ isJust entities
   let Just ent = entities
@@ -76,7 +76,7 @@ case_parseEmptyEntity = withJSON (fj [st|{}|]) $ \entity -> do
     length (enMedia entity) @?= 0
 
 case_parseEntityHashTag :: Assertion
-case_parseEntityHashTag = withJSON (fj [st|{"symbols":[],"urls":[{"indices":[32,52], "url":"http://t.co/IOwBrTZR", "display_url":"youtube.com/watch?v=oHg5SJ\u2026", "expanded_url":"http://www.youtube.com/watch?v=oHg5SJYRHA0"}],"user_mentions":[{"name":"Twitter API", "indices":[4,15], "screen_name":"twitterapi", "id":6253282, "id_str":"6253282"}],"hashtags":[{"indices":[32,36],"text":"lol"}]}|]) $ \entity -> do
+case_parseEntityHashTag = withJSON fixture_entity01 $ \entity -> do
     length (enHashTags entity) @?= 1
     length (enUserMentions entity) @?= 1
     length (enURLs entity) @?= 1
@@ -96,7 +96,7 @@ case_parseEntityHashTag = withJSON (fj [st|{"symbols":[],"urls":[{"indices":[32,
     hashtag @?= "lol"
 
 case_parseExtendedEntities :: Assertion
-case_parseExtendedEntities = withJSON mediaExtendedEntityJson $ \obj -> do
+case_parseExtendedEntities = withJSON fixture_media_extended_entity $ \obj -> do
     let entities = statusExtendedEntities obj
     assert $ isJust entities
     let Just ent = entities
