@@ -1,16 +1,20 @@
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE CPP #-}
 
 module Fixtures where
 
+import Language.Haskell.TH
 import Data.Aeson
 import Data.Attoparsec.ByteString
+import Data.Char
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import qualified Data.Text.IO as T
 import Data.Maybe
 import Text.Shakespeare.Text
+import System.Directory
 import System.Environment
 import System.FilePath
 import System.IO.Unsafe (unsafePerformIO)
@@ -33,6 +37,25 @@ fixture = unsafePerformIO . loadFixture
 
 errorMsgJson :: Value
 errorMsgJson = fj [st|{"request":"\/1\/statuses\/user_timeline.json","error":"Not authorized"}|]
+
+snakeToLowerCamel :: String -> String
+snakeToLowerCamel [] = []
+snakeToLowerCamel ('_':[]) = []
+snakeToLowerCamel ('_':x:xs) = toUpper x : snakeToLowerCamel xs
+snakeToLowerCamel str = f ++ snakeToLowerCamel next
+  where (f, next) = span (/= '_') str
+
+loadFixtureTH :: Q [Dec]
+loadFixtureTH = do
+    files <- runIO $ filter (\fn -> takeExtension fn == ".json") <$> getDirectoryContents fixturePath
+    concat <$> mapM genEachDefs files
+  where
+    genEachDefs filename = do
+        let bn = dropExtension filename
+            funN = mkName $ snakeToLowerCamel bn
+        sigdef <- sigD funN (conT ''Value)
+        bind <- valD (varP funN) (normalB [|fixture $(litE (stringL filename))|]) []
+        return [ sigdef, bind ]
 
 statusJson :: Value
 statusJson = fixture "status_object.json"

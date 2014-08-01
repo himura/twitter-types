@@ -52,6 +52,7 @@ test-suite tests
     , text
     , unordered-containers
     , filepath
+    , directory
   other-modules:
     Fixtures
 

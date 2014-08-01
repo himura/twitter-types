@@ -16,6 +16,7 @@ import qualified Data.HashMap.Strict as M
 import Data.Maybe
 
 import Fixtures
+loadFixtureTH
 
 main :: IO ()
 main = $(defaultMainGenerator)
