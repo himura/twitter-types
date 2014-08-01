@@ -365,14 +365,13 @@ class AsStatus s where
     user :: SimpleLens s User
     created_at :: SimpleLens s DateString
     geolocation :: SimpleLens s (Maybe Coordinates)
-    
+
 instance AsStatus Status where
     status_id = statusId
     text = statusText
     user = statusUser
     created_at = statusCreatedAt
-    geolocation = (statusCoordinates)
-    
+    geolocation = statusCoordinates
 
 instance AsStatus SearchStatus where
     status_id = searchStatusId
