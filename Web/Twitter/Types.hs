@@ -298,6 +298,7 @@ data User =
   , userTweets          :: Maybe Int
   , userLangCode        :: Maybe LanguageCode
   , userCreatedAt       :: Maybe DateString
+  , userFavoritesCount  :: Int
   } deriving (Show, Eq)
 
 instance FromJSON User where
@@ -315,6 +316,7 @@ instance FromJSON User where
          <*> o .:? "statuses_count"
          <*> o .:? "lang"
          <*> o .:? "created_at"
+         <*> o .:? "favourites_count" .!= 0
   parseJSON _ = mzero
 
 data List =

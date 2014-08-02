@@ -165,3 +165,4 @@ case_parseUser = withJSON fixture_user_thimura $ \obj -> do
     userTweets obj @?= Just 24709
     userLangCode obj @?= Just "en"
     userCreatedAt obj @?= Just "Thu Aug 27 02:48:06 +0000 2009"
+    userFavoritesCount obj @?= 17313
