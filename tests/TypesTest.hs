@@ -158,6 +158,11 @@ case_parseEventUnfavorite = withJSON fixture_event_unfavorite_thimura $ \obj -> 
     let ETUser sourceUser = evSource obj
     userScreenName sourceUser @?= "thimura_shinku"
 
+case_parseDelete :: Assertion
+case_parseDelete = withJSON fixture_delete $ \obj -> do
+    delId obj @?= 495607981833064448
+    delUserId obj @?= 2566877347
+
 case_parseErrorMsg :: Assertion
 case_parseErrorMsg =
     case parseStatus fixture_error_not_authorized of
