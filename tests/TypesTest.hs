@@ -25,29 +25,29 @@ withJSON :: FromJSON a
          -> (a -> Assertion)
          -> Assertion
 withJSON js f = either assertFailure id $ do
-  o <- parseEither parseJSON js
-  return $ f o
+    o <- parseEither parseJSON js
+    return $ f o
 
 case_parseStatus :: Assertion
 case_parseStatus = withJSON fixture_status01 $ \obj -> do
-  statusCreatedAt obj @?= "Sat Sep 10 22:23:38 +0000 2011"
-  statusId obj @?= 112652479837110273
-  statusText obj @?= "@twitter meets @seepicturely at #tcdisrupt cc.@boscomonkey @episod http://t.co/6J2EgYM"
-  statusSource obj @?= "<a href=\"http://instagr.am\" rel=\"nofollow\">Instagram</a>"
-  statusTruncated obj @?= False
-  statusEntities obj @?= Nothing
-  statusExtendedEntities obj @?= Nothing
-  statusInReplyTo obj @?= Nothing
-  statusInReplyToUser obj @?= Just 783214
-  statusFavorite obj @?= Just False
-  statusRetweetCount obj @?= Just 0
-  (userScreenName . statusUser) obj @?= "imeoin"
-  statusRetweet obj @?= Nothing
-  statusPlace obj @?= Nothing
-  statusFavoriteCount obj @?= 0
-  statusLang obj @?= Nothing
-  statusPossiblySensitive obj @?= Just False
-  statusCoordinates obj @?= Nothing
+    statusCreatedAt obj @?= "Sat Sep 10 22:23:38 +0000 2011"
+    statusId obj @?= 112652479837110273
+    statusText obj @?= "@twitter meets @seepicturely at #tcdisrupt cc.@boscomonkey @episod http://t.co/6J2EgYM"
+    statusSource obj @?= "<a href=\"http://instagr.am\" rel=\"nofollow\">Instagram</a>"
+    statusTruncated obj @?= False
+    statusEntities obj @?= Nothing
+    statusExtendedEntities obj @?= Nothing
+    statusInReplyTo obj @?= Nothing
+    statusInReplyToUser obj @?= Just 783214
+    statusFavorite obj @?= Just False
+    statusRetweetCount obj @?= Just 0
+    (userScreenName . statusUser) obj @?= "imeoin"
+    statusRetweet obj @?= Nothing
+    statusPlace obj @?= Nothing
+    statusFavoriteCount obj @?= 0
+    statusLang obj @?= Nothing
+    statusPossiblySensitive obj @?= Just False
+    statusCoordinates obj @?= Nothing
 
 case_parseStatusWithPhoto :: Assertion
 case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj -> do
@@ -82,35 +82,35 @@ case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj ->
 
 case_parseStatusIncludeEntities :: Assertion
 case_parseStatusIncludeEntities = withJSON fixture_status_with_entity $ \obj -> do
-  statusId obj @?= 112652479837110273
-  statusRetweetCount obj @?= Just 0
-  (userScreenName . statusUser) obj @?= "imeoin"
-  let ent = fromMaybe (Entities [] [] [] []) $ statusEntities obj
-  (map entityIndices . enHashTags) ent @?= [[32,42]]
-  (hashTagText . entityBody . head . enHashTags) ent @?= "tcdisrupt"
+    statusId obj @?= 112652479837110273
+    statusRetweetCount obj @?= Just 0
+    (userScreenName . statusUser) obj @?= "imeoin"
+    let ent = fromMaybe (Entities [] [] [] []) $ statusEntities obj
+    (map entityIndices . enHashTags) ent @?= [[32,42]]
+    (hashTagText . entityBody . head . enHashTags) ent @?= "tcdisrupt"
 
 case_parseErrorMsg :: Assertion
 case_parseErrorMsg =
-  case parseStatus fixture_error_not_authorized of
-    Left str -> "Not authorized" @=? str
-    Right _ -> assertFailure "errorMsgJson should be parsed as an error."
+    case parseStatus fixture_error_not_authorized of
+        Left str -> "Not authorized" @=? str
+        Right _ -> assertFailure "errorMsgJson should be parsed as an error."
   where
     parseStatus :: Value -> Either String Status
     parseStatus = parseEither parseJSON
 
 case_parseMediaEntity :: Assertion
 case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
-  let entities = statusEntities obj
-  assert $ isJust entities
-  let Just ent = entities
-      media = enMedia ent
-  length media @?= 1
-  let me = entityBody $ head media
-  ueURL (meURL me) @?= "http://t.co/rJC5Pxsu"
-  meMediaURLHttps me @?= "https://pbs.twimg.com/media/AZVLmp-CIAAbkyy.jpg"
-  let sizes = meSizes me
-  assert $ M.member "thumb" sizes
-  assert $ M.member "large" sizes
+    let entities = statusEntities obj
+    assert $ isJust entities
+    let Just ent = entities
+        media = enMedia ent
+    length media @?= 1
+    let me = entityBody $ head media
+    ueURL (meURL me) @?= "http://t.co/rJC5Pxsu"
+    meMediaURLHttps me @?= "https://pbs.twimg.com/media/AZVLmp-CIAAbkyy.jpg"
+    let sizes = meSizes me
+    assert $ M.member "thumb" sizes
+    assert $ M.member "large" sizes
 
 case_parseEmptyEntity :: Assertion
 case_parseEmptyEntity = withJSON (parseJSONValue "{}") $ \entity -> do
