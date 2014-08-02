@@ -89,6 +89,47 @@ case_parseStatusIncludeEntities = withJSON fixture_status_with_entity $ \obj -> 
     (map entityIndices . enHashTags) ent @?= [[32,42]]
     (hashTagText . entityBody . head . enHashTags) ent @?= "tcdisrupt"
 
+case_parseSearchStatusMetadata :: Assertion
+case_parseSearchStatusMetadata = withJSON fixture_search_haskell $ \obj -> do
+    let status = (searchResultStatuses obj) :: [Status]
+    length status @?= 1
+
+    let metadata = searchResultSearchMetadata obj
+    searchMetadataMaxId metadata @?= 495597397733433345
+    searchMetadataSinceId metadata @?= 0
+    searchMetadataRefreshUrl metadata @?= "?since_id=495597397733433345&q=haskell&include_entities=1"
+    searchMetadataNextResults metadata @?= Just "?max_id=495594369802440705&q=haskell&include_entities=1"
+    searchMetadataCount metadata @?= 1
+    searchMetadataCompletedIn metadata @?= Just 0.043
+    searchMetadataSinceIdStr metadata @?= "0"
+    searchMetadataQuery metadata @?= "haskell"
+    searchMetadataMaxIdStr metadata @?= "495597397733433345"
+
+case_parseSearchStatusBodyStatus :: Assertion
+case_parseSearchStatusBodyStatus = withJSON fixture_search_haskell $ \obj -> do
+    let status = (searchResultStatuses obj) :: [Status]
+    length status @?= 1
+    statusText (head status) @?= "haskell"
+
+case_parseSearchStatusBodySearchStatus :: Assertion
+case_parseSearchStatusBodySearchStatus = withJSON fixture_search_haskell $ \obj -> do
+    let status = (searchResultStatuses obj) :: [SearchStatus]
+    length status @?= 1
+    searchStatusText (head status) @?= "haskell"
+
+case_parseDirectMessage :: Assertion
+case_parseDirectMessage = withJSON fixture_direct_message_thimura $ \obj -> do
+    dmCreatedAt obj @?= "Sat Aug 02 16:10:04 +0000 2014"
+    dmSenderScreenName obj @?= "thimura_shinku"
+    (userScreenName . dmSender) obj @?= "thimura_shinku"
+    dmText obj @?= "おまえの明日が、今日よりもずっと、楽しい事で溢れているようにと、祈っているよ"
+    dmRecipientScreeName obj @?= "thimura"
+    dmId obj @?= 495602442466123776
+    (userScreenName . dmRecipient) obj @?= "thimura"
+    dmRecipientId obj @?= 69179963
+    dmSenderId obj @?= 2566877347
+    dmCoordinates obj @?= Nothing
+
 case_parseErrorMsg :: Assertion
 case_parseErrorMsg =
     case parseStatus fixture_error_not_authorized of
