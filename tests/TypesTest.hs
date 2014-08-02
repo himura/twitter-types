@@ -104,3 +104,19 @@ case_parseExtendedEntities = withJSON fixture_media_extended_entity $ \obj -> do
     let me = entityBody $ head media
     ueURL (meURL me) @?= "http://t.co/qOjPwmgLKO"
     meMediaURL me @?= "http://pbs.twimg.com/media/BqgdlpaCQAA5OSu.jpg"
+
+case_parseUser :: Assertion
+case_parseUser = withJSON fixture_user_thimura $ \obj -> do
+    userId obj @?= 69179963
+    userName obj @?= "ちむら"
+    userScreenName obj @?= "thimura"
+    userDescription obj @?= Just "真紅かわいい"
+    userLocation obj @?= Just "State# Irotoridori.No.World"
+    userProfileImageURL obj @?= Just "http://pbs.twimg.com/profile_images/414044387346116609/VNMfLpY7_normal.png"
+    userURL obj @?= Just "http://t.co/TFUAsAffX0"
+    userProtected obj @?= Just False
+    userFollowers obj @?= Just 754
+    userFriends obj @?= Just 780
+    userTweets obj @?= Just 24709
+    userLangCode obj @?= Just "en"
+    userCreatedAt obj @?= Just "Thu Aug 27 02:48:06 +0000 2009"
