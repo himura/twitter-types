@@ -130,6 +130,34 @@ case_parseDirectMessage = withJSON fixture_direct_message_thimura $ \obj -> do
     dmSenderId obj @?= 2566877347
     dmCoordinates obj @?= Nothing
 
+case_parseEventFavorite :: Assertion
+case_parseEventFavorite = withJSON fixture_event_favorite_thimura $ \obj -> do
+    evCreatedAt obj @?= "Sat Aug 02 16:32:01 +0000 2014"
+    evEvent obj @?= "favorite"
+    let Just (ETStatus targetObj) = evTargetObject obj
+    statusId targetObj @?= 495597326736449536
+    statusText targetObj @?= "haskell"
+
+    let ETUser targetUser = evTarget obj
+    userScreenName targetUser @?= "thimura"
+
+    let ETUser sourceUser = evSource obj
+    userScreenName sourceUser @?= "thimura_shinku"
+
+case_parseEventUnfavorite :: Assertion
+case_parseEventUnfavorite = withJSON fixture_event_unfavorite_thimura $ \obj -> do
+    evCreatedAt obj @?= "Sat Aug 02 16:32:10 +0000 2014"
+    evEvent obj @?= "unfavorite"
+    let Just (ETStatus targetObj) = evTargetObject obj
+    statusId targetObj @?= 495597326736449536
+    statusText targetObj @?= "haskell"
+
+    let ETUser targetUser = evTarget obj
+    userScreenName targetUser @?= "thimura"
+
+    let ETUser sourceUser = evSource obj
+    userScreenName sourceUser @?= "thimura_shinku"
+
 case_parseErrorMsg :: Assertion
 case_parseErrorMsg =
     case parseStatus fixture_error_not_authorized of
