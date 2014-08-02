@@ -110,10 +110,10 @@ module Web.Twitter.Types.Lens
        , userProfileImageURL
        , userURL
        , userProtected
-       , userFollowers
-       , userFriends
-       , userTweets
-       , userLangCode
+       , userFollowersCount
+       , userFriendsCount
+       , userStatusesCount
+       , userLang
        , userCreatedAt
        , userFavoritesCount
 

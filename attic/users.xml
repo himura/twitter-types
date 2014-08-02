@@ -173,7 +173,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
     <mapped_type>Bool</mapped_type>
     <description>Nullable. Deprecated. May incorrectly report "false" at times. Indicates whether the authenticated user has chosen to receive this user's tweets by SMS. Discussion</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>profile_background_color</name>
     <type>String</type>
     <mapped_type>Text</mapped_type>
@@ -181,7 +181,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
         Example:
 "profile_background_color":"e8f2f7"</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>profile_background_image_url</name>
     <type>String</type>
     <mapped_type>URIString</mapped_type>
@@ -191,7 +191,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
 "http:\/\/a2.twimg.com\/profile_background_images\
 /229557229\/twitterapi-bg.png"</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>profile_background_image_url_https</name>
     <type>String</type>
     <mapped_type>URIString</mapped_type>
@@ -201,7 +201,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
 "https:\/\/si0.twimg.com\/profile_background_images\
 /229557229\/twitterapi-bg.png"</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>profile_background_tile</name>
     <type>Boolean</type>
     <mapped_type>Bool</mapped_type>
@@ -209,7 +209,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
         Example:
 "profile_background_tile":false</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>profile_banner_url</name>
     <type>String</type>
     <mapped_type>URIString</mapped_type>
@@ -218,7 +218,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
         Example:
 "profile_banner_url": "https://si0.twimg.com/profile_banners/819797/1348102824"</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>profile_image_url</name>
     <type>String</type>
     <mapped_type>URIString</mapped_type>
@@ -294,7 +294,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
         Example:
 "screen_name":"twitterapi"</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>show_all_inline_media</name>
     <type>Boolean</type>
     <mapped_type>Bool</mapped_type>
@@ -302,53 +302,53 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
         Example:
 "show_all_inline_media": false</description>
   </field>
-  <field nullable="true">
-    <name>status</name>
-    <type>Tweets</type>
-    <mapped_type>Tweets</mapped_type>
-    <description>Nullable. If possible, the user's most recent tweet or retweet. In some circumstances, this data cannot be provided and this field will be omitted, null, or empty. Perspectival attributes within tweets embedded within users cannot always be relied upon. See Why are embedded objects stale or inaccurate?.
-        Example:
-"status": {
-    "coordinates": null,
-    "favorited": false,
-    "truncated": false,
-    "created_at": "Tue Apr 17 16:38:18 +0000 2012",
-    "id_str": "192290904646754304",
-    "entities": {
-      "urls": [
- 
-      ],
-      "hashtags": [
- 
-      ],
-      "user_mentions": [
-        {
-          "name": "Micah McVicker",
-          "id_str": "166661446",
-          "id": 166661446,
-          "indices": [
-            0,
-            14
-          ],
-          "screen_name": "MicahMcVicker"
-        }
-      ]
-    },
-    "in_reply_to_user_id_str": "166661446",
-    "contributors": null,
-    "text": "@MicahMcVicker make sure you're using include_rts=true and no other filters, then walking your timeline by since_id and max_id",
-    "retweet_count": 0,
-    "in_reply_to_status_id_str": "192290470427246594",
-    "id": 192290904646754304,
-    "geo": null,
-    "retweeted": false,
-    "in_reply_to_user_id": 166661446,
-    "place": null,
-    "in_reply_to_screen_name": "MicahMcVicker",
-    "source": "&lt;a href=\"http://sites.google.com/site/yorufukurou/\" rel=\"nofollow\">YoruFukurou&lt;/a>",
-    "in_reply_to_status_id": 192290470427246594
-  },</description>
-  </field>
+<!--   <field nullable="true"> -->
+<!--     <name>status</name> -->
+<!--     <type>Tweets</type> -->
+<!--     <mapped_type>Status</mapped_type> -->
+<!--     <description>Nullable. If possible, the user's most recent tweet or retweet. In some circumstances, this data cannot be provided and this field will be omitted, null, or empty. Perspectival attributes within tweets embedded within users cannot always be relied upon. See Why are embedded objects stale or inaccurate?. -->
+<!--         Example: -->
+<!-- "status": { -->
+<!--     "coordinates": null, -->
+<!--     "favorited": false, -->
+<!--     "truncated": false, -->
+<!--     "created_at": "Tue Apr 17 16:38:18 +0000 2012", -->
+<!--     "id_str": "192290904646754304", -->
+<!--     "entities": { -->
+<!--       "urls": [ -->
+<!--   -->
+<!--       ], -->
+<!--       "hashtags": [ -->
+<!--   -->
+<!--       ], -->
+<!--       "user_mentions": [ -->
+<!--         { -->
+<!--           "name": "Micah McVicker", -->
+<!--           "id_str": "166661446", -->
+<!--           "id": 166661446, -->
+<!--           "indices": [ -->
+<!--             0, -->
+<!--             14 -->
+<!--           ], -->
+<!--           "screen_name": "MicahMcVicker" -->
+<!--         } -->
+<!--       ] -->
+<!--     }, -->
+<!--     "in_reply_to_user_id_str": "166661446", -->
+<!--     "contributors": null, -->
+<!--     "text": "@MicahMcVicker make sure you're using include_rts=true and no other filters, then walking your timeline by since_id and max_id", -->
+<!--     "retweet_count": 0, -->
+<!--     "in_reply_to_status_id_str": "192290470427246594", -->
+<!--     "id": 192290904646754304, -->
+<!--     "geo": null, -->
+<!--     "retweeted": false, -->
+<!--     "in_reply_to_user_id": 166661446, -->
+<!--     "place": null, -->
+<!--     "in_reply_to_screen_name": "MicahMcVicker", -->
+<!--     "source": "&lt;a href=\"http://sites.google.com/site/yorufukurou/\" rel=\"nofollow\">YoruFukurou&lt;/a>", -->
+<!--     "in_reply_to_status_id": 192290470427246594 -->
+<!--   },</description> -->
+<!--   </field> -->
   <field nullable="false">
     <name>statuses_count</name>
     <type>Int</type>
@@ -389,7 +389,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
         Example:
 "verified": false</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>withheld_in_countries</name>
     <type>String</type>
     <mapped_type>Text</mapped_type>
@@ -398,7 +398,7 @@ id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JS
           Example:
           "withheld_in_countries": "GR, HK, MY"</description>
   </field>
-  <field nullable="false">
+  <field nullable="true">
     <name>withheld_scope</name>
     <type>String</type>
     <mapped_type>Text</mapped_type>

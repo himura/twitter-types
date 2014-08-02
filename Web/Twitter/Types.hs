@@ -283,40 +283,91 @@ instance FromJSON Delete where
                <*> s .: "user_id"
     parseJSON _ = mzero
 
-data User =
-    User
-    { userId              :: UserId
-    , userName            :: UserName
-    , userScreenName      :: Text
-    , userDescription     :: Maybe Text
-    , userLocation        :: Maybe Text
+data User = User
+    { userContributorsEnabled :: Bool
+    , userCreatedAt :: DateString
+    , userDefaultProfile :: Bool
+    , userDefaultProfileImage :: Bool
+    , userDescription :: Maybe Text
+    , userFavoritesCount :: Int
+    , userFollowRequestSent :: Maybe Bool
+    , userFollowing :: Maybe Bool
+    , userFollowersCount :: Int
+    , userFriendsCount :: Int
+    , userGeoEnabled :: Bool
+    , userId :: UserId
+    , userIsTranslator :: Bool
+    , userLang :: LanguageCode
+    , userListedCount :: Int
+    , userLocation :: Maybe Text
+    , userName :: Text
+    , userNotifications :: Maybe Bool
+    , userProfileBackgroundColor :: Maybe Text
+    , userProfileBackgroundImageURL :: Maybe URIString
+    , userProfileBackgroundImageURLHttps :: Maybe URIString
+    , userProfileBackgroundTile :: Maybe Bool
+    , userProfileBannerURL :: Maybe URIString
     , userProfileImageURL :: Maybe URIString
-    , userURL             :: Maybe URIString
-    , userProtected       :: Maybe Bool
-    , userFollowers       :: Maybe Int
-    , userFriends         :: Maybe Int
-    , userTweets          :: Maybe Int
-    , userLangCode        :: Maybe LanguageCode
-    , userCreatedAt       :: Maybe DateString
-    , userFavoritesCount  :: Int
+    , userProfileImageURLHttps :: Maybe URIString
+    , userProfileLinkColor :: Text
+    , userProfileSidebarBorderColor :: Text
+    , userProfileSidebarFillColor :: Text
+    , userProfileTextColor :: Text
+    , userProfileUseBackgroundImage :: Bool
+    , userProtected :: Bool
+    , userScreenName :: Text
+    , userShowAllInlineMedia :: Maybe Bool
+    , userStatusesCount :: Int
+    , userTimeZone :: Maybe Text
+    , userURL :: Maybe URIString
+    , userUtcOffset :: Maybe Int
+    , userVerified :: Bool
+    , userWithheldInCountries :: Maybe Text
+    , userWithheldScope :: Maybe Text
     } deriving (Show, Eq)
 
 instance FromJSON User where
     parseJSON (Object o) = checkError o >>
-        User <$> o .:  "id"
-             <*> o .:  "name"
-             <*> o .:  "screen_name"
+        User <$> o .:  "contributors_enabled"
+             <*> o .:  "created_at"
+             <*> o .:  "default_profile"
+             <*> o .:  "default_profile_image"
              <*> o .:? "description"
+             <*> o .:  "favourites_count"
+             <*> o .:? "follow_request_sent"
+             <*> o .:? "following"
+             <*> o .:  "followers_count"
+             <*> o .:  "friends_count"
+             <*> o .:  "geo_enabled"
+             <*> o .:  "id"
+             <*> o .:  "is_translator"
+             <*> o .:  "lang"
+             <*> o .:  "listed_count"
              <*> o .:? "location"
+             <*> o .:  "name"
+             <*> o .:? "notifications"
+             <*> o .:? "profile_background_color"
+             <*> o .:? "profile_background_image_url"
+             <*> o .:? "profile_background_image_url_https"
+             <*> o .:? "profile_background_tile"
+             <*> o .:? "profile_banner_url"
              <*> o .:? "profile_image_url"
+             <*> o .:? "profile_image_url_https"
+             <*> o .:  "profile_link_color"
+             <*> o .:  "profile_sidebar_border_color"
+             <*> o .:  "profile_sidebar_fill_color"
+             <*> o .:  "profile_text_color"
+             <*> o .:  "profile_use_background_image"
+             <*> o .:  "protected"
+             <*> o .:  "screen_name"
+             <*> o .:? "show_all_inline_media"
+             <*> o .:  "statuses_count"
+             <*> o .:? "time_zone"
              <*> o .:? "url"
-             <*> o .:? "protected"
-             <*> o .:? "followers_count"
-             <*> o .:? "friends_count"
-             <*> o .:? "statuses_count"
-             <*> o .:? "lang"
-             <*> o .:? "created_at"
-             <*> o .:? "favourites_count" .!= 0
+             <*> o .:? "utc_offset"
+             <*> o .:  "verified"
+             <*> o .:? "withheld_in_countries"
+             <*> o .:? "withheld_scope"
     parseJSON _ = mzero
 
 data List =
