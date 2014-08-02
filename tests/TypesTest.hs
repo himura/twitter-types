@@ -166,3 +166,13 @@ case_parseUser = withJSON fixture_user_thimura $ \obj -> do
     userLangCode obj @?= Just "en"
     userCreatedAt obj @?= Just "Thu Aug 27 02:48:06 +0000 2009"
     userFavoritesCount obj @?= 17313
+
+case_parseList :: Assertion
+case_parseList = withJSON fixture_list_thimura_haskell $ \obj -> do
+    listId obj @?= 20849097
+    listName obj @?= "haskell"
+    listFullName obj @?= "@thimura/haskell"
+    listMemberCount obj @?= 50
+    listSubscriberCount obj @?= 1
+    listMode obj @?= "public"
+    (userScreenName . listUser) obj @?= "thimura"
