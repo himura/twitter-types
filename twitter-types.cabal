@@ -48,6 +48,7 @@ test-suite tests
     , http-types
     , aeson
     , attoparsec
+    , bytestring
     , text
     , unordered-containers
     , filepath

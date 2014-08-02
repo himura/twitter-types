@@ -8,9 +8,7 @@ module Fixtures where
 import Language.Haskell.TH
 import Data.Aeson
 import Data.Attoparsec.ByteString
-import qualified Data.Text as T
-import qualified Data.Text.Encoding as T
-import qualified Data.Text.IO as T
+import qualified Data.ByteString as S
 import Data.Maybe
 import System.Directory
 import System.Environment
@@ -18,8 +16,8 @@ import System.FilePath
 import System.IO.Unsafe (unsafePerformIO)
 import Control.Applicative
 
-parseJSONValue :: T.Text -> Value
-parseJSONValue = fromJust . maybeResult . parse json . T.encodeUtf8
+parseJSONValue :: S.ByteString -> Value
+parseJSONValue = fromJust . maybeResult . parse json
 
 fixturePath :: String
 fixturePath = unsafePerformIO $ do
@@ -27,10 +25,10 @@ fixturePath = unsafePerformIO $ do
   where
     defaultPath = takeDirectory __FILE__ </> "fixtures"
 
-loadFixture :: (T.Text -> a) -> String -> IO a
-loadFixture conv filename = conv <$> T.readFile (fixturePath </> filename)
+loadFixture :: (S.ByteString -> a) -> String -> IO a
+loadFixture conv filename = conv <$> S.readFile (fixturePath </> filename)
 
-fixture :: (T.Text -> a) -> String -> a
+fixture :: (S.ByteString -> a) -> String -> a
 fixture conv = unsafePerformIO . loadFixture conv
 
 loadFixturesTH :: Name -> Q [Dec]
