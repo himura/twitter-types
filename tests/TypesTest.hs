@@ -30,10 +30,55 @@ withJSON js f = either assertFailure id $ do
 
 case_parseStatus :: Assertion
 case_parseStatus = withJSON fixture_status01 $ \obj -> do
+  statusCreatedAt obj @?= "Sat Sep 10 22:23:38 +0000 2011"
   statusId obj @?= 112652479837110273
+  statusText obj @?= "@twitter meets @seepicturely at #tcdisrupt cc.@boscomonkey @episod http://t.co/6J2EgYM"
+  statusSource obj @?= "<a href=\"http://instagr.am\" rel=\"nofollow\">Instagram</a>"
+  statusTruncated obj @?= False
+  statusEntities obj @?= Nothing
+  statusExtendedEntities obj @?= Nothing
+  statusInReplyTo obj @?= Nothing
+  statusInReplyToUser obj @?= Just 783214
+  statusFavorite obj @?= Just False
   statusRetweetCount obj @?= Just 0
   (userScreenName . statusUser) obj @?= "imeoin"
-  statusEntities obj @?= Nothing
+  statusRetweet obj @?= Nothing
+  statusPlace obj @?= Nothing
+  statusFavoriteCount obj @?= 0
+  statusLang obj @?= Nothing
+  statusPossiblySensitive obj @?= Just False
+  statusCoordinates obj @?= Nothing
+
+case_parseStatusWithPhoto :: Assertion
+case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj -> do
+    statusId obj @?= 491143410770657280
+    statusText obj @?= "近所の海です http://t.co/FjSOU8dDoD"
+    statusTruncated obj @?= False
+
+    let ent = fromJust $ statusEntities obj
+    enHashTags ent @?= []
+    enUserMentions ent @?= []
+    enURLs ent @?= []
+    length (enMedia ent) @?= 1
+    map (meMediaURLHttps . entityBody) (enMedia ent) @?= ["https://pbs.twimg.com/media/BtDkUVaCQAIpWBU.jpg"]
+
+    let exent = fromJust $ statusExtendedEntities obj
+    enHashTags exent @?= []
+    enUserMentions exent @?= []
+    enURLs exent @?= []
+    length (enMedia ent) @?= 1
+
+    statusInReplyTo obj @?= Nothing
+    statusInReplyToUser obj @?= Nothing
+    statusFavorite obj @?= Just False
+    statusRetweetCount obj @?= Just 4
+    (userScreenName . statusUser) obj @?= "thimura"
+    statusRetweet obj @?= Nothing
+    statusPlace obj @?= Nothing
+    statusFavoriteCount obj @?= 9
+    statusLang obj @?= Just "ja"
+    statusPossiblySensitive obj @?= Just False
+    statusCoordinates obj @?= Nothing
 
 case_parseStatusIncludeEntities :: Assertion
 case_parseStatusIncludeEntities = withJSON fixture_status_with_entity $ \obj -> do
