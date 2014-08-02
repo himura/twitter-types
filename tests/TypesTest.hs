@@ -180,11 +180,20 @@ case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
         media = enMedia ent
     length media @?= 1
     let me = entityBody $ head media
-    ueURL (meURL me) @?= "http://t.co/rJC5Pxsu"
-    meMediaURLHttps me @?= "https://pbs.twimg.com/media/AZVLmp-CIAAbkyy.jpg"
+    meType me @?= "photo"
+    meId me @?= 114080493040967680
     let sizes = meSizes me
     assert $ M.member "thumb" sizes
     assert $ M.member "large" sizes
+
+    let Just mediaSize = M.lookup "large" sizes
+
+    msWidth mediaSize @?= 226
+    msHeight mediaSize @?= 238
+    msResize mediaSize @?= "fit"
+
+    ueURL (meURL me) @?= "http://t.co/rJC5Pxsu"
+    meMediaURLHttps me @?= "https://pbs.twimg.com/media/AZVLmp-CIAAbkyy.jpg"
 
 case_parseEmptyEntity :: Assertion
 case_parseEmptyEntity = withJSON (parseJSONValue "{}") $ \entity -> do
