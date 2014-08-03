@@ -11,21 +11,21 @@ import Language.Haskell.TH.Syntax
 makeLenses :: Name -> Q [Dec]
 makeLenses typename = do
     typeinfo <- reify typename
+    runIO $ print typeinfo
     case typeinfo of
-        TyConI (DataD cxt _name tyVarBndr [RecC _dataConName fields] _names) ->
-            makeFieldLenses cxt typename tyVarBndr fields
+        TyConI (DataD _cxt _name tyVarBndr [RecC _dataConName fields] _names) ->
+            makeFieldLenses typename tyVarBndr fields
         _ -> error $ "unknown type info: reify " ++ show typename
 
-makeFieldLenses :: Cxt -> Name -> [TyVarBndr] -> [VarStrictType] -> Q [Dec]
-makeFieldLenses cxt tyConName tyVarBndr fields = do
-    fieldsDec <- mapM (eachField cxt tyConName tyVarBndr) fields
+makeFieldLenses :: Name -> [TyVarBndr] -> [VarStrictType] -> Q [Dec]
+makeFieldLenses tyConName tyVarBndr fields = do
+    fieldsDec <- mapM (eachField tyConName tyVarBndr) fields
     return $ concat fieldsDec
 
-eachField :: Cxt -> Name -> [TyVarBndr] -> (Name, Strict, Type) -> Q [Dec]
-eachField _cxt tyConName _tyVarBndr (fieldName, _, fieldType) = do
+eachField :: Name -> [TyVarBndr] -> (Name, Strict, Type) -> Q [Dec]
+eachField tyConName tyVarBndr (fieldName, _, fieldType) = do
     let funN = mkName (nameBase fieldName)
-        simpleLensName = mkName "SimpleLens"
-    sigdef <- sigD funN (conT simpleLensName `appT` conT tyConName `appT` return fieldType)
+    sigdef <- eachFieldSigD funN tyConName tyVarBndr fieldType
     f <- newName "f"
     record <- newName "record"
     newVal <- newName "newVal"
@@ -34,4 +34,22 @@ eachField _cxt tyConName _tyVarBndr (fieldName, _, fieldType) = do
                `appE` (lamE [varP newVal] (recUpdE (varE record) [return (fieldName, recUpdVal)]))
                `appE` (varE f `appE` (varE fieldName `appE` varE record))
     bind <- funD funN [clause [varP f, varP record] (normalB expr) []]
-    return [sigdef, bind]
+    pragD <- pragInlD funN Inline FunLike AllPhases
+    return [sigdef, bind, pragD]
+
+eachFieldSigD :: Name -> Name -> [TyVarBndr] -> Type -> DecQ
+eachFieldSigD funN tyConName [_] (VarT _fieldTypeVal) = do
+    let lensName = mkName "Lens"
+    a <- newName "a"
+    b <- newName "b"
+    let typ = forallT [PlainTV a, PlainTV b] (return []) (conT lensName `appT` (conT tyConName `appT` varT a) `appT` (conT tyConName `appT` varT b) `appT` varT a `appT` varT b)
+    sigD funN typ
+eachFieldSigD funN tyConName [PlainTV a] fieldType = do
+    let simpleLensName = mkName "SimpleLens"
+    let typ = forallT [PlainTV a] (return []) (conT simpleLensName `appT` (conT tyConName `appT` varT a) `appT` return fieldType)
+    sigD funN typ
+eachFieldSigD funN tyConName [] fieldType = do
+    let simpleLensName = mkName "SimpleLens"
+    sigD funN (conT simpleLensName `appT` conT tyConName `appT` return fieldType)
+eachFieldSigD funN tyConName tyVarBndr fieldType =
+    error $ "Unknown TH : " ++ show funN ++ " " ++ show tyConName ++ " " ++ show tyVarBndr ++ " " ++ show fieldType

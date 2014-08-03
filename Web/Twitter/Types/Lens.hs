@@ -174,9 +174,6 @@ module Web.Twitter.Types.Lens
        )
        where
 
-import Data.Functor
-import qualified Web.Twitter.Types as TT
-
 import Web.Twitter.Types
        ( DateString
        , UserId
@@ -215,21 +212,8 @@ import Web.Twitter.Types.TH
 type Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t
 type SimpleLens s a = Lens s s a a
 
-#define HASHSIGN #
-#define SIMPLE_LENS(name, s, a) \
-name :: SimpleLens (s) (a);\
-name f record = (\newVal -> record { TT.name = newVal }) <$> (f (TT.name record));\
-{-HASHSIGN INLINE name HASHSIGN-}
-
-#define TYPECHANGE_LENS(name, s) \
-name :: Lens ((s) a) ((s) b) (a) (b);\
-name f record = (\newVal -> record { TT.name = newVal }) <$> (f (TT.name record))
-
 makeLenses ''Status
-
-TYPECHANGE_LENS(searchResultStatuses  , SearchResult                          )
-SIMPLE_LENS(searchResultSearchMetadata, SearchResult body,  SearchMetadata    )
-
+makeLenses ''SearchResult
 makeLenses ''SearchStatus
 makeLenses ''SearchMetadata
 makeLenses ''RetweetedStatus
@@ -247,9 +231,7 @@ makeLenses ''Coordinates
 makeLenses ''Place
 makeLenses ''BoundingBox
 makeLenses ''Entities
-
-TYPECHANGE_LENS(entityBody            , Entity                                )
-SIMPLE_LENS(entityIndices             , Entity a,  EntityIndices              )
+makeLenses ''Entity
 
 class AsStatus s where
     status_id :: SimpleLens s StatusId
