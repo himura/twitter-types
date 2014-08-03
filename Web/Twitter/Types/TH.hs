@@ -11,7 +11,6 @@ import Language.Haskell.TH.Syntax
 makeLenses :: Name -> Q [Dec]
 makeLenses typename = do
     typeinfo <- reify typename
-    runIO $ print typeinfo
     case typeinfo of
         TyConI (DataD _cxt _name tyVarBndr [RecC _dataConName fields] _names) ->
             makeFieldLenses typename tyVarBndr fields
