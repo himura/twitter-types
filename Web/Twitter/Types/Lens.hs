@@ -40,11 +40,11 @@ module Web.Twitter.Types.Lens
        , statusTruncated
        , statusEntities
        , statusExtendedEntities
-       , statusInReplyTo
-       , statusInReplyToUser
-       , statusFavorite
+       , statusInReplyToStatusId
+       , statusInReplyToUserId
+       , statusFavorited
        , statusRetweetCount
-       , statusRetweet
+       , statusRetweetedStatus
        , statusUser
        , statusPlace
        , statusFavoriteCount

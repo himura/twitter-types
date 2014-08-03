@@ -31,6 +31,7 @@ module Web.Twitter.Types
        , Coordinates(..)
        , Place(..)
        , BoundingBox(..)
+       , Contributor(..)
        , checkError
        )
        where
@@ -79,48 +80,65 @@ instance FromJSON StreamingAPI where
         js = parseJSON v
     parseJSON _ = mzero
 
-data Status =
-    Status
-    { statusCreatedAt          :: DateString
-    , statusId                 :: StatusId
-    , statusText               :: Text
-    , statusSource             :: Text
-    , statusTruncated          :: Bool
-    , statusEntities           :: Maybe Entities
-    , statusExtendedEntities   :: Maybe Entities
-    , statusInReplyTo          :: Maybe StatusId
-    , statusInReplyToUser      :: Maybe UserId
-    , statusFavorite           :: Maybe Bool
-    , statusRetweetCount       :: Maybe Integer
-    , statusUser               :: User
-    , statusRetweet            :: Maybe Status
-    , statusPlace              :: Maybe Place
-    , statusFavoriteCount      :: Integer
-    , statusLang               :: Maybe Text
-    , statusPossiblySensitive  :: Maybe Bool
-    , statusCoordinates        :: Maybe Coordinates
+data Status = Status
+    { statusContributors :: Maybe [Contributor]
+    , statusCoordinates :: Maybe Coordinates
+    , statusCreatedAt :: DateString
+    , statusCurrentUserRetweet :: Maybe UserId
+    , statusEntities :: Maybe Entities
+    , statusExtendedEntities :: Maybe Entities
+    , statusFavoriteCount :: Integer
+    , statusFavorited :: Maybe Bool
+    , statusFilterLevel :: Maybe Text
+    , statusId :: StatusId
+    , statusInReplyToScreenName :: Maybe Text
+    , statusInReplyToStatusId :: Maybe StatusId
+    , statusInReplyToUserId :: Maybe UserId
+    , statusLang :: Maybe LanguageCode
+    , statusPlace :: Maybe Place
+    , statusPossiblySensitive :: Maybe Bool
+    , statusScopes :: Maybe Object
+    , statusRetweetCount :: Integer
+    , statusRetweeted :: Maybe Bool
+    , statusRetweetedStatus :: Maybe Status
+    , statusSource :: Text
+    , statusText :: Text
+    , statusTruncated :: Bool
+    , statusUser :: User
+    , statusWithheldCopyright :: Maybe Bool
+    , statusWithheldInCountries :: Maybe [Text]
+    , statusWithheldScope :: Maybe Text
     } deriving (Show, Eq)
 
 instance FromJSON Status where
     parseJSON (Object o) = checkError o >>
-        Status <$> o .:  "created_at"
-               <*> o .:  "id"
-               <*> o .:  "text"
-               <*> o .:  "source"
-               <*> o .:  "truncated"
+        Status <$> o .:? "contributors"
+               <*> o .:? "coordinates"
+               <*> o .:  "created_at"
+               <*> ((o .: "current_user_retweet" >>= (.: "id")) <|> return Nothing)
                <*> o .:? "entities"
                <*> o .:? "extended_entities"
+               <*> o .:? "favorite_count" .!= 0
+               <*> o .:? "favorited"
+               <*> o .:? "filter_level"
+               <*> o .:  "id"
+               <*> o .:? "in_reply_to_screen_name"
                <*> o .:? "in_reply_to_status_id"
                <*> o .:? "in_reply_to_user_id"
-               <*> o .:? "favorited"
-               <*> o .:? "retweet_count"
-               <*> o .:  "user"
-               <*> o .:? "retweeted_status"
-               <*> o .:? "place"
-               <*> o .:? "favorite_count" .!= 0
                <*> o .:? "lang"
+               <*> o .:? "place"
                <*> o .:? "possibly_sensitive"
-               <*> o .:? "coordinates"
+               <*> o .:? "scopes"
+               <*> o .:? "retweet_count" .!= 0
+               <*> o .:? "retweeted"
+               <*> o .:? "retweeted_status"
+               <*> o .:  "source"
+               <*> o .:  "text"
+               <*> o .:  "truncated"
+               <*> o .:  "user"
+               <*> o .:? "withheld_copyright"
+               <*> o .:? "withheld_in_countries"
+               <*> o .:? "withheld_scope"
     parseJSON _ = mzero
 
 data SearchResult body =
@@ -547,4 +565,15 @@ instance FromJSON a => FromJSON (Entity a) where
     parseJSON v@(Object o) =
         Entity <$> parseJSON v
                <*> o .: "indices"
+    parseJSON _ = mzero
+
+data Contributor = Contributor
+    { contributorId :: UserId
+    , contributorScreenName :: Text
+    } deriving (Show, Eq)
+
+instance FromJSON Contributor where
+    parseJSON (Object o) =
+        Contributor <$>  o .:  "id"
+                    <*>  o .:  "screen_name"
     parseJSON _ = mzero
