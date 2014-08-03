@@ -11,7 +11,6 @@ import Data.Attoparsec.ByteString
 import qualified Data.ByteString as S
 import Data.Maybe
 import System.Directory
-import System.Environment
 import System.FilePath
 import System.IO.Unsafe (unsafePerformIO)
 import Control.Applicative
@@ -20,10 +19,7 @@ parseJSONValue :: S.ByteString -> Value
 parseJSONValue = fromJust . maybeResult . parse json
 
 fixturePath :: String
-fixturePath = unsafePerformIO $ do
-    fromMaybe defaultPath <$> lookupEnv "TWITTER_FIXTURE_PATH"
-  where
-    defaultPath = takeDirectory __FILE__ </> "fixtures"
+fixturePath = takeDirectory __FILE__ </> "fixtures"
 
 loadFixture :: (S.ByteString -> a) -> String -> IO a
 loadFixture conv filename = conv <$> S.readFile (fixturePath </> filename)
