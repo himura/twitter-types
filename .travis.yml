@@ -27,6 +27,7 @@ install:
   - export PATH=$HOME/.cabal/bin:$PATH
   - which cabal
   - travis_retry cabal update
+  - cabal install happy
   - cabal install --only-dependencies --enable-tests
   - "[ -n \"$USE_COVERALLS\" ] && travis_retry cabal install hpc-coveralls || true"
   - ghc-pkg list
