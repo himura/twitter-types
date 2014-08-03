@@ -201,11 +201,11 @@ makeLenses ''TT.Entities
 makeLenses ''TT.Entity
 
 class AsStatus s where
-    status_id :: SimpleLens s TT.StatusId
-    text :: SimpleLens s Text
-    user :: SimpleLens s TT.User
-    created_at :: SimpleLens s TT.DateString
-    geolocation :: SimpleLens s (Maybe TT.Coordinates)
+    status_id :: Lens' s TT.StatusId
+    text :: Lens' s Text
+    user :: Lens' s TT.User
+    created_at :: Lens' s TT.DateString
+    geolocation :: Lens' s (Maybe TT.Coordinates)
 
 instance AsStatus TT.Status where
     status_id = statusId
@@ -236,9 +236,9 @@ instance AsStatus TT.DirectMessage where
     geolocation = dmCoordinates
 
 class AsUser u where
-    user_id :: SimpleLens u TT.UserId
-    name :: SimpleLens u TT.UserName
-    screen_name :: SimpleLens u Text
+    user_id :: Lens' u TT.UserId
+    name :: Lens' u TT.UserName
+    screen_name :: Lens' u Text
 
 instance AsUser TT.User where
     user_id = userId

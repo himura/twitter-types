@@ -44,9 +44,9 @@ eachFieldSigD funN tyConName [_] (VarT _fieldTypeVal) = do
     let typ = forallT [PlainTV a, PlainTV b] (return []) (conT ''Lens `appT` (conT tyConName `appT` varT a) `appT` (conT tyConName `appT` varT b) `appT` varT a `appT` varT b)
     sigD funN typ
 eachFieldSigD funN tyConName [PlainTV a] fieldType = do
-    let typ = forallT [PlainTV a] (return []) (conT ''SimpleLens `appT` (conT tyConName `appT` varT a) `appT` return fieldType)
+    let typ = forallT [PlainTV a] (return []) (conT ''Lens' `appT` (conT tyConName `appT` varT a) `appT` return fieldType)
     sigD funN typ
 eachFieldSigD funN tyConName [] fieldType = do
-    sigD funN (conT ''SimpleLens `appT` conT tyConName `appT` return fieldType)
+    sigD funN (conT ''Lens' `appT` conT tyConName `appT` return fieldType)
 eachFieldSigD funN tyConName tyVarBndr fieldType =
     error $ "Unknown TH : " ++ show funN ++ " " ++ show tyConName ++ " " ++ show tyVarBndr ++ " " ++ show fieldType
