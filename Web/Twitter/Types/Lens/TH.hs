@@ -1,6 +1,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE CPP #-}
 
 module Web.Twitter.Types.Lens.TH
        where
@@ -34,8 +35,17 @@ eachField tyConName tyVarBndr (fieldName, _, fieldType) = do
                `appE` (lamE [varP newVal] (recUpdE (varE record) [return (fieldName, recUpdVal)]))
                `appE` (varE f `appE` (varE fieldName `appE` varE record))
     bind <- funD funN [clause [varP f, varP record] (normalB expr) []]
+#if MIN_VERSION_template_haskell(2,8,0)
+    -- GHC 7.6
     pragD <- pragInlD funN Inline FunLike AllPhases
     return [sigdef, bind, pragD]
+#elif MIN_VERSION_template_haskell(2,6,0)
+    -- GHC 7.4
+    pragD <- pragInlD funN (inlineSpecNoPhase True False)
+    return [sigdef, bind, pragD]
+#else
+    return [sigdef, bind]
+#endif
 
 eachFieldSigD :: Name -> Name -> [TyVarBndr] -> Type -> DecQ
 eachFieldSigD funN tyConName [_] (VarT _fieldTypeVal) = do
