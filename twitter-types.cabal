@@ -29,10 +29,16 @@ library
     , aeson >= 0.3.2.2
     , text
     , unordered-containers
+    , template-haskell
 
   exposed-modules:
     Web.Twitter.Types
     Web.Twitter.Types.Lens
+    -- for documentation
+    Web.Twitter.Types.Lens.Types
+
+  other-modules:
+    Web.Twitter.Types.Lens.TH
 
 test-suite tests
   type:              exitcode-stdio-1.0
