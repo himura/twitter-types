@@ -7,6 +7,7 @@ module Web.Twitter.Types.TH
 
 import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
+import Web.Twitter.Types.Lens.Types
 
 makeLenses :: Name -> Q [Dec]
 makeLenses typename = do
@@ -38,17 +39,14 @@ eachField tyConName tyVarBndr (fieldName, _, fieldType) = do
 
 eachFieldSigD :: Name -> Name -> [TyVarBndr] -> Type -> DecQ
 eachFieldSigD funN tyConName [_] (VarT _fieldTypeVal) = do
-    let lensName = mkName "Lens"
     a <- newName "a"
     b <- newName "b"
-    let typ = forallT [PlainTV a, PlainTV b] (return []) (conT lensName `appT` (conT tyConName `appT` varT a) `appT` (conT tyConName `appT` varT b) `appT` varT a `appT` varT b)
+    let typ = forallT [PlainTV a, PlainTV b] (return []) (conT ''Lens `appT` (conT tyConName `appT` varT a) `appT` (conT tyConName `appT` varT b) `appT` varT a `appT` varT b)
     sigD funN typ
 eachFieldSigD funN tyConName [PlainTV a] fieldType = do
-    let simpleLensName = mkName "SimpleLens"
-    let typ = forallT [PlainTV a] (return []) (conT simpleLensName `appT` (conT tyConName `appT` varT a) `appT` return fieldType)
+    let typ = forallT [PlainTV a] (return []) (conT ''SimpleLens `appT` (conT tyConName `appT` varT a) `appT` return fieldType)
     sigD funN typ
 eachFieldSigD funN tyConName [] fieldType = do
-    let simpleLensName = mkName "SimpleLens"
-    sigD funN (conT simpleLensName `appT` conT tyConName `appT` return fieldType)
+    sigD funN (conT ''SimpleLens `appT` conT tyConName `appT` return fieldType)
 eachFieldSigD funN tyConName tyVarBndr fieldType =
     error $ "Unknown TH : " ++ show funN ++ " " ++ show tyConName ++ " " ++ show tyVarBndr ++ " " ++ show fieldType
