@@ -34,9 +34,11 @@ library
   exposed-modules:
     Web.Twitter.Types
     Web.Twitter.Types.Lens
+    -- for documentation
+    Web.Twitter.Types.Lens.Types
 
   other-modules:
-    Web.Twitter.Types.TH
+    Web.Twitter.Types.Lens.TH
 
 test-suite tests
   type:              exitcode-stdio-1.0

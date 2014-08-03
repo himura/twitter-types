@@ -2,7 +2,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Web.Twitter.Types.TH
+module Web.Twitter.Types.Lens.TH
        where
 
 import Language.Haskell.TH

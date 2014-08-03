@@ -2,36 +2,36 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RankNTypes, CPP, FlexibleInstances #-}
 
 module Web.Twitter.Types.Lens
-       ( DateString
-       , UserId
-       , Friends
-       , URIString
-       , UserName
-       , StatusId
-       , LanguageCode
-       , StreamingAPI(..)
-       , Status
-       , SearchResult
-       , SearchStatus
-       , SearchMetadata
-       , RetweetedStatus
-       , DirectMessage
-       , EventTarget(..)
-       , Event
-       , Delete
-       , User
-       , List
-       , Entities
-       , EntityIndices
-       , Entity
-       , HashTagEntity
-       , UserEntity
-       , URLEntity
-       , MediaEntity
-       , MediaSize
-       , Coordinates
-       , Place
-       , BoundingBox
+       ( TT.DateString
+       , TT.UserId
+       , TT.Friends
+       , TT.URIString
+       , TT.UserName
+       , TT.StatusId
+       , TT.LanguageCode
+       , TT.StreamingAPI(..)
+       , TT.Status
+       , TT.SearchResult
+       , TT.SearchStatus
+       , TT.SearchMetadata
+       , TT.RetweetedStatus
+       , TT.DirectMessage
+       , TT.EventTarget(..)
+       , TT.Event
+       , TT.Delete
+       , TT.User
+       , TT.List
+       , TT.Entities
+       , TT.EntityIndices
+       , TT.Entity
+       , TT.HashTagEntity
+       , TT.UserEntity
+       , TT.URLEntity
+       , TT.MediaEntity
+       , TT.MediaSize
+       , TT.Coordinates
+       , TT.Place
+       , TT.BoundingBox
 
        , statusCreatedAt
        , statusId
@@ -174,94 +174,61 @@ module Web.Twitter.Types.Lens
        )
        where
 
-import Web.Twitter.Types
-       ( DateString
-       , UserId
-       , Friends
-       , URIString
-       , UserName
-       , StatusId
-       , LanguageCode
-       , StreamingAPI
-       , Status
-       , SearchResult
-       , SearchStatus
-       , SearchMetadata
-       , RetweetedStatus
-       , DirectMessage
-       , EventTarget
-       , Event
-       , Delete
-       , User
-       , List
-       , Entities
-       , EntityIndices
-       , Entity
-       , HashTagEntity
-       , UserEntity
-       , URLEntity
-       , MediaEntity
-       , MediaSize
-       , Coordinates
-       , Place
-       , BoundingBox
-       )
+import Web.Twitter.Types.Lens.Types
+import qualified Web.Twitter.Types as TT
 import Data.Text (Text)
-import Web.Twitter.Types.TH
+import Web.Twitter.Types.Lens.TH
 
-type Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t
-type SimpleLens s a = Lens s s a a
-
-makeLenses ''Status
-makeLenses ''SearchResult
-makeLenses ''SearchStatus
-makeLenses ''SearchMetadata
-makeLenses ''RetweetedStatus
-makeLenses ''DirectMessage
-makeLenses ''Event
-makeLenses ''Delete
-makeLenses ''User
-makeLenses ''List
-makeLenses ''HashTagEntity
-makeLenses ''UserEntity
-makeLenses ''URLEntity
-makeLenses ''MediaEntity
-makeLenses ''MediaSize
-makeLenses ''Coordinates
-makeLenses ''Place
-makeLenses ''BoundingBox
-makeLenses ''Entities
-makeLenses ''Entity
+makeLenses ''TT.Status
+makeLenses ''TT.SearchResult
+makeLenses ''TT.SearchStatus
+makeLenses ''TT.SearchMetadata
+makeLenses ''TT.RetweetedStatus
+makeLenses ''TT.DirectMessage
+makeLenses ''TT.Event
+makeLenses ''TT.Delete
+makeLenses ''TT.User
+makeLenses ''TT.List
+makeLenses ''TT.HashTagEntity
+makeLenses ''TT.UserEntity
+makeLenses ''TT.URLEntity
+makeLenses ''TT.MediaEntity
+makeLenses ''TT.MediaSize
+makeLenses ''TT.Coordinates
+makeLenses ''TT.Place
+makeLenses ''TT.BoundingBox
+makeLenses ''TT.Entities
+makeLenses ''TT.Entity
 
 class AsStatus s where
-    status_id :: SimpleLens s StatusId
+    status_id :: SimpleLens s TT.StatusId
     text :: SimpleLens s Text
-    user :: SimpleLens s User
-    created_at :: SimpleLens s DateString
-    geolocation :: SimpleLens s (Maybe Coordinates)
+    user :: SimpleLens s TT.User
+    created_at :: SimpleLens s TT.DateString
+    geolocation :: SimpleLens s (Maybe TT.Coordinates)
 
-instance AsStatus Status where
+instance AsStatus TT.Status where
     status_id = statusId
     text = statusText
     user = statusUser
     created_at = statusCreatedAt
     geolocation = statusCoordinates
 
-instance AsStatus SearchStatus where
+instance AsStatus TT.SearchStatus where
     status_id = searchStatusId
     text = searchStatusText
     user = searchStatusUser
     created_at = searchStatusCreatedAt
     geolocation = searchStatusCoordinates
 
-instance AsStatus RetweetedStatus where
+instance AsStatus TT.RetweetedStatus where
     status_id = rsId
     text = rsText
     user = rsUser
     created_at = rsCreatedAt
     geolocation = rsCoordinates
 
-instance AsStatus DirectMessage where
+instance AsStatus TT.DirectMessage where
     status_id = dmId
     text = dmText
     user = dmSender
@@ -269,21 +236,21 @@ instance AsStatus DirectMessage where
     geolocation = dmCoordinates
 
 class AsUser u where
-    user_id :: SimpleLens u UserId
-    name :: SimpleLens u UserName
+    user_id :: SimpleLens u TT.UserId
+    name :: SimpleLens u TT.UserName
     screen_name :: SimpleLens u Text
 
-instance AsUser User where
+instance AsUser TT.User where
     user_id = userId
     name = userName
     screen_name = userScreenName
 
-instance AsUser UserEntity where
+instance AsUser TT.UserEntity where
     user_id = userEntityUserId
     name = userEntityUserName
     screen_name = userEntityUserScreenName
 
-instance AsUser (Entity UserEntity) where
+instance AsUser (TT.Entity TT.UserEntity) where
     user_id = entityBody.userEntityUserId
     name = entityBody.userEntityUserName
     screen_name = entityBody.userEntityUserScreenName
