@@ -97,7 +97,7 @@ case_parseSearchStatusMetadata = withJSON fixture_search_haskell $ \obj -> do
     let metadata = searchResultSearchMetadata obj
     searchMetadataMaxId metadata @?= 495597397733433345
     searchMetadataSinceId metadata @?= 0
-    searchMetadataRefreshUrl metadata @?= "?since_id=495597397733433345&q=haskell&include_entities=1"
+    searchMetadataRefreshURL metadata @?= "?since_id=495597397733433345&q=haskell&include_entities=1"
     searchMetadataNextResults metadata @?= Just "?max_id=495594369802440705&q=haskell&include_entities=1"
     searchMetadataCount metadata @?= 1
     searchMetadataCompletedIn metadata @?= Just 0.043

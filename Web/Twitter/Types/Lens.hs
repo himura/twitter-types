@@ -64,7 +64,7 @@ module Web.Twitter.Types.Lens
 
        , searchMetadataMaxId
        , searchMetadataSinceId
-       , searchMetadataRefreshUrl
+       , searchMetadataRefreshURL
        , searchMetadataNextResults
        , searchMetadataCount
        , searchMetadataCompletedIn
@@ -157,7 +157,7 @@ module Web.Twitter.Types.Lens
        , placeId
        , placeName
        , placeType
-       , placeUrl
+       , placeURL
 
        , boundingBoxCoordinates
        , boundingBoxType

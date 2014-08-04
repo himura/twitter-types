@@ -178,7 +178,7 @@ data SearchMetadata =
     SearchMetadata
     { searchMetadataMaxId         :: StatusId
     , searchMetadataSinceId       :: StatusId
-    , searchMetadataRefreshUrl    :: URIString
+    , searchMetadataRefreshURL    :: URIString
     , searchMetadataNextResults   :: Maybe URIString
     , searchMetadataCount         :: Int
     , searchMetadataCompletedIn   :: Maybe Float
@@ -504,7 +504,7 @@ data Place =
     , placeId           :: Text
     , placeName         :: Text
     , placeType         :: Text
-    , placeUrl          :: Text
+    , placeURL          :: Text
     } deriving (Show, Eq)
 
 instance FromJSON Place where
