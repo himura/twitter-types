@@ -33,24 +33,33 @@ module Web.Twitter.Types.Lens
        , TT.Place
        , TT.BoundingBox
 
+       , statusContributors
+       , statusCoordinates
        , statusCreatedAt
-       , statusId
-       , statusText
-       , statusSource
-       , statusTruncated
+       , statusCurrentUserRetweet
        , statusEntities
        , statusExtendedEntities
+       , statusFavoriteCount
+       , statusFavorited
+       , statusFilterLevel
+       , statusId
+       , statusInReplyToScreenName
        , statusInReplyToStatusId
        , statusInReplyToUserId
-       , statusFavorited
-       , statusRetweetCount
-       , statusRetweetedStatus
-       , statusUser
-       , statusPlace
-       , statusFavoriteCount
        , statusLang
+       , statusPlace
        , statusPossiblySensitive
-       , statusCoordinates
+       , statusScopes
+       , statusRetweetCount
+       , statusRetweeted
+       , statusRetweetedStatus
+       , statusSource
+       , statusText
+       , statusTruncated
+       , statusUser
+       , statusWithheldCopyright
+       , statusWithheldInCountries
+       , statusWithheldScope
 
        , searchResultStatuses
        , searchResultSearchMetadata
@@ -102,20 +111,46 @@ module Web.Twitter.Types.Lens
        , delId
        , delUserId
 
-       , userId
-       , userName
-       , userScreenName
+       , userContributorsEnabled
+       , userCreatedAt
+       , userDefaultProfile
+       , userDefaultProfileImage
        , userDescription
-       , userLocation
-       , userProfileImageURL
-       , userURL
-       , userProtected
+       , userFavoritesCount
+       , userFollowRequestSent
+       , userFollowing
        , userFollowersCount
        , userFriendsCount
-       , userStatusesCount
+       , userGeoEnabled
+       , userId
+       , userIsTranslator
        , userLang
-       , userCreatedAt
-       , userFavoritesCount
+       , userListedCount
+       , userLocation
+       , userName
+       , userNotifications
+       , userProfileBackgroundColor
+       , userProfileBackgroundImageURL
+       , userProfileBackgroundImageURLHttps
+       , userProfileBackgroundTile
+       , userProfileBannerURL
+       , userProfileImageURL
+       , userProfileImageURLHttps
+       , userProfileLinkColor
+       , userProfileSidebarBorderColor
+       , userProfileSidebarFillColor
+       , userProfileTextColor
+       , userProfileUseBackgroundImage
+       , userProtected
+       , userScreenName
+       , userShowAllInlineMedia
+       , userStatusesCount
+       , userTimeZone
+       , userURL
+       , userUtcOffset
+       , userVerified
+       , userWithheldInCountries
+       , userWithheldScope
 
        , listId
        , listName
