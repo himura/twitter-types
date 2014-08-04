@@ -115,6 +115,7 @@ module Web.Twitter.Types.Lens
        , userTweets
        , userLangCode
        , userCreatedAt
+       , userFavoritesCount
 
        , listId
        , listName
