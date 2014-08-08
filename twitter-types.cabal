@@ -6,7 +6,7 @@ author:            Takahiro HIMURA
 maintainer:        Takahiro HIMURA <taka@himura.jp>
 synopsis:          Twitter JSON parser and types
 description:       This package uses enumerator package for access Twitter API.
-category:          Web, Enumerator
+category:          Web
 stability:         Experimental
 cabal-version:     >= 1.8
 build-type:        Simple
