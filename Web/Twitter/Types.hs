@@ -31,6 +31,7 @@ module Web.Twitter.Types
        , Coordinates(..)
        , Place(..)
        , BoundingBox(..)
+       , Contributor(..)
        , checkError
        )
        where
@@ -79,48 +80,65 @@ instance FromJSON StreamingAPI where
         js = parseJSON v
     parseJSON _ = mzero
 
-data Status =
-    Status
-    { statusCreatedAt          :: DateString
-    , statusId                 :: StatusId
-    , statusText               :: Text
-    , statusSource             :: Text
-    , statusTruncated          :: Bool
-    , statusEntities           :: Maybe Entities
-    , statusExtendedEntities   :: Maybe Entities
-    , statusInReplyTo          :: Maybe StatusId
-    , statusInReplyToUser      :: Maybe UserId
-    , statusFavorite           :: Maybe Bool
-    , statusRetweetCount       :: Maybe Integer
-    , statusUser               :: User
-    , statusRetweet            :: Maybe Status
-    , statusPlace              :: Maybe Place
-    , statusFavoriteCount      :: Integer
-    , statusLang               :: Maybe Text
-    , statusPossiblySensitive  :: Maybe Bool
-    , statusCoordinates        :: Maybe Coordinates
+data Status = Status
+    { statusContributors :: Maybe [Contributor]
+    , statusCoordinates :: Maybe Coordinates
+    , statusCreatedAt :: DateString
+    , statusCurrentUserRetweet :: Maybe UserId
+    , statusEntities :: Maybe Entities
+    , statusExtendedEntities :: Maybe Entities
+    , statusFavoriteCount :: Integer
+    , statusFavorited :: Maybe Bool
+    , statusFilterLevel :: Maybe Text
+    , statusId :: StatusId
+    , statusInReplyToScreenName :: Maybe Text
+    , statusInReplyToStatusId :: Maybe StatusId
+    , statusInReplyToUserId :: Maybe UserId
+    , statusLang :: Maybe LanguageCode
+    , statusPlace :: Maybe Place
+    , statusPossiblySensitive :: Maybe Bool
+    , statusScopes :: Maybe Object
+    , statusRetweetCount :: Integer
+    , statusRetweeted :: Maybe Bool
+    , statusRetweetedStatus :: Maybe Status
+    , statusSource :: Text
+    , statusText :: Text
+    , statusTruncated :: Bool
+    , statusUser :: User
+    , statusWithheldCopyright :: Maybe Bool
+    , statusWithheldInCountries :: Maybe [Text]
+    , statusWithheldScope :: Maybe Text
     } deriving (Show, Eq)
 
 instance FromJSON Status where
     parseJSON (Object o) = checkError o >>
-        Status <$> o .:  "created_at"
-               <*> o .:  "id"
-               <*> o .:  "text"
-               <*> o .:  "source"
-               <*> o .:  "truncated"
+        Status <$> o .:? "contributors"
+               <*> o .:? "coordinates"
+               <*> o .:  "created_at"
+               <*> ((o .: "current_user_retweet" >>= (.: "id")) <|> return Nothing)
                <*> o .:? "entities"
                <*> o .:? "extended_entities"
+               <*> o .:? "favorite_count" .!= 0
+               <*> o .:? "favorited"
+               <*> o .:? "filter_level"
+               <*> o .:  "id"
+               <*> o .:? "in_reply_to_screen_name"
                <*> o .:? "in_reply_to_status_id"
                <*> o .:? "in_reply_to_user_id"
-               <*> o .:? "favorited"
-               <*> o .:? "retweet_count"
-               <*> o .:  "user"
-               <*> o .:? "retweeted_status"
-               <*> o .:? "place"
-               <*> o .:? "favorite_count" .!= 0
                <*> o .:? "lang"
+               <*> o .:? "place"
                <*> o .:? "possibly_sensitive"
-               <*> o .:? "coordinates"
+               <*> o .:? "scopes"
+               <*> o .:? "retweet_count" .!= 0
+               <*> o .:? "retweeted"
+               <*> o .:? "retweeted_status"
+               <*> o .:  "source"
+               <*> o .:  "text"
+               <*> o .:  "truncated"
+               <*> o .:  "user"
+               <*> o .:? "withheld_copyright"
+               <*> o .:? "withheld_in_countries"
+               <*> o .:? "withheld_scope"
     parseJSON _ = mzero
 
 data SearchResult body =
@@ -160,7 +178,7 @@ data SearchMetadata =
     SearchMetadata
     { searchMetadataMaxId         :: StatusId
     , searchMetadataSinceId       :: StatusId
-    , searchMetadataRefreshUrl    :: URIString
+    , searchMetadataRefreshURL    :: URIString
     , searchMetadataNextResults   :: Maybe URIString
     , searchMetadataCount         :: Int
     , searchMetadataCompletedIn   :: Maybe Float
@@ -283,40 +301,91 @@ instance FromJSON Delete where
                <*> s .: "user_id"
     parseJSON _ = mzero
 
-data User =
-    User
-    { userId              :: UserId
-    , userName            :: UserName
-    , userScreenName      :: Text
-    , userDescription     :: Maybe Text
-    , userLocation        :: Maybe Text
+data User = User
+    { userContributorsEnabled :: Bool
+    , userCreatedAt :: DateString
+    , userDefaultProfile :: Bool
+    , userDefaultProfileImage :: Bool
+    , userDescription :: Maybe Text
+    , userFavoritesCount :: Int
+    , userFollowRequestSent :: Maybe Bool
+    , userFollowing :: Maybe Bool
+    , userFollowersCount :: Int
+    , userFriendsCount :: Int
+    , userGeoEnabled :: Bool
+    , userId :: UserId
+    , userIsTranslator :: Bool
+    , userLang :: LanguageCode
+    , userListedCount :: Int
+    , userLocation :: Maybe Text
+    , userName :: Text
+    , userNotifications :: Maybe Bool
+    , userProfileBackgroundColor :: Maybe Text
+    , userProfileBackgroundImageURL :: Maybe URIString
+    , userProfileBackgroundImageURLHttps :: Maybe URIString
+    , userProfileBackgroundTile :: Maybe Bool
+    , userProfileBannerURL :: Maybe URIString
     , userProfileImageURL :: Maybe URIString
-    , userURL             :: Maybe URIString
-    , userProtected       :: Maybe Bool
-    , userFollowers       :: Maybe Int
-    , userFriends         :: Maybe Int
-    , userTweets          :: Maybe Int
-    , userLangCode        :: Maybe LanguageCode
-    , userCreatedAt       :: Maybe DateString
-    , userFavoritesCount  :: Int
+    , userProfileImageURLHttps :: Maybe URIString
+    , userProfileLinkColor :: Text
+    , userProfileSidebarBorderColor :: Text
+    , userProfileSidebarFillColor :: Text
+    , userProfileTextColor :: Text
+    , userProfileUseBackgroundImage :: Bool
+    , userProtected :: Bool
+    , userScreenName :: Text
+    , userShowAllInlineMedia :: Maybe Bool
+    , userStatusesCount :: Int
+    , userTimeZone :: Maybe Text
+    , userURL :: Maybe URIString
+    , userUtcOffset :: Maybe Int
+    , userVerified :: Bool
+    , userWithheldInCountries :: Maybe Text
+    , userWithheldScope :: Maybe Text
     } deriving (Show, Eq)
 
 instance FromJSON User where
     parseJSON (Object o) = checkError o >>
-        User <$> o .:  "id"
-             <*> o .:  "name"
-             <*> o .:  "screen_name"
+        User <$> o .:  "contributors_enabled"
+             <*> o .:  "created_at"
+             <*> o .:  "default_profile"
+             <*> o .:  "default_profile_image"
              <*> o .:? "description"
+             <*> o .:  "favourites_count"
+             <*> o .:? "follow_request_sent"
+             <*> o .:? "following"
+             <*> o .:  "followers_count"
+             <*> o .:  "friends_count"
+             <*> o .:  "geo_enabled"
+             <*> o .:  "id"
+             <*> o .:  "is_translator"
+             <*> o .:  "lang"
+             <*> o .:  "listed_count"
              <*> o .:? "location"
+             <*> o .:  "name"
+             <*> o .:? "notifications"
+             <*> o .:? "profile_background_color"
+             <*> o .:? "profile_background_image_url"
+             <*> o .:? "profile_background_image_url_https"
+             <*> o .:? "profile_background_tile"
+             <*> o .:? "profile_banner_url"
              <*> o .:? "profile_image_url"
+             <*> o .:? "profile_image_url_https"
+             <*> o .:  "profile_link_color"
+             <*> o .:  "profile_sidebar_border_color"
+             <*> o .:  "profile_sidebar_fill_color"
+             <*> o .:  "profile_text_color"
+             <*> o .:  "profile_use_background_image"
+             <*> o .:  "protected"
+             <*> o .:  "screen_name"
+             <*> o .:? "show_all_inline_media"
+             <*> o .:  "statuses_count"
+             <*> o .:? "time_zone"
              <*> o .:? "url"
-             <*> o .:? "protected"
-             <*> o .:? "followers_count"
-             <*> o .:? "friends_count"
-             <*> o .:? "statuses_count"
-             <*> o .:? "lang"
-             <*> o .:? "created_at"
-             <*> o .:? "favourites_count" .!= 0
+             <*> o .:? "utc_offset"
+             <*> o .:  "verified"
+             <*> o .:? "withheld_in_countries"
+             <*> o .:? "withheld_scope"
     parseJSON _ = mzero
 
 data List =
@@ -435,7 +504,7 @@ data Place =
     , placeId           :: Text
     , placeName         :: Text
     , placeType         :: Text
-    , placeUrl          :: Text
+    , placeURL          :: Text
     } deriving (Show, Eq)
 
 instance FromJSON Place where
@@ -496,4 +565,15 @@ instance FromJSON a => FromJSON (Entity a) where
     parseJSON v@(Object o) =
         Entity <$> parseJSON v
                <*> o .: "indices"
+    parseJSON _ = mzero
+
+data Contributor = Contributor
+    { contributorId :: UserId
+    , contributorScreenName :: Text
+    } deriving (Show, Eq)
+
+instance FromJSON Contributor where
+    parseJSON (Object o) =
+        Contributor <$>  o .:  "id"
+                    <*>  o .:  "screen_name"
     parseJSON _ = mzero

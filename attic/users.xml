@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<platform-object>
+  <field nullable="false">
+    <name>contributors_enabled</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>Indicates that the user has an account with "contributor mode" enabled, allowing for Tweets issued by the user to be co-authored by another account. Rarely true.
+        Example:
+"contributors_enabled": false</description>
+  </field>
+  <field nullable="false">
+    <name>created_at</name>
+    <type>String</type>
+    <mapped_type>DateString</mapped_type>
+    <description>The UTC datetime that the user account was created on Twitter.
+        Example:
+"created_at": "Mon Nov 29 21:18:15 +0000 2010"</description>
+  </field>
+  <field nullable="false">
+    <name>default_profile</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>When true, indicates that the user has not altered the theme or background of their user profile.
+        Example:
+"default_profile": false</description>
+  </field>
+  <field nullable="false">
+    <name>default_profile_image</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>When true, indicates that the user has not uploaded their own avatar and a default egg avatar is used instead.
+        Example:
+"default_profile_image": false</description>
+  </field>
+  <field nullable="true">
+    <name>description</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>Nullable. The user-defined UTF-8 string describing their account.
+        Example:
+"description":"The Real Twitter API."</description>
+  </field>
+<!--   <field nullable="false"> -->
+<!--     <name>entities</name> -->
+<!--     <type>Entities</type> -->
+<!--     <mapped_type>Entities</mapped_type> -->
+<!--     <description>Entities which have been parsed out of the url or description fields defined by the user. Read more about User Entities. -->
+<!--         Example: -->
+<!-- "entities": { -->
+<!--   "url": { -->
+<!--     "urls": [ -->
+<!--       { -->
+<!--         "url": "http:\/\/dev.twitter.com", -->
+<!--         "expanded_url": null, -->
+<!--         "indices": [0, 22] -->
+<!--       } -->
+<!--     ] -->
+<!--   }, -->
+<!--   "description": {"urls":[] } -->
+<!-- }</description> -->
+<!--   </field> -->
+  <field nullable="false">
+    <name>favourites_count</name>
+    <haskell_name>favorites_count</haskell_name>
+    <type>Int</type>
+    <mapped_type>Int</mapped_type>
+    <description>The number of tweets this user has favorited in the account's lifetime. British spelling used in the field name for historical reasons.
+        Example:
+"favourites_count": 13</description>
+  </field>
+  <field nullable="true">
+    <name>follow_request_sent</name>
+    <type>Type</type>
+    <mapped_type>Bool</mapped_type>
+    <description>Nullable. Perspectival. When true, indicates that the authenticating user has issued a follow request to this protected user account.
+        Example:
+"follow_request_sent":false</description>
+  </field>
+  <field nullable="true">
+    <name>following</name>
+    <type>Type</type>
+    <mapped_type>Bool</mapped_type>
+    <description>Nullable. Perspectival. Deprecated. When true, indicates that the authenticating user is following this user. Some false negatives are possible when set to "false," but these false negatives are increasingly being represented as "null" instead. See Discussion.
+        Example:
+"following":true</description>
+  </field>
+  <field nullable="false">
+    <name>followers_count</name>
+    <type>Int</type>
+    <mapped_type>Int</mapped_type>
+    <description>The number of followers this account currently has. Under certain conditions of duress, this field will temporarily indicate "0."
+        Example:
+"followers_count": 21</description>
+  </field>
+  <field nullable="false">
+    <name>friends_count</name>
+    <type>Int</type>
+    <mapped_type>Int</mapped_type>
+    <description>The number of users this account is following (AKA their "followings"). Under certain conditions of duress, this field will temporarily indicate "0."
+        Example:
+"friends_count": 32</description>
+  </field>
+  <field nullable="false">
+    <name>geo_enabled</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>When true, indicates that the user has enabled the possibility of geotagging their Tweets. This field must be true for the current user to attach geographic data when using POST statuses/update.
+        Example:
+"geo_enabled": true</description>
+  </field>
+  <field nullable="false">
+    <name>id</name>
+    <type>Int64</type>
+    <mapped_type>UserId</mapped_type>
+    <description>The integer representation of the unique identifier for this User. This number is greater than 53 bits and some programming languages may have difficulty/silent defects in interpreting it. Using a signed 64 bit integer for storing this identifier is safe. Use
+id_str for fetching the identifier to stay on the safe side. See Twitter IDs, JSON and Snowflake.
+        Example:
+"id":6253282</description>
+  </field>
+<!--   <field nullable="false"> -->
+<!--     <name>id_str</name> -->
+<!--     <type>String</type> -->
+<!--     <mapped_type>Text</mapped_type> -->
+<!--     <description>The string representation of the unique identifier for this User. Implementations should use this rather than the large, possibly un-consumable integer in id. -->
+<!--         Example: -->
+<!-- "id_str":"6253282"</description> -->
+<!--   </field> -->
+  <field nullable="false">
+    <name>is_translator</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>When true, indicates that the user is a participant in Twitter's translator community.
+        Example:
+"is_translator": false</description>
+  </field>
+  <field nullable="false">
+    <name>lang</name>
+    <type>String</type>
+    <mapped_type>LanguageCode</mapped_type>
+    <description>The BCP 47 code for the user's self-declared user interface language. May or may not have anything to do with the content of their Tweets. 
+        Examples:
+"lang": "en"
+"lang": "msa"
+"lang": "zh-cn"</description>
+  </field>
+  <field nullable="false">
+    <name>listed_count</name>
+    <type>Int</type>
+    <mapped_type>Int</mapped_type>
+    <description>The number of public lists that this user is a member of.
+        Example:
+"listed_count":9274</description>
+  </field>
+  <field nullable="true">
+    <name>location</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>Nullable. The user-defined location for this account's profile. Not necessarily a location nor parseable. This field will occasionally be fuzzily interpreted by the Search service.
+        Example:
+"location":"San Francisco, CA"</description>
+  </field>
+  <field nullable="false">
+    <name>name</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>The name of the user, as they've defined it. Not necessarily a person's name. Typically capped at 20 characters, but subject to change.
+        Example:
+"name":"Twitter API"</description>
+  </field>
+  <field nullable="true">
+    <name>notifications</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>Nullable. Deprecated. May incorrectly report "false" at times. Indicates whether the authenticated user has chosen to receive this user's tweets by SMS. Discussion</description>
+  </field>
+  <field nullable="true">
+    <name>profile_background_color</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>The hexadecimal color chosen by the user for their background.
+        Example:
+"profile_background_color":"e8f2f7"</description>
+  </field>
+  <field nullable="true">
+    <name>profile_background_image_url</name>
+    <type>String</type>
+    <mapped_type>URIString</mapped_type>
+    <description>A HTTP-based URL pointing to the background image the user has uploaded for their profile.
+        Example:
+"profile_background_image_url":
+"http:\/\/a2.twimg.com\/profile_background_images\
+/229557229\/twitterapi-bg.png"</description>
+  </field>
+  <field nullable="true">
+    <name>profile_background_image_url_https</name>
+    <type>String</type>
+    <mapped_type>URIString</mapped_type>
+    <description>A HTTPS-based URL pointing to the background image the user has uploaded for their profile.
+        Example:
+"profile_background_image_url_https":
+"https:\/\/si0.twimg.com\/profile_background_images\
+/229557229\/twitterapi-bg.png"</description>
+  </field>
+  <field nullable="true">
+    <name>profile_background_tile</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>When true, indicates that the user's profile_background_image_url should be tiled when displayed.
+        Example:
+"profile_background_tile":false</description>
+  </field>
+  <field nullable="true">
+    <name>profile_banner_url</name>
+    <type>String</type>
+    <mapped_type>URIString</mapped_type>
+    <description>The HTTPS-based URL pointing to the standard web representation of the user's uploaded profile banner. By adding a final path element of the URL, you can obtain different image sizes optimized for specific displays. In the future, an API method will be provided to serve these URLs so that you need not modify the original URL. For size variations, please see User Profile Images and Banners.
+
+        Example:
+"profile_banner_url": "https://si0.twimg.com/profile_banners/819797/1348102824"</description>
+  </field>
+  <field nullable="true">
+    <name>profile_image_url</name>
+    <type>String</type>
+    <mapped_type>URIString</mapped_type>
+    <description>A HTTP-based URL pointing to the user's avatar image. See User Profile Images and Banners.
+        Example:
+"profile_image_url":
+"http:\/\/a2.twimg.com\/profile_images\/1438634086\
+/avatar_normal.png"</description>
+  </field>
+  <field nullable="false">
+    <name>profile_image_url_https</name>
+    <type>String</type>
+    <mapped_type>URIString</mapped_type>
+    <description>A HTTPS-based URL pointing to the user's avatar image.
+        Example:
+"profile_image_url_https":
+"https:\/\/si0.twimg.com\/profile_images\/1438634086\
+/avatar_normal.png"</description>
+  </field>
+  <field nullable="false">
+    <name>profile_link_color</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>The hexadecimal color the user has chosen to display links with in their Twitter UI.
+        Example:
+"profile_link_color":"0094C2"</description>
+  </field>
+  <field nullable="false">
+    <name>profile_sidebar_border_color</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>The hexadecimal color the user has chosen to display sidebar borders with in their Twitter UI.
+        Example:
+"profile_sidebar_border_color":"0094C2"</description>
+  </field>
+  <field nullable="false">
+    <name>profile_sidebar_fill_color</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>The hexadecimal color the user has chosen to display sidebar backgrounds with in their Twitter UI.
+        Example:
+"profile_sidebar_fill_color":"a9d9f1"</description>
+  </field>
+  <field nullable="false">
+    <name>profile_text_color</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>The hexadecimal color the user has chosen to display text with in their Twitter UI.
+        Example:
+"profile_text_color":"437792"</description>
+  </field>
+  <field nullable="false">
+    <name>profile_use_background_image</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>When true, indicates the user wants their uploaded background image to be used.
+        Example:
+"profile_use_background_image":true</description>
+  </field>
+  <field nullable="false">
+    <name>protected</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>When true, indicates that this user has chosen to protect their Tweets. See About Public and Protected Tweets.
+        Example:
+"protected": true</description>
+  </field>
+  <field nullable="false">
+    <name>screen_name</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>The screen name, handle, or alias that this user identifies themselves with. screen_names are unique but subject to change. Use id_str as a user identifier whenever possible. Typically a maximum of 15 characters long, but some historical accounts may exist with longer names.
+        Example:
+"screen_name":"twitterapi"</description>
+  </field>
+  <field nullable="true">
+    <name>show_all_inline_media</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>Indicates that the user would like to see media inline. Somewhat disused.
+        Example:
+"show_all_inline_media": false</description>
+  </field>
+<!--   <field nullable="true"> -->
+<!--     <name>status</name> -->
+<!--     <type>Tweets</type> -->
+<!--     <mapped_type>Status</mapped_type> -->
+<!--     <description>Nullable. If possible, the user's most recent tweet or retweet. In some circumstances, this data cannot be provided and this field will be omitted, null, or empty. Perspectival attributes within tweets embedded within users cannot always be relied upon. See Why are embedded objects stale or inaccurate?. -->
+<!--         Example: -->
+<!-- "status": { -->
+<!--     "coordinates": null, -->
+<!--     "favorited": false, -->
+<!--     "truncated": false, -->
+<!--     "created_at": "Tue Apr 17 16:38:18 +0000 2012", -->
+<!--     "id_str": "192290904646754304", -->
+<!--     "entities": { -->
+<!--       "urls": [ -->
+<!--   -->
+<!--       ], -->
+<!--       "hashtags": [ -->
+<!--   -->
+<!--       ], -->
+<!--       "user_mentions": [ -->
+<!--         { -->
+<!--           "name": "Micah McVicker", -->
+<!--           "id_str": "166661446", -->
+<!--           "id": 166661446, -->
+<!--           "indices": [ -->
+<!--             0, -->
+<!--             14 -->
+<!--           ], -->
+<!--           "screen_name": "MicahMcVicker" -->
+<!--         } -->
+<!--       ] -->
+<!--     }, -->
+<!--     "in_reply_to_user_id_str": "166661446", -->
+<!--     "contributors": null, -->
+<!--     "text": "@MicahMcVicker make sure you're using include_rts=true and no other filters, then walking your timeline by since_id and max_id", -->
+<!--     "retweet_count": 0, -->
+<!--     "in_reply_to_status_id_str": "192290470427246594", -->
+<!--     "id": 192290904646754304, -->
+<!--     "geo": null, -->
+<!--     "retweeted": false, -->
+<!--     "in_reply_to_user_id": 166661446, -->
+<!--     "place": null, -->
+<!--     "in_reply_to_screen_name": "MicahMcVicker", -->
+<!--     "source": "&lt;a href=\"http://sites.google.com/site/yorufukurou/\" rel=\"nofollow\">YoruFukurou&lt;/a>", -->
+<!--     "in_reply_to_status_id": 192290470427246594 -->
+<!--   },</description> -->
+<!--   </field> -->
+  <field nullable="false">
+    <name>statuses_count</name>
+    <type>Int</type>
+    <mapped_type>Int</mapped_type>
+    <description>The number of tweets (including retweets) issued by the user.
+        Example:
+"statuses_count": 42</description>
+  </field>
+  <field nullable="true">
+    <name>time_zone</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>Nullable. A string describing the Time Zone this user declares themselves within.
+        Example:
+"time_zone":"Pacific Time (US &amp; Canada)"</description>
+  </field>
+  <field nullable="true">
+    <name>url</name>
+    <type>String</type>
+    <mapped_type>URIString</mapped_type>
+    <description>Nullable. A URL provided by the user in association with their profile.
+        Example:
+"url":"http:\/\/dev.twitter.com"</description>
+  </field>
+  <field nullable="true">
+    <name>utc_offset</name>
+    <type>Int</type>
+    <mapped_type>Int</mapped_type>
+    <description>Nullable. The offset from GMT/UTC in seconds.
+        Example:
+"utc_offset": -18000</description>
+  </field>
+  <field nullable="false">
+    <name>verified</name>
+    <type>Boolean</type>
+    <mapped_type>Bool</mapped_type>
+    <description>When true, indicates that the user has a verified account. See Verified Accounts.
+        Example:
+"verified": false</description>
+  </field>
+  <field nullable="true">
+    <name>withheld_in_countries</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>When present, indicates a textual representation of the two-letter country codes this user is withheld from. See New Withheld Content Fields in API Responses.
+        
+          Example:
+          "withheld_in_countries": "GR, HK, MY"</description>
+  </field>
+  <field nullable="true">
+    <name>withheld_scope</name>
+    <type>String</type>
+    <mapped_type>Text</mapped_type>
+    <description>When present, indicates whether the content being withheld is the "status" or a "user." See New Withheld Content Fields in API Responses.
+        
+          Example:
+          "withheld_scope": "user"</description>
+  </field>
+</platform-object>
+

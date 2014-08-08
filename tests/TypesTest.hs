@@ -37,12 +37,12 @@ case_parseStatus = withJSON fixture_status01 $ \obj -> do
     statusTruncated obj @?= False
     statusEntities obj @?= Nothing
     statusExtendedEntities obj @?= Nothing
-    statusInReplyTo obj @?= Nothing
-    statusInReplyToUser obj @?= Just 783214
-    statusFavorite obj @?= Just False
-    statusRetweetCount obj @?= Just 0
+    statusInReplyToStatusId obj @?= Nothing
+    statusInReplyToUserId obj @?= Just 783214
+    statusFavorited obj @?= Just False
+    statusRetweetCount obj @?= 0
     (userScreenName . statusUser) obj @?= "imeoin"
-    statusRetweet obj @?= Nothing
+    statusRetweetedStatus obj @?= Nothing
     statusPlace obj @?= Nothing
     statusFavoriteCount obj @?= 0
     statusLang obj @?= Nothing
@@ -68,12 +68,12 @@ case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj ->
     enURLs exent @?= []
     length (enMedia ent) @?= 1
 
-    statusInReplyTo obj @?= Nothing
-    statusInReplyToUser obj @?= Nothing
-    statusFavorite obj @?= Just False
-    statusRetweetCount obj @?= Just 4
+    statusInReplyToStatusId obj @?= Nothing
+    statusInReplyToUserId obj @?= Nothing
+    statusFavorited obj @?= Just False
+    statusRetweetCount obj @?= 4
     (userScreenName . statusUser) obj @?= "thimura"
-    statusRetweet obj @?= Nothing
+    statusRetweetedStatus obj @?= Nothing
     statusPlace obj @?= Nothing
     statusFavoriteCount obj @?= 9
     statusLang obj @?= Just "ja"
@@ -83,7 +83,7 @@ case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj ->
 case_parseStatusIncludeEntities :: Assertion
 case_parseStatusIncludeEntities = withJSON fixture_status_with_entity $ \obj -> do
     statusId obj @?= 112652479837110273
-    statusRetweetCount obj @?= Just 0
+    statusRetweetCount obj @?= 0
     (userScreenName . statusUser) obj @?= "imeoin"
     let ent = fromMaybe (Entities [] [] [] []) $ statusEntities obj
     (map entityIndices . enHashTags) ent @?= [[32,42]]
@@ -97,7 +97,7 @@ case_parseSearchStatusMetadata = withJSON fixture_search_haskell $ \obj -> do
     let metadata = searchResultSearchMetadata obj
     searchMetadataMaxId metadata @?= 495597397733433345
     searchMetadataSinceId metadata @?= 0
-    searchMetadataRefreshUrl metadata @?= "?since_id=495597397733433345&q=haskell&include_entities=1"
+    searchMetadataRefreshURL metadata @?= "?since_id=495597397733433345&q=haskell&include_entities=1"
     searchMetadataNextResults metadata @?= Just "?max_id=495594369802440705&q=haskell&include_entities=1"
     searchMetadataCount metadata @?= 1
     searchMetadataCompletedIn metadata @?= Just 0.043
@@ -242,12 +242,12 @@ case_parseUser = withJSON fixture_user_thimura $ \obj -> do
     userLocation obj @?= Just "State# Irotoridori.No.World"
     userProfileImageURL obj @?= Just "http://pbs.twimg.com/profile_images/414044387346116609/VNMfLpY7_normal.png"
     userURL obj @?= Just "http://t.co/TFUAsAffX0"
-    userProtected obj @?= Just False
-    userFollowers obj @?= Just 754
-    userFriends obj @?= Just 780
-    userTweets obj @?= Just 24709
-    userLangCode obj @?= Just "en"
-    userCreatedAt obj @?= Just "Thu Aug 27 02:48:06 +0000 2009"
+    userProtected obj @?= False
+    userFollowersCount obj @?= 754
+    userFriendsCount obj @?= 780
+    userStatusesCount obj @?= 24709
+    userLang obj @?= "en"
+    userCreatedAt obj @?= "Thu Aug 27 02:48:06 +0000 2009"
     userFavoritesCount obj @?= 17313
 
 case_parseList :: Assertion

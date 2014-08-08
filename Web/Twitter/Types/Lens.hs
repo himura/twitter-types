@@ -33,24 +33,33 @@ module Web.Twitter.Types.Lens
        , TT.Place
        , TT.BoundingBox
 
+       , statusContributors
+       , statusCoordinates
        , statusCreatedAt
-       , statusId
-       , statusText
-       , statusSource
-       , statusTruncated
+       , statusCurrentUserRetweet
        , statusEntities
        , statusExtendedEntities
-       , statusInReplyTo
-       , statusInReplyToUser
-       , statusFavorite
-       , statusRetweetCount
-       , statusRetweet
-       , statusUser
-       , statusPlace
        , statusFavoriteCount
+       , statusFavorited
+       , statusFilterLevel
+       , statusId
+       , statusInReplyToScreenName
+       , statusInReplyToStatusId
+       , statusInReplyToUserId
        , statusLang
+       , statusPlace
        , statusPossiblySensitive
-       , statusCoordinates
+       , statusScopes
+       , statusRetweetCount
+       , statusRetweeted
+       , statusRetweetedStatus
+       , statusSource
+       , statusText
+       , statusTruncated
+       , statusUser
+       , statusWithheldCopyright
+       , statusWithheldInCountries
+       , statusWithheldScope
 
        , searchResultStatuses
        , searchResultSearchMetadata
@@ -64,7 +73,7 @@ module Web.Twitter.Types.Lens
 
        , searchMetadataMaxId
        , searchMetadataSinceId
-       , searchMetadataRefreshUrl
+       , searchMetadataRefreshURL
        , searchMetadataNextResults
        , searchMetadataCount
        , searchMetadataCompletedIn
@@ -102,20 +111,46 @@ module Web.Twitter.Types.Lens
        , delId
        , delUserId
 
-       , userId
-       , userName
-       , userScreenName
-       , userDescription
-       , userLocation
-       , userProfileImageURL
-       , userURL
-       , userProtected
-       , userFollowers
-       , userFriends
-       , userTweets
-       , userLangCode
+       , userContributorsEnabled
        , userCreatedAt
+       , userDefaultProfile
+       , userDefaultProfileImage
+       , userDescription
        , userFavoritesCount
+       , userFollowRequestSent
+       , userFollowing
+       , userFollowersCount
+       , userFriendsCount
+       , userGeoEnabled
+       , userId
+       , userIsTranslator
+       , userLang
+       , userListedCount
+       , userLocation
+       , userName
+       , userNotifications
+       , userProfileBackgroundColor
+       , userProfileBackgroundImageURL
+       , userProfileBackgroundImageURLHttps
+       , userProfileBackgroundTile
+       , userProfileBannerURL
+       , userProfileImageURL
+       , userProfileImageURLHttps
+       , userProfileLinkColor
+       , userProfileSidebarBorderColor
+       , userProfileSidebarFillColor
+       , userProfileTextColor
+       , userProfileUseBackgroundImage
+       , userProtected
+       , userScreenName
+       , userShowAllInlineMedia
+       , userStatusesCount
+       , userTimeZone
+       , userURL
+       , userUtcOffset
+       , userVerified
+       , userWithheldInCountries
+       , userWithheldScope
 
        , listId
        , listName
@@ -157,7 +192,7 @@ module Web.Twitter.Types.Lens
        , placeId
        , placeName
        , placeType
-       , placeUrl
+       , placeURL
 
        , boundingBoxCoordinates
        , boundingBoxType
