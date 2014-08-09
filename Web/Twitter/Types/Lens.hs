@@ -2,37 +2,13 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RankNTypes, CPP, FlexibleInstances #-}
 
 module Web.Twitter.Types.Lens
-       ( TT.DateString
-       , TT.UserId
-       , TT.Friends
-       , TT.URIString
-       , TT.UserName
-       , TT.StatusId
-       , TT.LanguageCode
-       , TT.StreamingAPI(..)
-       , TT.Status
-       , TT.SearchResult
-       , TT.SearchStatus
-       , TT.SearchMetadata
-       , TT.RetweetedStatus
-       , TT.DirectMessage
-       , TT.EventTarget(..)
-       , TT.Event
-       , TT.Delete
-       , TT.User
-       , TT.List
-       , TT.Entities
-       , TT.EntityIndices
-       , TT.Entity
-       , TT.HashTagEntity
-       , TT.UserEntity
-       , TT.URLEntity
-       , TT.MediaEntity
-       , TT.MediaSize
-       , TT.Coordinates
-       , TT.Place
-       , TT.BoundingBox
+       (
+       -- * Type classes
+         AsStatus(..)
+       , AsUser(..)
 
+       -- * 'TT.Status'
+       , TT.Status
        , statusContributors
        , statusCoordinates
        , statusCreatedAt
@@ -61,9 +37,13 @@ module Web.Twitter.Types.Lens
        , statusWithheldInCountries
        , statusWithheldScope
 
+       -- * 'TT.SearchResult'
+       , TT.SearchResult
        , searchResultStatuses
        , searchResultSearchMetadata
 
+       -- * 'TT.SearchStatus'
+       , TT.SearchStatus
        , searchStatusCreatedAt
        , searchStatusId
        , searchStatusText
@@ -71,6 +51,8 @@ module Web.Twitter.Types.Lens
        , searchStatusUser
        , searchStatusCoordinates
 
+       -- * 'TT.SearchMetadata'
+       , TT.SearchMetadata
        , searchMetadataMaxId
        , searchMetadataSinceId
        , searchMetadataRefreshURL
@@ -81,6 +63,8 @@ module Web.Twitter.Types.Lens
        , searchMetadataQuery
        , searchMetadataMaxIdStr
 
+       -- * 'TT.RetweetedStatus'
+       , TT.RetweetedStatus
        , rsCreatedAt
        , rsId
        , rsText
@@ -91,6 +75,8 @@ module Web.Twitter.Types.Lens
        , rsRetweetedStatus
        , rsCoordinates
 
+       -- * 'TT.DirectMessage'
+       , TT.DirectMessage
        , dmCreatedAt
        , dmSenderScreenName
        , dmSender
@@ -102,15 +88,24 @@ module Web.Twitter.Types.Lens
        , dmSenderId
        , dmCoordinates
 
+       -- * 'TT.EventTarget'
+       , TT.EventTarget(..)
+
+       -- * 'TT.Event'
+       , TT.Event
        , evCreatedAt
        , evTargetObject
        , evEvent
        , evTarget
        , evSource
 
+       -- * 'TT.Delete'
+       , TT.Delete
        , delId
        , delUserId
 
+       -- * 'TT.User'
+       , TT.User
        , userContributorsEnabled
        , userCreatedAt
        , userDefaultProfile
@@ -152,6 +147,8 @@ module Web.Twitter.Types.Lens
        , userWithheldInCountries
        , userWithheldScope
 
+       -- * 'TT.List'
+       , TT.List
        , listId
        , listName
        , listFullName
@@ -160,16 +157,36 @@ module Web.Twitter.Types.Lens
        , listMode
        , listUser
 
+       -- * 'TT.Entities'
+       , TT.Entities
+       , enHashTags
+       , enUserMentions
+       , enURLs
+       , enMedia
+
+       -- * 'TT.Entity'
+       , TT.Entity
+       , entityBody
+       , entityIndices
+
+       -- * 'TT.HashTagEntity'
+       , TT.HashTagEntity
        , hashTagText
 
+       -- * 'TT.UserEntity'
+       , TT.UserEntity
        , userEntityUserId
        , userEntityUserName
        , userEntityUserScreenName
 
+       -- * 'TT.URLEntity'
+       , TT.URLEntity
        , ueURL
        , ueExpanded
        , ueDisplay
 
+       -- * 'TT.MediaEntity'
+       , TT.MediaEntity
        , meType
        , meId
        , meSizes
@@ -177,13 +194,19 @@ module Web.Twitter.Types.Lens
        , meMediaURLHttps
        , meURL
 
+       -- * 'TT.MediaSize'
+       , TT.MediaSize
        , msWidth
        , msHeight
        , msResize
 
+       -- * 'TT.Coordinates'
+       , TT.Coordinates
        , coordinates
        , coordinatesType
 
+       -- * 'TT.Place'
+       , TT.Place
        , placeAttributes
        , placeBoundingBox
        , placeCountry
@@ -194,19 +217,21 @@ module Web.Twitter.Types.Lens
        , placeType
        , placeURL
 
+       -- * 'TT.BoundingBox'
+       , TT.BoundingBox
        , boundingBoxCoordinates
        , boundingBoxType
 
-       , enHashTags
-       , enUserMentions
-       , enURLs
-       , enMedia
-
-       , entityBody
-       , entityIndices
-
-       , AsStatus(..)
-       , AsUser(..)
+       -- * Type aliases and sum types
+       , TT.DateString
+       , TT.UserId
+       , TT.Friends
+       , TT.URIString
+       , TT.UserName
+       , TT.StatusId
+       , TT.LanguageCode
+       , TT.StreamingAPI(..)
+       , TT.EntityIndices
        )
        where
 

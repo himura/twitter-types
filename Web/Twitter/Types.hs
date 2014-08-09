@@ -80,6 +80,8 @@ instance FromJSON StreamingAPI where
         js = parseJSON v
     parseJSON _ = mzero
 
+-- | This type represents a Twitter tweet structure.
+-- See <https://dev.twitter.com/docs/platform-objects/tweets>.
 data Status = Status
     { statusContributors :: Maybe [Contributor]
     , statusCoordinates :: Maybe Coordinates
@@ -301,6 +303,8 @@ instance FromJSON Delete where
                <*> s .: "user_id"
     parseJSON _ = mzero
 
+-- | This type represents the Twitter user.
+-- See <https://dev.twitter.com/docs/platform-objects/users>.
 data User = User
     { userContributorsEnabled :: Bool
     , userCreatedAt :: DateString
@@ -410,6 +414,8 @@ instance FromJSON List where
              <*> o .:  "user"
     parseJSON _ = mzero
 
+-- | Hashtag entity.
+-- See <https://dev.twitter.com/docs/platform-objects/entities#obj-hashtags>.
 data HashTagEntity =
     HashTagEntity
     { hashTagText :: Text -- ^ The Hashtag text
@@ -420,6 +426,8 @@ instance FromJSON HashTagEntity where
         HashTagEntity <$> o .: "text"
     parseJSON _ = mzero
 
+-- | User mention entity.
+-- See <https://dev.twitter.com/docs/platform-objects/entities#obj-usermention>.
 data UserEntity =
     UserEntity
     { userEntityUserId              :: UserId
@@ -434,6 +442,8 @@ instance FromJSON UserEntity where
                    <*> o .:  "screen_name"
     parseJSON _ = mzero
 
+-- | URL entity.
+-- See <https://dev.twitter.com/docs/platform-objects/entities#obj-url>.
 data URLEntity =
     URLEntity
     { ueURL      :: URIString -- ^ The URL that was extracted
@@ -468,6 +478,8 @@ instance FromJSON MediaEntity where
                     <*> parseJSON v
     parseJSON _ = mzero
 
+-- | Size entity.
+-- See <https://dev.twitter.com/docs/platform-objects/entities#obj-size>.
 data MediaSize =
     MediaSize
     { msWidth :: Int
@@ -494,6 +506,8 @@ instance FromJSON Coordinates where
                     <*> o .: "type"
     parseJSON _ = mzero
 
+-- | This type represents a place, named locations with corresponding geo coordinates.
+-- See <https://dev.twitter.com/docs/platform-objects/places>.
 data Place =
     Place
     { placeAttributes   :: HashMap Text Text
@@ -520,6 +534,8 @@ instance FromJSON Place where
               <*> o .: "url"
     parseJSON _ = mzero
 
+-- | A bounding box of coordinates which encloses the place.
+-- See <https://dev.twitter.com/docs/platform-objects/places#obj-boundingbox>.
 data BoundingBox =
     BoundingBox
     { boundingBoxCoordinates  :: [[[Double]]]
@@ -533,6 +549,7 @@ instance FromJSON BoundingBox where
     parseJSON _ = mzero
 
 -- | Entity handling.
+-- See <https://dev.twitter.com/docs/platform-objects/entities>.
 data Entities =
     Entities
     { enHashTags     :: [Entity HashTagEntity]
