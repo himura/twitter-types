@@ -7,6 +7,7 @@ module Web.Twitter.Types.Lens
          AsStatus(..)
        , AsUser(..)
        , HasCreatedAt(..)
+       , AsImageSize(..)
 
        -- * 'TT.Status'
        , TT.Status
@@ -342,3 +343,13 @@ instance HasCreatedAt TT.DirectMessage where
     created_at = dmCreatedAt
 instance HasCreatedAt TT.User where
     created_at = userCreatedAt
+
+class AsImageSize a where
+    width :: Lens' a Int
+    height :: Lens' a Int
+instance AsImageSize TT.MediaSize where
+    width = msWidth
+    height = msHeight
+instance AsImageSize TT.ImageSizeType where
+    width = imageSizeTypeWidth
+    height = imageSizeTypeHeight
