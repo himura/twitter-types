@@ -597,7 +597,7 @@ instance FromJSON Contributor where
                     <*>  o .:  "screen_name"
     parseJSON _ = mzero
 
--- | Image size type. This type is included in the API response of "/1.1/media/upload.json".
+-- | Image size type. This type is included in the API response of \"\/1.1\/media\/upload.json\".
 data ImageSizeType = ImageSizeType
     { imageSizeTypeWidth :: Int
     , imageSizeTypeHeight :: Int
@@ -610,7 +610,7 @@ instance FromJSON ImageSizeType where
                       <*> o .:  "image_type"
     parseJSON v = fail $ "unknown value: " ++ show v
 
--- | This type is represents the API response of "/1.1/media/upload.json"
+-- | This type is represents the API response of \"\/1.1\/media\/upload.json\".
 -- See <https://dev.twitter.com/docs/api/multiple-media-extended-entities>.
 data UploadedMedia = UploadedMedia
     { uploadedMediaId :: Integer
