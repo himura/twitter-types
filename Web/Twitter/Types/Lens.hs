@@ -6,6 +6,7 @@ module Web.Twitter.Types.Lens
        -- * Type classes
          AsStatus(..)
        , AsUser(..)
+       , HasCreatedAt(..)
 
        -- * 'TT.Status'
        , TT.Status
@@ -265,35 +266,30 @@ class AsStatus s where
     status_id :: Lens' s TT.StatusId
     text :: Lens' s Text
     user :: Lens' s TT.User
-    created_at :: Lens' s TT.DateString
     geolocation :: Lens' s (Maybe TT.Coordinates)
 
 instance AsStatus TT.Status where
     status_id = statusId
     text = statusText
     user = statusUser
-    created_at = statusCreatedAt
     geolocation = statusCoordinates
 
 instance AsStatus TT.SearchStatus where
     status_id = searchStatusId
     text = searchStatusText
     user = searchStatusUser
-    created_at = searchStatusCreatedAt
     geolocation = searchStatusCoordinates
 
 instance AsStatus TT.RetweetedStatus where
     status_id = rsId
     text = rsText
     user = rsUser
-    created_at = rsCreatedAt
     geolocation = rsCoordinates
 
 instance AsStatus TT.DirectMessage where
     status_id = dmId
     text = dmText
     user = dmSender
-    created_at = dmCreatedAt
     geolocation = dmCoordinates
 
 class AsUser u where
@@ -315,3 +311,16 @@ instance AsUser (TT.Entity TT.UserEntity) where
     user_id = entityBody.userEntityUserId
     name = entityBody.userEntityUserName
     screen_name = entityBody.userEntityUserScreenName
+
+class HasCreatedAt a where
+    created_at :: Lens' a TT.DateString
+instance HasCreatedAt TT.Status where
+    created_at = statusCreatedAt
+instance HasCreatedAt TT.SearchStatus where
+    created_at = searchStatusCreatedAt
+instance HasCreatedAt TT.RetweetedStatus where
+    created_at = rsCreatedAt
+instance HasCreatedAt TT.DirectMessage where
+    created_at = dmCreatedAt
+instance HasCreatedAt TT.User where
+    created_at = userCreatedAt
