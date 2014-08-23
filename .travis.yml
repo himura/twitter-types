@@ -9,6 +9,7 @@ env:
 
 matrix:
   allow_failures:
+    - env: GHCVER=7.4.2
     - env: GHCVER=head
 
 before_install:
