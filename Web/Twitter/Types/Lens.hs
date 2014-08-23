@@ -89,9 +89,6 @@ module Web.Twitter.Types.Lens
        , dmSenderId
        , dmCoordinates
 
-       -- * 'TT.EventTarget'
-       , TT.EventTarget(..)
-
        -- * 'TT.Event'
        , TT.Event
        , evCreatedAt
@@ -223,6 +220,23 @@ module Web.Twitter.Types.Lens
        , boundingBoxCoordinates
        , boundingBoxType
 
+       -- * 'TT.Contributor'
+       , TT.Contributor
+       , contributorId
+       , contributorScreenName
+
+       -- * 'TT.UploadedMedia'
+       , TT.UploadedMedia
+       , uploadedMediaId
+       , uploadedMediaSize
+       , uploadedMediaImage
+
+       -- * 'TT.ImageSizeType'
+       , TT.ImageSizeType
+       , imageSizeTypeWidth
+       , imageSizeTypeHeight
+       , imageSizeTypeType
+
        -- * Type aliases and sum types
        , TT.DateString
        , TT.UserId
@@ -232,6 +246,7 @@ module Web.Twitter.Types.Lens
        , TT.StatusId
        , TT.LanguageCode
        , TT.StreamingAPI(..)
+       , TT.EventTarget(..)
        , TT.EntityIndices
        )
        where
@@ -251,6 +266,8 @@ makeLenses ''TT.Event
 makeLenses ''TT.Delete
 makeLenses ''TT.User
 makeLenses ''TT.List
+makeLenses ''TT.Entities
+makeLenses ''TT.Entity
 makeLenses ''TT.HashTagEntity
 makeLenses ''TT.UserEntity
 makeLenses ''TT.URLEntity
@@ -259,8 +276,9 @@ makeLenses ''TT.MediaSize
 makeLenses ''TT.Coordinates
 makeLenses ''TT.Place
 makeLenses ''TT.BoundingBox
-makeLenses ''TT.Entities
-makeLenses ''TT.Entity
+makeLenses ''TT.Contributor
+makeLenses ''TT.ImageSizeType
+makeLenses ''TT.UploadedMedia
 
 class AsStatus s where
     status_id :: Lens' s TT.StatusId

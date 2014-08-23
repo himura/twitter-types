@@ -32,6 +32,8 @@ module Web.Twitter.Types
        , Place(..)
        , BoundingBox(..)
        , Contributor(..)
+       , UploadedMedia (..)
+       , ImageSizeType (..)
        , checkError
        )
        where
@@ -594,3 +596,30 @@ instance FromJSON Contributor where
         Contributor <$>  o .:  "id"
                     <*>  o .:  "screen_name"
     parseJSON _ = mzero
+
+-- | Image size type. This type is included in the API response of "/1.1/media/upload.json".
+data ImageSizeType = ImageSizeType
+    { imageSizeTypeWidth :: Int
+    , imageSizeTypeHeight :: Int
+    , imageSizeTypeType :: Text
+    } deriving Show
+instance FromJSON ImageSizeType where
+    parseJSON (Object o) =
+        ImageSizeType <$> o .:  "w"
+                      <*> o .:  "h"
+                      <*> o .:  "image_type"
+    parseJSON v = fail $ "unknown value: " ++ show v
+
+-- | This type is represents the API response of "/1.1/media/upload.json"
+-- See <https://dev.twitter.com/docs/api/multiple-media-extended-entities>.
+data UploadedMedia = UploadedMedia
+    { uploadedMediaId :: Integer
+    , uploadedMediaSize :: Integer
+    , uploadedMediaImage :: ImageSizeType
+    } deriving Show
+instance FromJSON UploadedMedia where
+    parseJSON (Object o) =
+        UploadedMedia <$> o .:  "media_id"
+                      <*> o .:  "size"
+                      <*> o .:  "image"
+    parseJSON v = fail $ "unknown value: " ++ show v
