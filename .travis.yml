@@ -29,12 +29,13 @@ install:
   - which cabal
   - travis_retry cabal update
   - cabal install happy
-  - cabal install --only-dependencies --enable-tests
+  - "(cd twitter-types && cabal install --only-dependencies --enable-tests)"
   - "[ -n \"$USE_COVERALLS\" ] && travis_retry cabal install hpc-coveralls || true"
   - ghc-pkg list
 
 script:
   - |
+    cd twitter-types
     if [ -n "$USE_COVERALLS" ]; then
       cabal configure --enable-tests --enable-library-coverage $CABAL_FLAGS
     else
