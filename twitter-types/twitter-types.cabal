@@ -25,11 +25,9 @@ library
 
   build-depends:
       base >= 4 && < 5
-    , http-types
     , aeson >= 0.3.2.2
     , text
     , unordered-containers
-    , template-haskell
 
   exposed-modules:
     Web.Twitter.Types
