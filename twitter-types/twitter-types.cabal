@@ -42,9 +42,7 @@ test-suite tests
     , test-framework >= 0.3.3
     , test-framework-th-prime
     , test-framework-hunit
-    , haskell-src-exts
     , HUnit
-    , http-types
     , aeson
     , attoparsec
     , bytestring
