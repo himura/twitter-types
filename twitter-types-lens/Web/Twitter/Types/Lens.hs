@@ -1,5 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RankNTypes, CPP, FlexibleInstances #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module Web.Twitter.Types.Lens
        (
@@ -249,12 +253,26 @@ module Web.Twitter.Types.Lens
        , TT.StreamingAPI(..)
        , TT.EventTarget(..)
        , TT.EntityIndices
+
+       -- * 'TT.StreamingAPI'
+       , _SStatus
+       , _SRetweetedStatus
+       , _SEvent
+       , _SDelete
+       , _SFriends
+       , _SUnknown
+
+       -- * 'TT.EventTarget'
+       , _ETUser
+       , _ETStatus
+       , _ETList
+       , _ETUnknown
        )
        where
 
-import Web.Twitter.Types.Lens.Types
-import qualified Web.Twitter.Types as TT
+import Control.Lens hiding (makeLenses)
 import Data.Text (Text)
+import qualified Web.Twitter.Types as TT
 import Web.Twitter.Types.Lens.TH
 
 makeLenses ''TT.Status
@@ -353,3 +371,6 @@ instance AsImageSize TT.MediaSize where
 instance AsImageSize TT.ImageSizeType where
     width = imageSizeTypeWidth
     height = imageSizeTypeHeight
+
+makePrisms ''TT.StreamingAPI
+makePrisms ''TT.EventTarget
