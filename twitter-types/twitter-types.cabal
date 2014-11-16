@@ -12,10 +12,6 @@ cabal-version:     >= 1.8
 build-type:        Simple
 homepage:          https://github.com/himura/twitter-types
 
-extra-source-files:
-  .gitignore
-  .travis.yml
-
 source-repository head
   type: git
   location: git://github.com/himura/twitter-types.git

@@ -10,10 +10,6 @@ category:            Web
 build-type:          Simple
 cabal-version:       >=1.10
 
-extra-source-files:
-  .gitignore
-  .travis.yml
-
 source-repository head
   type: git
   location: git://github.com/himura/twitter-types-lens.git
