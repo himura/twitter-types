@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
+{-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RecordWildCards #-}
 
 module Web.Twitter.Types
        ( DateString
@@ -41,7 +41,7 @@ module Web.Twitter.Types
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Text (Text)
-import Data.HashMap.Strict (HashMap)
+import Data.HashMap.Strict (HashMap, fromList, union)
 import Control.Applicative
 import Control.Monad
 
@@ -144,6 +144,38 @@ instance FromJSON Status where
                <*> o .:? "withheld_in_countries"
                <*> o .:? "withheld_scope"
     parseJSON _ = mzero
+
+instance ToJSON Status where
+    toJSON Status{..} = object [ "contributors"             .= statusContributors
+                               , "coordinates"              .= statusCoordinates
+                               , "created_at"               .= statusCreatedAt
+                               , "current_user_retweet"     .= object [ "id"     .= statusCurrentUserRetweet
+                                                                      , "id_str" .= show statusCurrentUserRetweet
+                                                                      ]
+                               , "entities"                 .= statusEntities
+                               , "extended_entities"        .= statusExtendedEntities
+                               , "favorite_count"           .= statusFavoriteCount
+                               , "favorited"                .= statusFavorited
+                               , "filter_level"             .= statusFilterLevel
+                               , "id"                       .= statusId
+                               , "in_reply_to_screen_name"  .= statusInReplyToScreenName
+                               , "in_reply_to_status_id"    .= statusInReplyToStatusId
+                               , "in_reply_to_user_id"      .= statusInReplyToUserId
+                               , "lang"                     .= statusLang
+                               , "place"                    .= statusPlace
+                               , "possibly_sensitive"       .= statusPossiblySensitive
+                               , "scopes"                   .= statusScopes
+                               , "retweet_count"            .= statusRetweetCount
+                               , "retweeted"                .= statusRetweeted
+                               , "retweeted_status"         .= statusRetweetedStatus
+                               , "source"                   .= statusSource
+                               , "text"                     .= statusText
+                               , "truncated"                .= statusTruncated
+                               , "user"                     .= statusUser
+                               , "withheld_copyright"       .= statusWithheldCopyright
+                               , "withheld_in_countries"    .= statusWithheldInCountries
+                               , "withheld_scope"           .= statusWithheldScope
+                               ]
 
 data SearchResult body =
     SearchResult
@@ -394,6 +426,49 @@ instance FromJSON User where
              <*> o .:? "withheld_scope"
     parseJSON _ = mzero
 
+instance ToJSON User where
+    toJSON User{..} = object [ "contributors_enabled"               .= userContributorsEnabled
+                             , "created_at"                         .= userCreatedAt
+                             , "default_profile"                    .= userDefaultProfile
+                             , "default_profile_image"              .= userDefaultProfileImage
+                             , "description"                        .= userDescription
+                             , "favourites_count"                   .= userFavoritesCount
+                             , "follow_request_sent"                .= userFollowRequestSent
+                             , "following"                          .= userFollowing
+                             , "followers_count"                    .= userFollowersCount
+                             , "friends_count"                      .= userFriendsCount
+                             , "geo_enabled"                        .= userGeoEnabled
+                             , "id"                                 .= userId
+                             , "is_translator"                      .= userIsTranslator
+                             , "lang"                               .= userLang
+                             , "listed_count"                       .= userListedCount
+                             , "location"                           .= userLocation
+                             , "name"                               .= userName
+                             , "notifications"                      .= userNotifications
+                             , "profile_background_color"           .= userProfileBackgroundColor
+                             , "profile_background_image_url"       .= userProfileBackgroundImageURL
+                             , "profile_background_image_url_https" .= userProfileBackgroundImageURLHttps
+                             , "profile_background_tile"            .= userProfileBackgroundTile
+                             , "profile_banner_url"                 .= userProfileBannerURL
+                             , "profile_image_url"                  .= userProfileImageURL
+                             , "profile_image_url_https"            .= userProfileBackgroundImageURLHttps
+                             , "profile_link_color"                 .= userProfileLinkColor
+                             , "profile_sidebar_border_color"       .= userProfileSidebarBorderColor
+                             , "profile_sidebar_fill_color"         .= userProfileSidebarFillColor
+                             , "profile_text_color"                 .= userProfileTextColor
+                             , "profile_use_background_image"       .= userProfileUseBackgroundImage
+                             , "protected"                          .= userProtected
+                             , "screen_name"                        .= userScreenName
+                             , "show_all_inline_media"              .= userShowAllInlineMedia
+                             , "statuses_count"                     .= userStatusesCount
+                             , "time_zone"                          .= userTimeZone
+                             , "url"                                .= userURL
+                             , "utc_offset"                         .= userUtcOffset
+                             , "verified"                           .= userVerified
+                             , "withheld_in_countries"              .= userWithheldInCountries
+                             , "withheld_scope"                     .= userWithheldScope
+                             ]
+
 data List =
     List
     { listId :: Int
@@ -428,6 +503,9 @@ instance FromJSON HashTagEntity where
         HashTagEntity <$> o .: "text"
     parseJSON _ = mzero
 
+instance ToJSON HashTagEntity where
+    toJSON HashTagEntity{..} = object [ "text" .= hashTagText ]
+
 -- | User mention entity.
 -- See <https://dev.twitter.com/docs/platform-objects/entities#obj-usermention>.
 data UserEntity =
@@ -444,6 +522,12 @@ instance FromJSON UserEntity where
                    <*> o .:  "screen_name"
     parseJSON _ = mzero
 
+instance ToJSON UserEntity where
+    toJSON UserEntity{..} = object [ "id"           .= userEntityUserId
+                                   , "name"         .= userEntityUserName
+                                   , "screen_name"  .= userEntityUserScreenName
+                                   ]
+
 -- | URL entity.
 -- See <https://dev.twitter.com/docs/platform-objects/entities#obj-url>.
 data URLEntity =
@@ -459,6 +543,12 @@ instance FromJSON URLEntity where
                   <*> o .:  "expanded_url"
                   <*> o .:  "display_url"
     parseJSON _ = mzero
+
+instance ToJSON URLEntity where
+    toJSON URLEntity{..} = object [ "url"           .= ueURL
+                                  , "expanded_url"  .= ueExpanded
+                                  , "display_url"   .= ueDisplay
+                                  ]
 
 data MediaEntity =
     MediaEntity
@@ -480,6 +570,14 @@ instance FromJSON MediaEntity where
                     <*> parseJSON v
     parseJSON _ = mzero
 
+instance ToJSON MediaEntity where
+    toJSON MediaEntity{..} = object [ "type"            .= meType
+                                    , "id"              .= meId
+                                    , "sizes"           .= meSizes
+                                    , "media_url"       .= meMediaURL
+                                    , "media_url_https" .= meMediaURLHttps
+                                    ]
+
 -- | Size entity.
 -- See <https://dev.twitter.com/docs/platform-objects/entities#obj-size>.
 data MediaSize =
@@ -496,6 +594,12 @@ instance FromJSON MediaSize where
                   <*> o .: "resize"
     parseJSON _ = mzero
 
+instance ToJSON MediaSize where
+    toJSON MediaSize{..} = object [ "w"      .= msWidth
+                                  , "h"      .= msHeight
+                                  , "resize" .= msResize
+                                  ]
+
 data Coordinates =
     Coordinates
     { coordinates :: [Double]
@@ -507,6 +611,11 @@ instance FromJSON Coordinates where
         Coordinates <$> o .: "coordinates"
                     <*> o .: "type"
     parseJSON _ = mzero
+
+instance ToJSON Coordinates where
+    toJSON Coordinates{..} = object [ "coordinates" .= coordinates
+                                    , "type"        .= coordinatesType
+                                    ]
 
 -- | This type represents a place, named locations with corresponding geo coordinates.
 -- See <https://dev.twitter.com/docs/platform-objects/places>.
@@ -536,6 +645,18 @@ instance FromJSON Place where
               <*> o .: "url"
     parseJSON _ = mzero
 
+instance ToJSON Place where
+    toJSON Place{..} = object [ "attributes"    .= placeAttributes
+                              , "bounding_box"  .= placeBoundingBox
+                              , "country"       .= placeCountry
+                              , "country_code"  .= placeCountryCode
+                              , "full_name"     .= placeFullName
+                              , "id"            .= placeId
+                              , "name"          .= placeName
+                              , "place_type"    .= placeType
+                              , "url"           .= placeURL
+                              ]
+
 -- | A bounding box of coordinates which encloses the place.
 -- See <https://dev.twitter.com/docs/platform-objects/places#obj-boundingbox>.
 data BoundingBox =
@@ -549,6 +670,11 @@ instance FromJSON BoundingBox where
         BoundingBox <$> o .: "coordinates"
                     <*> o .: "type"
     parseJSON _ = mzero
+
+instance ToJSON BoundingBox where
+    toJSON BoundingBox{..} = object [ "coordinates" .= boundingBoxCoordinates
+                                    , "type"        .= boundingBoxType
+                                    ]
 
 -- | Entity handling.
 -- See <https://dev.twitter.com/docs/platform-objects/entities>.
@@ -568,6 +694,13 @@ instance FromJSON Entities where
                  <*> o .:? "media" .!= []
     parseJSON _ = mzero
 
+instance ToJSON Entities where
+    toJSON Entities{..} = object [ "hashtags"       .= enHashTags
+                                 , "user_mentions"  .= enUserMentions
+                                 , "urls"           .= enURLs
+                                 , "media"          .= enMedia
+                                 ]
+
 -- | The character positions the Entity was extracted from
 --
 --   This is experimental implementation.
@@ -586,6 +719,11 @@ instance FromJSON a => FromJSON (Entity a) where
                <*> o .: "indices"
     parseJSON _ = mzero
 
+instance ToJSON a => ToJSON (Entity a) where
+    toJSON Entity{..} = case toJSON entityBody of
+                            (Object o) -> Object $ union o $ fromList [("indices"::Text, toJSON entityIndices)]
+                            _          -> error "Entity body must produce an object."
+
 data Contributor = Contributor
     { contributorId :: UserId
     , contributorScreenName :: Text
@@ -596,6 +734,11 @@ instance FromJSON Contributor where
         Contributor <$>  o .:  "id"
                     <*>  o .:  "screen_name"
     parseJSON _ = mzero
+
+instance ToJSON Contributor where
+    toJSON Contributor{..} = object [ "id"          .= contributorId
+                                    , "screen_name" .= contributorScreenName
+                                    ]
 
 -- | Image size type. This type is included in the API response of \"\/1.1\/media\/upload.json\".
 data ImageSizeType = ImageSizeType
