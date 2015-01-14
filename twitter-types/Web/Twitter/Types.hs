@@ -38,6 +38,7 @@ module Web.Twitter.Types
        )
        where
 
+import Data.Data
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Text (Text)
@@ -461,7 +462,7 @@ data User = User
     , userVerified :: Bool
     , userWithheldInCountries :: Maybe Text
     , userWithheldScope :: Maybe Text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON User where
     parseJSON (Object o) = checkError o >>
