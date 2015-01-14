@@ -61,7 +61,7 @@ data StreamingAPI = SStatus Status
                   -- -- | SScrubGeo ScrubGeo
                   | SFriends Friends
                   | SUnknown Value
-                  deriving (Show, Eq)
+                  deriving (Show, Eq, Data, Typeable)
 
 checkError :: Object -> Parser ()
 checkError o = do
@@ -121,7 +121,7 @@ data Status = Status
     , statusWithheldCopyright :: Maybe Bool
     , statusWithheldInCountries :: Maybe [Text]
     , statusWithheldScope :: Maybe Text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON Status where
     parseJSON (Object o) = checkError o >>
@@ -190,7 +190,7 @@ data SearchResult body =
     SearchResult
     { searchResultStatuses :: body
     , searchResultSearchMetadata :: SearchMetadata
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON body =>
          FromJSON (SearchResult body) where
@@ -213,7 +213,7 @@ data SearchStatus =
     , searchStatusSource        :: Text
     , searchStatusUser          :: User
     , searchStatusCoordinates   :: Maybe Coordinates
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON SearchStatus where
     parseJSON (Object o) = checkError o >>
@@ -245,7 +245,7 @@ data SearchMetadata =
     , searchMetadataSinceIdStr    :: String
     , searchMetadataQuery         :: String
     , searchMetadataMaxIdStr      :: String
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON SearchMetadata where
     parseJSON (Object o) = checkError o >>
@@ -283,7 +283,7 @@ data RetweetedStatus =
     , rsUser            :: User
     , rsRetweetedStatus :: Status
     , rsCoordinates     :: Maybe Coordinates
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON RetweetedStatus where
     parseJSON (Object o) = checkError o >>
@@ -322,7 +322,7 @@ data DirectMessage =
     , dmRecipientId        :: UserId
     , dmSenderId           :: UserId
     , dmCoordinates        :: Maybe Coordinates
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON DirectMessage where
     parseJSON (Object o) = checkError o >>
@@ -354,10 +354,10 @@ instance ToJSON DirectMessage where
 data EventType = Favorite | Unfavorite
                | ListCreated | ListUpdated | ListMemberAdded
                | UserUpdate | Block | Unblock | Follow
-               deriving (Show, Eq)
+               deriving (Show, Eq, Data, Typeable)
 
 data EventTarget = ETUser User | ETStatus Status | ETList List | ETUnknown Value
-                 deriving (Show, Eq)
+                 deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON EventTarget where
     parseJSON v@(Object o) = checkError o >>
@@ -380,7 +380,7 @@ data Event =
     , evEvent           :: Text
     , evTarget          :: EventTarget
     , evSource          :: EventTarget
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON Event where
     parseJSON (Object o) = checkError o >>
@@ -403,7 +403,7 @@ data Delete =
     Delete
     { delId  :: StatusId
     , delUserId :: UserId
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON Delete where
     parseJSON (Object o) = checkError o >> do
@@ -560,7 +560,7 @@ data List =
     , listSubscriberCount :: Int
     , listMode :: Text
     , listUser :: User
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON List where
     parseJSON (Object o) = checkError o >>
@@ -588,7 +588,7 @@ instance ToJSON List where
 data HashTagEntity =
     HashTagEntity
     { hashTagText :: Text -- ^ The Hashtag text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON HashTagEntity where
     parseJSON (Object o) =
@@ -605,7 +605,7 @@ data UserEntity =
     { userEntityUserId              :: UserId
     , userEntityUserName            :: UserName
     , userEntityUserScreenName      :: Text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON UserEntity where
     parseJSON (Object o) =
@@ -627,7 +627,7 @@ data URLEntity =
     { ueURL      :: URIString -- ^ The URL that was extracted
     , ueExpanded :: URIString -- ^ The fully resolved URL (only for t.co links)
     , ueDisplay  :: Text    -- ^ Not a URL but a string to display instead of the URL (only for t.co links)
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON URLEntity where
     parseJSON (Object o) =
@@ -650,7 +650,7 @@ data MediaEntity =
     , meMediaURL :: URIString
     , meMediaURLHttps :: URIString
     , meURL :: URLEntity
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON MediaEntity where
     parseJSON v@(Object o) =
@@ -677,7 +677,7 @@ data MediaSize =
     { msWidth :: Int
     , msHeight :: Int
     , msResize :: Text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON MediaSize where
     parseJSON (Object o) =
@@ -696,7 +696,7 @@ data Coordinates =
     Coordinates
     { coordinates :: [Double]
     , coordinatesType :: Text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON Coordinates where
     parseJSON (Object o) =
@@ -722,7 +722,7 @@ data Place =
     , placeName         :: Text
     , placeType         :: Text
     , placeURL          :: Text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON Place where
     parseJSON (Object o) =
@@ -755,7 +755,7 @@ data BoundingBox =
     BoundingBox
     { boundingBoxCoordinates  :: [[[Double]]]
     , boundingBoxType         :: Text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON BoundingBox where
     parseJSON (Object o) =
@@ -776,7 +776,7 @@ data Entities =
     , enUserMentions :: [Entity UserEntity]
     , enURLs         :: [Entity URLEntity]
     , enMedia        :: [Entity MediaEntity]
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON Entities where
     parseJSON (Object o) =
@@ -803,7 +803,7 @@ data Entity a =
     Entity
     { entityBody    :: a             -- ^ The detail information of the specific entity types (HashTag, URL, User)
     , entityIndices :: EntityIndices -- ^ The character positions the Entity was extracted from
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON a => FromJSON (Entity a) where
     parseJSON v@(Object o) =
@@ -819,7 +819,7 @@ instance ToJSON a => ToJSON (Entity a) where
 data Contributor = Contributor
     { contributorId :: UserId
     , contributorScreenName :: Text
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Data, Typeable)
 
 instance FromJSON Contributor where
     parseJSON (Object o) =
@@ -837,7 +837,7 @@ data ImageSizeType = ImageSizeType
     { imageSizeTypeWidth :: Int
     , imageSizeTypeHeight :: Int
     , imageSizeTypeType :: Text
-    } deriving Show
+    } deriving (Show, Data, Typeable)
 instance FromJSON ImageSizeType where
     parseJSON (Object o) =
         ImageSizeType <$> o .:  "w"
@@ -857,7 +857,7 @@ data UploadedMedia = UploadedMedia
     { uploadedMediaId :: Integer
     , uploadedMediaSize :: Integer
     , uploadedMediaImage :: ImageSizeType
-    } deriving Show
+    } deriving (Show, Data, Typeable)
 instance FromJSON UploadedMedia where
     parseJSON (Object o) =
         UploadedMedia <$> o .:  "media_id"
