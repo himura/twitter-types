@@ -1,4 +1,7 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RecordWildCards, DeriveGeneric #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveGeneric      #-}
+{-# LANGUAGE OverloadedStrings  #-}
+{-# LANGUAGE RecordWildCards    #-}
 
 module Web.Twitter.Types
        ( DateString
@@ -38,14 +41,14 @@ module Web.Twitter.Types
        )
        where
 
-import GHC.Generics
-import Data.Data
-import Data.Aeson
-import Data.Aeson.Types (Parser)
-import Data.Text (Text)
-import Data.HashMap.Strict (HashMap, fromList, union)
-import Control.Applicative
-import Control.Monad
+import           Control.Applicative
+import           Control.Monad
+import           Data.Aeson
+import           Data.Aeson.Types    (Parser)
+import           Data.Data
+import           Data.HashMap.Strict (HashMap, fromList, union)
+import           Data.Text           (Text)
+import           GHC.Generics
 
 type DateString   = String
 type UserId       = Integer
@@ -95,33 +98,33 @@ instance ToJSON StreamingAPI where
 -- | This type represents a Twitter tweet structure.
 -- See <https://dev.twitter.com/docs/platform-objects/tweets>.
 data Status = Status
-    { statusContributors :: Maybe [Contributor]
-    , statusCoordinates :: Maybe Coordinates
-    , statusCreatedAt :: DateString
-    , statusCurrentUserRetweet :: Maybe UserId
-    , statusEntities :: Maybe Entities
-    , statusExtendedEntities :: Maybe Entities
-    , statusFavoriteCount :: Integer
-    , statusFavorited :: Maybe Bool
-    , statusFilterLevel :: Maybe Text
-    , statusId :: StatusId
+    { statusContributors        :: Maybe [Contributor]
+    , statusCoordinates         :: Maybe Coordinates
+    , statusCreatedAt           :: DateString
+    , statusCurrentUserRetweet  :: Maybe UserId
+    , statusEntities            :: Maybe Entities
+    , statusExtendedEntities    :: Maybe Entities
+    , statusFavoriteCount       :: Integer
+    , statusFavorited           :: Maybe Bool
+    , statusFilterLevel         :: Maybe Text
+    , statusId                  :: StatusId
     , statusInReplyToScreenName :: Maybe Text
-    , statusInReplyToStatusId :: Maybe StatusId
-    , statusInReplyToUserId :: Maybe UserId
-    , statusLang :: Maybe LanguageCode
-    , statusPlace :: Maybe Place
-    , statusPossiblySensitive :: Maybe Bool
-    , statusScopes :: Maybe Object
-    , statusRetweetCount :: Integer
-    , statusRetweeted :: Maybe Bool
-    , statusRetweetedStatus :: Maybe Status
-    , statusSource :: Text
-    , statusText :: Text
-    , statusTruncated :: Bool
-    , statusUser :: User
-    , statusWithheldCopyright :: Maybe Bool
+    , statusInReplyToStatusId   :: Maybe StatusId
+    , statusInReplyToUserId     :: Maybe UserId
+    , statusLang                :: Maybe LanguageCode
+    , statusPlace               :: Maybe Place
+    , statusPossiblySensitive   :: Maybe Bool
+    , statusScopes              :: Maybe Object
+    , statusRetweetCount        :: Integer
+    , statusRetweeted           :: Maybe Bool
+    , statusRetweetedStatus     :: Maybe Status
+    , statusSource              :: Text
+    , statusText                :: Text
+    , statusTruncated           :: Bool
+    , statusUser                :: User
+    , statusWithheldCopyright   :: Maybe Bool
     , statusWithheldInCountries :: Maybe [Text]
-    , statusWithheldScope :: Maybe Text
+    , statusWithheldScope       :: Maybe Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON Status where
@@ -189,7 +192,7 @@ instance ToJSON Status where
 
 data SearchResult body =
     SearchResult
-    { searchResultStatuses :: body
+    { searchResultStatuses       :: body
     , searchResultSearchMetadata :: SearchMetadata
     } deriving (Show, Eq, Data, Typeable, Generic)
 
@@ -208,12 +211,12 @@ instance ToJSON body =>
 
 data SearchStatus =
     SearchStatus
-    { searchStatusCreatedAt     :: DateString
-    , searchStatusId            :: StatusId
-    , searchStatusText          :: Text
-    , searchStatusSource        :: Text
-    , searchStatusUser          :: User
-    , searchStatusCoordinates   :: Maybe Coordinates
+    { searchStatusCreatedAt   :: DateString
+    , searchStatusId          :: StatusId
+    , searchStatusText        :: Text
+    , searchStatusSource      :: Text
+    , searchStatusUser        :: User
+    , searchStatusCoordinates :: Maybe Coordinates
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON SearchStatus where
@@ -237,15 +240,15 @@ instance ToJSON SearchStatus where
 
 data SearchMetadata =
     SearchMetadata
-    { searchMetadataMaxId         :: StatusId
-    , searchMetadataSinceId       :: StatusId
-    , searchMetadataRefreshURL    :: URIString
-    , searchMetadataNextResults   :: Maybe URIString
-    , searchMetadataCount         :: Int
-    , searchMetadataCompletedIn   :: Maybe Float
-    , searchMetadataSinceIdStr    :: String
-    , searchMetadataQuery         :: String
-    , searchMetadataMaxIdStr      :: String
+    { searchMetadataMaxId       :: StatusId
+    , searchMetadataSinceId     :: StatusId
+    , searchMetadataRefreshURL  :: URIString
+    , searchMetadataNextResults :: Maybe URIString
+    , searchMetadataCount       :: Int
+    , searchMetadataCompletedIn :: Maybe Float
+    , searchMetadataSinceIdStr  :: String
+    , searchMetadataQuery       :: String
+    , searchMetadataMaxIdStr    :: String
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON SearchMetadata where
@@ -376,11 +379,11 @@ instance ToJSON EventTarget where
 
 data Event =
     Event
-    { evCreatedAt       :: DateString
-    , evTargetObject    :: Maybe EventTarget
-    , evEvent           :: Text
-    , evTarget          :: EventTarget
-    , evSource          :: EventTarget
+    { evCreatedAt    :: DateString
+    , evTargetObject :: Maybe EventTarget
+    , evEvent        :: Text
+    , evTarget       :: EventTarget
+    , evSource       :: EventTarget
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON Event where
@@ -402,7 +405,7 @@ instance ToJSON Event where
 
 data Delete =
     Delete
-    { delId  :: StatusId
+    { delId     :: StatusId
     , delUserId :: UserId
     } deriving (Show, Eq, Data, Typeable, Generic)
 
@@ -423,46 +426,46 @@ instance ToJSON Delete where
 -- | This type represents the Twitter user.
 -- See <https://dev.twitter.com/docs/platform-objects/users>.
 data User = User
-    { userContributorsEnabled :: Bool
-    , userCreatedAt :: DateString
-    , userDefaultProfile :: Bool
-    , userDefaultProfileImage :: Bool
-    , userDescription :: Maybe Text
-    , userFavoritesCount :: Int
-    , userFollowRequestSent :: Maybe Bool
-    , userFollowing :: Maybe Bool
-    , userFollowersCount :: Int
-    , userFriendsCount :: Int
-    , userGeoEnabled :: Bool
-    , userId :: UserId
-    , userIsTranslator :: Bool
-    , userLang :: LanguageCode
-    , userListedCount :: Int
-    , userLocation :: Maybe Text
-    , userName :: Text
-    , userNotifications :: Maybe Bool
-    , userProfileBackgroundColor :: Maybe Text
-    , userProfileBackgroundImageURL :: Maybe URIString
+    { userContributorsEnabled            :: Bool
+    , userCreatedAt                      :: DateString
+    , userDefaultProfile                 :: Bool
+    , userDefaultProfileImage            :: Bool
+    , userDescription                    :: Maybe Text
+    , userFavoritesCount                 :: Int
+    , userFollowRequestSent              :: Maybe Bool
+    , userFollowing                      :: Maybe Bool
+    , userFollowersCount                 :: Int
+    , userFriendsCount                   :: Int
+    , userGeoEnabled                     :: Bool
+    , userId                             :: UserId
+    , userIsTranslator                   :: Bool
+    , userLang                           :: LanguageCode
+    , userListedCount                    :: Int
+    , userLocation                       :: Maybe Text
+    , userName                           :: Text
+    , userNotifications                  :: Maybe Bool
+    , userProfileBackgroundColor         :: Maybe Text
+    , userProfileBackgroundImageURL      :: Maybe URIString
     , userProfileBackgroundImageURLHttps :: Maybe URIString
-    , userProfileBackgroundTile :: Maybe Bool
-    , userProfileBannerURL :: Maybe URIString
-    , userProfileImageURL :: Maybe URIString
-    , userProfileImageURLHttps :: Maybe URIString
-    , userProfileLinkColor :: Text
-    , userProfileSidebarBorderColor :: Text
-    , userProfileSidebarFillColor :: Text
-    , userProfileTextColor :: Text
-    , userProfileUseBackgroundImage :: Bool
-    , userProtected :: Bool
-    , userScreenName :: Text
-    , userShowAllInlineMedia :: Maybe Bool
-    , userStatusesCount :: Int
-    , userTimeZone :: Maybe Text
-    , userURL :: Maybe URIString
-    , userUtcOffset :: Maybe Int
-    , userVerified :: Bool
-    , userWithheldInCountries :: Maybe Text
-    , userWithheldScope :: Maybe Text
+    , userProfileBackgroundTile          :: Maybe Bool
+    , userProfileBannerURL               :: Maybe URIString
+    , userProfileImageURL                :: Maybe URIString
+    , userProfileImageURLHttps           :: Maybe URIString
+    , userProfileLinkColor               :: Text
+    , userProfileSidebarBorderColor      :: Text
+    , userProfileSidebarFillColor        :: Text
+    , userProfileTextColor               :: Text
+    , userProfileUseBackgroundImage      :: Bool
+    , userProtected                      :: Bool
+    , userScreenName                     :: Text
+    , userShowAllInlineMedia             :: Maybe Bool
+    , userStatusesCount                  :: Int
+    , userTimeZone                       :: Maybe Text
+    , userURL                            :: Maybe URIString
+    , userUtcOffset                      :: Maybe Int
+    , userVerified                       :: Bool
+    , userWithheldInCountries            :: Maybe Text
+    , userWithheldScope                  :: Maybe Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON User where
@@ -554,13 +557,13 @@ instance ToJSON User where
 
 data List =
     List
-    { listId :: Int
-    , listName :: Text
-    , listFullName :: Text
-    , listMemberCount :: Int
+    { listId              :: Int
+    , listName            :: Text
+    , listFullName        :: Text
+    , listMemberCount     :: Int
     , listSubscriberCount :: Int
-    , listMode :: Text
-    , listUser :: User
+    , listMode            :: Text
+    , listUser            :: User
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON List where
@@ -603,9 +606,9 @@ instance ToJSON HashTagEntity where
 -- See <https://dev.twitter.com/docs/platform-objects/entities#obj-usermention>.
 data UserEntity =
     UserEntity
-    { userEntityUserId              :: UserId
-    , userEntityUserName            :: UserName
-    , userEntityUserScreenName      :: Text
+    { userEntityUserId         :: UserId
+    , userEntityUserName       :: UserName
+    , userEntityUserScreenName :: Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON UserEntity where
@@ -645,12 +648,12 @@ instance ToJSON URLEntity where
 
 data MediaEntity =
     MediaEntity
-    { meType :: Text
-    , meId :: StatusId
-    , meSizes :: HashMap Text MediaSize
-    , meMediaURL :: URIString
+    { meType          :: Text
+    , meId            :: StatusId
+    , meSizes         :: HashMap Text MediaSize
+    , meMediaURL      :: URIString
     , meMediaURLHttps :: URIString
-    , meURL :: URLEntity
+    , meURL           :: URLEntity
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON MediaEntity where
@@ -675,7 +678,7 @@ instance ToJSON MediaEntity where
 -- See <https://dev.twitter.com/docs/platform-objects/entities#obj-size>.
 data MediaSize =
     MediaSize
-    { msWidth :: Int
+    { msWidth  :: Int
     , msHeight :: Int
     , msResize :: Text
     } deriving (Show, Eq, Data, Typeable, Generic)
@@ -695,7 +698,7 @@ instance ToJSON MediaSize where
 
 data Coordinates =
     Coordinates
-    { coordinates :: [Double]
+    { coordinates     :: [Double]
     , coordinatesType :: Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
@@ -714,15 +717,15 @@ instance ToJSON Coordinates where
 -- See <https://dev.twitter.com/docs/platform-objects/places>.
 data Place =
     Place
-    { placeAttributes   :: HashMap Text Text
-    , placeBoundingBox  :: BoundingBox
-    , placeCountry      :: Text
-    , placeCountryCode  :: Text
-    , placeFullName     :: Text
-    , placeId           :: Text
-    , placeName         :: Text
-    , placeType         :: Text
-    , placeURL          :: Text
+    { placeAttributes  :: HashMap Text Text
+    , placeBoundingBox :: BoundingBox
+    , placeCountry     :: Text
+    , placeCountryCode :: Text
+    , placeFullName    :: Text
+    , placeId          :: Text
+    , placeName        :: Text
+    , placeType        :: Text
+    , placeURL         :: Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON Place where
@@ -754,8 +757,8 @@ instance ToJSON Place where
 -- See <https://dev.twitter.com/docs/platform-objects/places#obj-boundingbox>.
 data BoundingBox =
     BoundingBox
-    { boundingBoxCoordinates  :: [[[Double]]]
-    , boundingBoxType         :: Text
+    { boundingBoxCoordinates :: [[[Double]]]
+    , boundingBoxType        :: Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON BoundingBox where
@@ -818,7 +821,7 @@ instance ToJSON a => ToJSON (Entity a) where
                             _          -> error "Entity body must produce an object."
 
 data Contributor = Contributor
-    { contributorId :: UserId
+    { contributorId         :: UserId
     , contributorScreenName :: Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
@@ -835,9 +838,9 @@ instance ToJSON Contributor where
 
 -- | Image size type. This type is included in the API response of \"\/1.1\/media\/upload.json\".
 data ImageSizeType = ImageSizeType
-    { imageSizeTypeWidth :: Int
+    { imageSizeTypeWidth  :: Int
     , imageSizeTypeHeight :: Int
-    , imageSizeTypeType :: Text
+    , imageSizeTypeType   :: Text
     } deriving (Show, Data, Typeable, Generic)
 instance FromJSON ImageSizeType where
     parseJSON (Object o) =
@@ -855,8 +858,8 @@ instance ToJSON ImageSizeType where
 -- | This type is represents the API response of \"\/1.1\/media\/upload.json\".
 -- See <https://dev.twitter.com/docs/api/multiple-media-extended-entities>.
 data UploadedMedia = UploadedMedia
-    { uploadedMediaId :: Integer
-    , uploadedMediaSize :: Integer
+    { uploadedMediaId    :: Integer
+    , uploadedMediaSize  :: Integer
     , uploadedMediaImage :: ImageSizeType
     } deriving (Show, Data, Typeable, Generic)
 instance FromJSON UploadedMedia where
