@@ -82,6 +82,14 @@ instance FromJSON StreamingAPI where
         js = parseJSON v
     parseJSON _ = mzero
 
+instance ToJSON StreamingAPI where
+    toJSON (SStatus          s) = toJSON s
+    toJSON (SRetweetedStatus s) = toJSON s
+    toJSON (SEvent           e) = toJSON e
+    toJSON (SDelete          d) = toJSON d
+    toJSON (SFriends         f) = toJSON f
+    toJSON (SUnknown         v) = v
+
 -- | This type represents a Twitter tweet structure.
 -- See <https://dev.twitter.com/docs/platform-objects/tweets>.
 data Status = Status
@@ -190,6 +198,12 @@ instance FromJSON body =>
                      <*> o .:  "search_metadata"
     parseJSON _ = mzero
 
+instance ToJSON body =>
+         ToJSON (SearchResult body) where
+    toJSON SearchResult{..} = object [ "statuses"        .= searchResultStatuses
+                                     , "search_metadata" .= searchResultSearchMetadata
+                                     ]
+
 data SearchStatus =
     SearchStatus
     { searchStatusCreatedAt     :: DateString
@@ -209,6 +223,15 @@ instance FromJSON SearchStatus where
                      <*> o .:  "user"
                      <*> o .:? "coordinates"
     parseJSON _ = mzero
+
+instance ToJSON SearchStatus where
+    toJSON SearchStatus{..} = object [ "created_at"     .= searchStatusCreatedAt
+                                     , "id"             .= searchStatusId
+                                     , "text"           .= searchStatusText
+                                     , "source"         .= searchStatusSource
+                                     , "user"           .= searchStatusUser
+                                     , "coordinates"    .= searchStatusCoordinates
+                                     ]
 
 data SearchMetadata =
     SearchMetadata
@@ -236,6 +259,18 @@ instance FromJSON SearchMetadata where
                        <*> o .:  "max_id_str"
     parseJSON _ = mzero
 
+instance ToJSON SearchMetadata where
+    toJSON SearchMetadata{..} = object [ "max_id"       .= searchMetadataMaxId
+                                       , "since_id"     .= searchMetadataSinceId
+                                       , "refresh_url"  .= searchMetadataRefreshURL
+                                       , "next_results" .= searchMetadataNextResults
+                                       , "count"        .= searchMetadataCount
+                                       , "completed_in" .= searchMetadataCompletedIn
+                                       , "since_id_str" .= searchMetadataSinceIdStr
+                                       , "query"        .= searchMetadataQuery
+                                       , "max_id_str"   .= searchMetadataMaxIdStr
+                                       ]
+
 data RetweetedStatus =
     RetweetedStatus
     { rsCreatedAt       :: DateString
@@ -261,6 +296,18 @@ instance FromJSON RetweetedStatus where
                         <*> o .:  "retweeted_status"
                         <*> o .:? "coordinates"
     parseJSON _ = mzero
+
+instance ToJSON RetweetedStatus where
+    toJSON RetweetedStatus{..} = object [ "created_at"          .= rsCreatedAt
+                                        , "id"                  .= rsId
+                                        , "text"                .= rsText
+                                        , "source"              .= rsSource
+                                        , "truncated"           .= rsTruncated
+                                        , "entities"            .= rsEntities
+                                        , "user"                .= rsUser
+                                        , "retweeted_status"    .= rsRetweetedStatus
+                                        , "coordinates"         .= rsCoordinates
+                                        ]
 
 data DirectMessage =
     DirectMessage
@@ -290,6 +337,19 @@ instance FromJSON DirectMessage where
                       <*> o .:? "coordinates"
     parseJSON _ = mzero
 
+instance ToJSON DirectMessage where
+    toJSON DirectMessage{..} = object [ "created_at"            .= dmCreatedAt
+                                      , "sender_screen_name"    .= dmSenderScreenName
+                                      , "sender"                .= dmSender
+                                      , "text"                  .= dmText
+                                      , "recipient_screen_name" .= dmRecipientScreeName
+                                      , "id"                    .= dmId
+                                      , "recipient"             .= dmRecipient
+                                      , "recipient_id"          .= dmRecipientId
+                                      , "sender_id"             .= dmSenderId
+                                      , "coordinates"           .= dmCoordinates
+                                      ]
+
 data EventType = Favorite | Unfavorite
                | ListCreated | ListUpdated | ListMemberAdded
                | UserUpdate | Block | Unblock | Follow
@@ -305,6 +365,12 @@ instance FromJSON EventTarget where
         ETList <$> parseJSON v <|>
         return (ETUnknown v)
     parseJSON _ = mzero
+
+instance ToJSON EventTarget where
+    toJSON (ETUser    u) = toJSON u
+    toJSON (ETStatus  s) = toJSON s
+    toJSON (ETList    l) = toJSON l
+    toJSON (ETUnknown v) = v
 
 data Event =
     Event
@@ -324,6 +390,14 @@ instance FromJSON Event where
               <*> o .:  "source"
     parseJSON _ = mzero
 
+instance ToJSON Event where
+    toJSON Event{..} = object [ "created_at"    .= evCreatedAt
+                              , "target_object" .= evTargetObject
+                              , "event"         .= evEvent
+                              , "target"        .= evTarget
+                              , "source"        .= evSource
+                              ]
+
 data Delete =
     Delete
     { delId  :: StatusId
@@ -336,6 +410,13 @@ instance FromJSON Delete where
         Delete <$> s .: "id"
                <*> s .: "user_id"
     parseJSON _ = mzero
+
+instance ToJSON Delete where
+    toJSON Delete{..} = object [ "delete" .= object [ "status" .= object [ "id"      .= delId
+                                                                         , "user_id" .= delUserId
+                                                                         ]
+                                                    ]
+                               ]
 
 -- | This type represents the Twitter user.
 -- See <https://dev.twitter.com/docs/platform-objects/users>.
@@ -490,6 +571,16 @@ instance FromJSON List where
              <*> o .:  "mode"
              <*> o .:  "user"
     parseJSON _ = mzero
+
+instance ToJSON List where
+    toJSON List{..} = object [ "id"                 .= listId
+                             , "name"               .= listName
+                             , "full_name"          .= listFullName
+                             , "member_count"       .= listMemberCount
+                             , "subscriber_count"   .= listSubscriberCount
+                             , "mode"               .= listMode
+                             , "user"               .= listUser
+                             ]
 
 -- | Hashtag entity.
 -- See <https://dev.twitter.com/docs/platform-objects/entities#obj-hashtags>.
@@ -753,6 +844,12 @@ instance FromJSON ImageSizeType where
                       <*> o .:  "image_type"
     parseJSON v = fail $ "unknown value: " ++ show v
 
+instance ToJSON ImageSizeType where
+    toJSON ImageSizeType{..} = object [ "w"          .= imageSizeTypeWidth
+                                      , "h"          .= imageSizeTypeHeight
+                                      , "image_type" .= imageSizeTypeType
+                                      ]
+
 -- | This type is represents the API response of \"\/1.1\/media\/upload.json\".
 -- See <https://dev.twitter.com/docs/api/multiple-media-extended-entities>.
 data UploadedMedia = UploadedMedia
@@ -766,3 +863,9 @@ instance FromJSON UploadedMedia where
                       <*> o .:  "size"
                       <*> o .:  "image"
     parseJSON v = fail $ "unknown value: " ++ show v
+
+instance ToJSON UploadedMedia where
+    toJSON UploadedMedia{..} = object [ "media_id"  .= uploadedMediaId
+                                      , "size"      .= uploadedMediaSize
+                                      , "image"     .= uploadedMediaImage
+                                      ]
