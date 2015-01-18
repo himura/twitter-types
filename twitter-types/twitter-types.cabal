@@ -25,6 +25,9 @@ library
     , text
     , unordered-containers
 
+  if impl(ghc < 7.6)
+    build-depends: ghc-prim
+
   exposed-modules:
     Web.Twitter.Types
 
