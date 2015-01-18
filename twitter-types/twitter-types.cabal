@@ -49,7 +49,6 @@ test-suite tests
     , unordered-containers
     , filepath
     , directory
-    , vector
   other-modules:
     Fixtures
 

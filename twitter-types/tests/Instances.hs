@@ -11,19 +11,16 @@ import Test.QuickCheck
 import Web.Twitter.Types
 import Data.Aeson
 import Data.HashMap.Strict as HashMap
-import Data.Vector as V
 
 instance Arbitrary T.Text where
     arbitrary = T.pack <$> arbitrary
 
 instance Arbitrary Value where
-    arbitrary = elements [ Null, Bool True, Bool False
-                         , Object HashMap.empty
-                         , Array (V.fromList [Number 1.0, String "test"])
-                         , String "test string"
+    arbitrary = elements [ Object HashMap.empty
+                         , Object (HashMap.fromList [("test", Number 2), ("value", String "non empty")])
                          ]
 
-derive makeArbitrary ''StreamingAPI
+-- derive makeArbitrary ''StreamingAPI
 
 instance Arbitrary Status where
     arbitrary = do

@@ -287,11 +287,11 @@ prop_fromToRetweetedStatus = fromToJSON
 prop_fromToDirectMessage :: DirectMessage -> Bool
 prop_fromToDirectMessage = fromToJSON
 
--- prop_fromToEventTarget :: EventTarget -> Bool
--- prop_fromToEventTarget = fromToJSON
+prop_fromToEventTarget :: EventTarget -> Bool
+prop_fromToEventTarget = fromToJSON
 
--- prop_fromToEvent :: Event -> Bool
--- prop_fromToEvent = fromToJSON
+prop_fromToEvent :: Event -> Bool
+prop_fromToEvent = fromToJSON
 
 prop_fromToDelete :: Delete -> Bool
 prop_fromToDelete = fromToJSON
