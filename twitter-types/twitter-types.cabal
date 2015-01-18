@@ -55,5 +55,6 @@ test-suite tests
     , twitter-types
   other-modules:
     Fixtures
+    Instances
 
   ghc-options:       -Wall

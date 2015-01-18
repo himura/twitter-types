@@ -56,4 +56,4 @@ script:
   - cabal build
 
 after_script:
-  - "[ -n \"$USE_COVERALLS\" ] && cd twitter-types && hpc-coveralls --exclude-dir=tests tests || true"
+  - "[ -n \"$USE_COVERALLS\" ] && cd ../twitter-types && hpc-coveralls --exclude-dir=tests tests || true"
