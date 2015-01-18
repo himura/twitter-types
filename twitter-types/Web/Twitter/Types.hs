@@ -838,7 +838,7 @@ data ImageSizeType = ImageSizeType
     { imageSizeTypeWidth :: Int
     , imageSizeTypeHeight :: Int
     , imageSizeTypeType :: Text
-    } deriving (Show, Data, Typeable, Generic)
+    } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON ImageSizeType where
     parseJSON (Object o) =
@@ -859,7 +859,7 @@ data UploadedMedia = UploadedMedia
     { uploadedMediaId :: Integer
     , uploadedMediaSize :: Integer
     , uploadedMediaImage :: ImageSizeType
-    } deriving (Show, Data, Typeable, Generic)
+    } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON UploadedMedia where
     parseJSON (Object o) =

@@ -38,7 +38,10 @@ test-suite tests
     , test-framework >= 0.3.3
     , test-framework-th-prime
     , test-framework-hunit
+    , test-framework-quickcheck2
     , HUnit
+    , QuickCheck
+    , derive
     , aeson
     , attoparsec
     , bytestring
@@ -46,6 +49,7 @@ test-suite tests
     , unordered-containers
     , filepath
     , directory
+    , vector
   other-modules:
     Fixtures
 
