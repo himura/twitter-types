@@ -44,9 +44,9 @@ script:
   - cabal build
   - |
     if [ -n "$USE_COVERALLS" ]; then
-      run-cabal-test --show-details=always
+      travis_wait run-cabal-test --show-details=always
     else
-      cabal test --show-details=always
+      travis_wait cabal test --show-details=always
     fi
   - cabal install
   - cd ..
