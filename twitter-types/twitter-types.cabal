@@ -33,7 +33,7 @@ library
 
 test-suite tests
   type:              exitcode-stdio-1.0
-  hs-source-dirs:    tests, .
+  hs-source-dirs:    tests
   main-is:           TypesTest.hs
   build-depends:
       base >= 4.0 && < 5
@@ -52,6 +52,7 @@ test-suite tests
     , unordered-containers
     , filepath
     , directory
+    , twitter-types
   other-modules:
     Fixtures
 
