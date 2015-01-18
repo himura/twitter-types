@@ -669,6 +669,9 @@ instance ToJSON MediaEntity where
                                     , "sizes"           .= meSizes
                                     , "media_url"       .= meMediaURL
                                     , "media_url_https" .= meMediaURLHttps
+                                    , "url"             .= ueURL meURL
+                                    , "expanded_url"    .= ueExpanded meURL
+                                    , "display_url"     .= ueDisplay meURL
                                     ]
 
 -- | Size entity.

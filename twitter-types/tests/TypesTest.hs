@@ -311,8 +311,8 @@ prop_fromToUserEntity = fromToJSON
 prop_fromToURLEntity :: URLEntity -> Bool
 prop_fromToURLEntity = fromToJSON
 
--- prop_fromToMediaEntity :: MediaEntity -> Bool
--- prop_fromToMediaEntity = fromToJSON
+prop_fromToMediaEntity :: MediaEntity -> Bool
+prop_fromToMediaEntity = fromToJSON
 
 prop_fromToMediaSize :: MediaSize -> Bool
 prop_fromToMediaSize = fromToJSON
@@ -326,8 +326,8 @@ prop_fromToPlace = fromToJSON
 prop_fromToBoundingBox :: BoundingBox -> Bool
 prop_fromToBoundingBox = fromToJSON
 
--- prop_fromToEntities :: Entities -> Bool
--- prop_fromToEntities = fromToJSON
+prop_fromToEntities :: Entities -> Bool
+prop_fromToEntities = fromToJSON
 
 prop_fromToContributor :: Contributor -> Bool
 prop_fromToContributor = fromToJSON
