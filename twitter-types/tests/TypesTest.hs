@@ -272,20 +272,20 @@ fromToJSON obj = case fromJSON . toJSON $ obj of
 -- prop_fromToStreamingAPI :: StreamingAPI -> Bool
 -- prop_fromToStreamingAPI = fromToJSON
 
--- prop_fromToStatus :: Status -> Bool
--- prop_fromToStatus = fromToJSON
+prop_fromToStatus :: Status -> Bool
+prop_fromToStatus = fromToJSON
 
--- prop_fromToSearchStatus :: SearchStatus -> Bool
--- prop_fromToSearchStatus = fromToJSON
+prop_fromToSearchStatus :: SearchStatus -> Bool
+prop_fromToSearchStatus = fromToJSON
 
 prop_fromToSearchMetadata :: SearchMetadata -> Bool
 prop_fromToSearchMetadata = fromToJSON
 
--- prop_fromToRetweetedStatus :: RetweetedStatus -> Bool
--- prop_fromToRetweetedStatus = fromToJSON
+prop_fromToRetweetedStatus :: RetweetedStatus -> Bool
+prop_fromToRetweetedStatus = fromToJSON
 
--- prop_fromToDirectMessage :: DirectMessage -> Bool
--- prop_fromToDirectMessage = fromToJSON
+prop_fromToDirectMessage :: DirectMessage -> Bool
+prop_fromToDirectMessage = fromToJSON
 
 -- prop_fromToEventTarget :: EventTarget -> Bool
 -- prop_fromToEventTarget = fromToJSON
@@ -296,11 +296,11 @@ prop_fromToSearchMetadata = fromToJSON
 prop_fromToDelete :: Delete -> Bool
 prop_fromToDelete = fromToJSON
 
--- prop_fromToUser :: User -> Bool
--- prop_fromToUser = fromToJSON
+prop_fromToUser :: User -> Bool
+prop_fromToUser = fromToJSON
 
--- prop_fromToList :: List -> Bool
--- prop_fromToList = fromToJSON
+prop_fromToList :: List -> Bool
+prop_fromToList = fromToJSON
 
 prop_fromToHashTagEntity :: HashTagEntity -> Bool
 prop_fromToHashTagEntity = fromToJSON

@@ -534,7 +534,7 @@ instance ToJSON User where
                              , "profile_background_tile"            .= userProfileBackgroundTile
                              , "profile_banner_url"                 .= userProfileBannerURL
                              , "profile_image_url"                  .= userProfileImageURL
-                             , "profile_image_url_https"            .= userProfileBackgroundImageURLHttps
+                             , "profile_image_url_https"            .= userProfileImageURLHttps
                              , "profile_link_color"                 .= userProfileLinkColor
                              , "profile_sidebar_border_color"       .= userProfileSidebarBorderColor
                              , "profile_sidebar_fill_color"         .= userProfileSidebarFillColor
