@@ -11,6 +11,7 @@ import Test.Framework.Providers.HUnit
 import Test.Framework.Providers.QuickCheck2
 import Test.HUnit
 
+import Debug.Trace
 import Data.Aeson hiding (Error)
 import Data.Aeson.Types (parseEither)
 import qualified Data.Aeson.Types as Aeson
@@ -266,7 +267,7 @@ case_parseList = withJSON fixture_list_thimura_haskell $ \obj -> do
 
 fromToJSON :: (Eq a, FromJSON a, ToJSON a) => a -> Bool
 fromToJSON obj = case fromJSON . toJSON $ obj of
-    Aeson.Error _ -> False
+    Aeson.Error e -> trace e False
     Aeson.Success a -> a == obj
 
 -- prop_fromToStreamingAPI :: StreamingAPI -> Bool

@@ -4,13 +4,27 @@
 
 module Instances where
 
+import Data.String
 import Control.Applicative
 import Data.DeriveTH
 import qualified Data.Text as T
+import Data.Time
 import Test.QuickCheck
 import Web.Twitter.Types
 import Data.Aeson
 import Data.HashMap.Strict as HashMap
+import System.Locale
+
+instance IsString UTCTime where
+    fromString = readTime defaultTimeLocale twitterTimeFormat
+
+instance Arbitrary UTCTime where
+    arbitrary =
+        do randomDay <- choose (1, 29) :: Gen Int
+           randomMonth <- choose (1, 12) :: Gen Int
+           randomYear <- choose (2001, 2002) :: Gen Integer
+           randomTime <- choose (0, 86401) :: Gen Int
+           return $ UTCTime (fromGregorian randomYear randomMonth randomDay) (fromIntegral randomTime)
 
 instance Arbitrary T.Text where
     arbitrary = T.pack <$> arbitrary
