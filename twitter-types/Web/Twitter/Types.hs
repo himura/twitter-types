@@ -1,8 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RecordWildCards, DeriveGeneric #-}
 
 module Web.Twitter.Types
-       ( DateString
-       , UserId
+       ( UserId
        , Friends
        , URIString
        , UserName
@@ -35,6 +34,7 @@ module Web.Twitter.Types
        , UploadedMedia (..)
        , ImageSizeType (..)
        , checkError
+       , twitterTimeFormat
        )
        where
 
@@ -44,10 +44,13 @@ import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Data
 import Data.HashMap.Strict (HashMap, fromList, union)
-import Data.Text (Text)
+import Data.Text (Text, unpack, pack)
+import Data.Time
 import GHC.Generics
+import System.Locale
 
-type DateString   = String
+newtype TwitterTime = TwitterTime { fromTwitterTime :: UTCTime }
+
 type UserId       = Integer
 type Friends      = [UserId]
 type URIString    = Text
@@ -70,6 +73,18 @@ checkError o = do
     case err of
         Just msg -> fail msg
         Nothing -> return ()
+
+twitterTimeFormat :: String
+twitterTimeFormat = "%a %b %d %T %z %Y"
+
+instance FromJSON TwitterTime where
+    parseJSON = withText "TwitterTime" $ \t ->
+        case parseTime defaultTimeLocale twitterTimeFormat (unpack t) of
+            Just  d -> pure $ TwitterTime d
+            Nothing -> fail $ "Could not parse twitter time. Text was: " ++ unpack t
+
+instance ToJSON TwitterTime where
+    toJSON t = String $ pack $ formatTime defaultTimeLocale twitterTimeFormat $ fromTwitterTime t 
 
 instance FromJSON StreamingAPI where
     parseJSON v@(Object o) =
@@ -97,7 +112,7 @@ instance ToJSON StreamingAPI where
 data Status = Status
     { statusContributors :: Maybe [Contributor]
     , statusCoordinates :: Maybe Coordinates
-    , statusCreatedAt :: DateString
+    , statusCreatedAt :: UTCTime
     , statusCurrentUserRetweet :: Maybe UserId
     , statusEntities :: Maybe Entities
     , statusExtendedEntities :: Maybe Entities
@@ -128,7 +143,7 @@ instance FromJSON Status where
     parseJSON (Object o) = checkError o >>
         Status <$> o .:? "contributors"
                <*> o .:? "coordinates"
-               <*> o .:  "created_at"
+               <*> (o .:  "created_at" >>= return . fromTwitterTime)
                <*> ((o .: "current_user_retweet" >>= (.: "id")) <|> return Nothing)
                <*> o .:? "entities"
                <*> o .:? "extended_entities"
@@ -158,7 +173,7 @@ instance FromJSON Status where
 instance ToJSON Status where
     toJSON Status{..} = object [ "contributors"             .= statusContributors
                                , "coordinates"              .= statusCoordinates
-                               , "created_at"               .= statusCreatedAt
+                               , "created_at"               .= TwitterTime statusCreatedAt
                                , "current_user_retweet"     .= object [ "id"     .= statusCurrentUserRetweet
                                                                       , "id_str" .= show statusCurrentUserRetweet
                                                                       ]
@@ -208,7 +223,7 @@ instance ToJSON body =>
 
 data SearchStatus =
     SearchStatus
-    { searchStatusCreatedAt     :: DateString
+    { searchStatusCreatedAt     :: UTCTime
     , searchStatusId            :: StatusId
     , searchStatusText          :: Text
     , searchStatusSource        :: Text
@@ -218,7 +233,7 @@ data SearchStatus =
 
 instance FromJSON SearchStatus where
     parseJSON (Object o) = checkError o >>
-        SearchStatus <$> o .:  "created_at"
+        SearchStatus <$> (o .:  "created_at" >>= return . fromTwitterTime)
                      <*> o .:  "id"
                      <*> o .:  "text"
                      <*> o .:  "source"
@@ -227,7 +242,7 @@ instance FromJSON SearchStatus where
     parseJSON _ = mzero
 
 instance ToJSON SearchStatus where
-    toJSON SearchStatus{..} = object [ "created_at"     .= searchStatusCreatedAt
+    toJSON SearchStatus{..} = object [ "created_at"     .= TwitterTime searchStatusCreatedAt
                                      , "id"             .= searchStatusId
                                      , "text"           .= searchStatusText
                                      , "source"         .= searchStatusSource
@@ -275,7 +290,7 @@ instance ToJSON SearchMetadata where
 
 data RetweetedStatus =
     RetweetedStatus
-    { rsCreatedAt       :: DateString
+    { rsCreatedAt       :: UTCTime
     , rsId              :: StatusId
     , rsText            :: Text
     , rsSource          :: Text
@@ -288,7 +303,7 @@ data RetweetedStatus =
 
 instance FromJSON RetweetedStatus where
     parseJSON (Object o) = checkError o >>
-        RetweetedStatus <$> o .:  "created_at"
+        RetweetedStatus <$> (o .:  "created_at" >>= return . fromTwitterTime)
                         <*> o .:  "id"
                         <*> o .:  "text"
                         <*> o .:  "source"
@@ -300,7 +315,7 @@ instance FromJSON RetweetedStatus where
     parseJSON _ = mzero
 
 instance ToJSON RetweetedStatus where
-    toJSON RetweetedStatus{..} = object [ "created_at"          .= rsCreatedAt
+    toJSON RetweetedStatus{..} = object [ "created_at"          .= TwitterTime rsCreatedAt
                                         , "id"                  .= rsId
                                         , "text"                .= rsText
                                         , "source"              .= rsSource
@@ -313,7 +328,7 @@ instance ToJSON RetweetedStatus where
 
 data DirectMessage =
     DirectMessage
-    { dmCreatedAt          :: DateString
+    { dmCreatedAt          :: UTCTime
     , dmSenderScreenName   :: Text
     , dmSender             :: User
     , dmText               :: Text
@@ -327,7 +342,7 @@ data DirectMessage =
 
 instance FromJSON DirectMessage where
     parseJSON (Object o) = checkError o >>
-        DirectMessage <$> o .:  "created_at"
+        DirectMessage <$> (o .:  "created_at" >>= return . fromTwitterTime)
                       <*> o .:  "sender_screen_name"
                       <*> o .:  "sender"
                       <*> o .:  "text"
@@ -340,7 +355,7 @@ instance FromJSON DirectMessage where
     parseJSON _ = mzero
 
 instance ToJSON DirectMessage where
-    toJSON DirectMessage{..} = object [ "created_at"            .= dmCreatedAt
+    toJSON DirectMessage{..} = object [ "created_at"            .= TwitterTime dmCreatedAt
                                       , "sender_screen_name"    .= dmSenderScreenName
                                       , "sender"                .= dmSender
                                       , "text"                  .= dmText
@@ -376,7 +391,7 @@ instance ToJSON EventTarget where
 
 data Event =
     Event
-    { evCreatedAt       :: DateString
+    { evCreatedAt       :: UTCTime
     , evTargetObject    :: Maybe EventTarget
     , evEvent           :: Text
     , evTarget          :: EventTarget
@@ -385,7 +400,7 @@ data Event =
 
 instance FromJSON Event where
     parseJSON (Object o) = checkError o >>
-        Event <$> o .:  "created_at"
+        Event <$> (o .:  "created_at" >>= return . fromTwitterTime)
               <*> o .:? "target_object"
               <*> o .:  "event"
               <*> o .:  "target"
@@ -393,7 +408,7 @@ instance FromJSON Event where
     parseJSON _ = mzero
 
 instance ToJSON Event where
-    toJSON Event{..} = object [ "created_at"    .= evCreatedAt
+    toJSON Event{..} = object [ "created_at"    .= TwitterTime evCreatedAt
                               , "target_object" .= evTargetObject
                               , "event"         .= evEvent
                               , "target"        .= evTarget
@@ -424,7 +439,7 @@ instance ToJSON Delete where
 -- See <https://dev.twitter.com/docs/platform-objects/users>.
 data User = User
     { userContributorsEnabled :: Bool
-    , userCreatedAt :: DateString
+    , userCreatedAt :: UTCTime
     , userDefaultProfile :: Bool
     , userDefaultProfileImage :: Bool
     , userDescription :: Maybe Text
@@ -468,7 +483,7 @@ data User = User
 instance FromJSON User where
     parseJSON (Object o) = checkError o >>
         User <$> o .:  "contributors_enabled"
-             <*> o .:  "created_at"
+             <*> (o .:  "created_at" >>= return . fromTwitterTime)
              <*> o .:  "default_profile"
              <*> o .:  "default_profile_image"
              <*> o .:? "description"
@@ -511,7 +526,7 @@ instance FromJSON User where
 
 instance ToJSON User where
     toJSON User{..} = object [ "contributors_enabled"               .= userContributorsEnabled
-                             , "created_at"                         .= userCreatedAt
+                             , "created_at"                         .= TwitterTime userCreatedAt
                              , "default_profile"                    .= userDefaultProfile
                              , "default_profile_image"              .= userDefaultProfileImage
                              , "description"                        .= userDescription

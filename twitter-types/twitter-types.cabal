@@ -23,6 +23,8 @@ library
       base >= 4 && < 5
     , aeson >= 0.3.2.2
     , text
+    , time <1.5
+    , old-locale
     , unordered-containers
 
   if impl(ghc < 7.6)
@@ -49,10 +51,12 @@ test-suite tests
     , attoparsec
     , bytestring
     , text
+    , time
     , unordered-containers
     , filepath
     , directory
     , twitter-types
+    , old-locale
   other-modules:
     Fixtures
     Instances
