@@ -243,7 +243,6 @@ module Web.Twitter.Types.Lens
        , imageSizeTypeType
 
        -- * Type aliases and sum types
-       , TT.DateString
        , TT.UserId
        , TT.Friends
        , TT.URIString
@@ -272,6 +271,7 @@ module Web.Twitter.Types.Lens
 
 import Control.Lens hiding (makeLenses)
 import Data.Text (Text)
+import Data.Time
 import qualified Web.Twitter.Types as TT
 import Web.Twitter.Types.Lens.TH
 
@@ -350,7 +350,7 @@ instance AsUser (TT.Entity TT.UserEntity) where
     screen_name = entityBody.userEntityUserScreenName
 
 class HasCreatedAt a where
-    created_at :: Lens' a TT.DateString
+    created_at :: Lens' a UTCTime
 instance HasCreatedAt TT.Status where
     created_at = statusCreatedAt
 instance HasCreatedAt TT.SearchStatus where
