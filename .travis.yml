@@ -51,8 +51,8 @@ script:
   - cabal install
   - cd ..
   - cd twitter-types-lens
-  - travis_retry cabal install --only-dependencies --enable-tests
-  - cabal configure --enable-tests $CABAL_FLAGS
+  - travis_retry cabal install --only-dependencies --enable-tests --allow-newer=twitter-types
+  - cabal configure --enable-tests $CABAL_FLAGS  --allow-newer=twitter-types
   - cabal build
 
 after_script:
