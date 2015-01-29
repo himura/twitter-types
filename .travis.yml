@@ -29,6 +29,7 @@ install:
   - which cabal
   - travis_retry cabal update
   - cabal install happy
+  - "(cd twitter-types && cabal install --only-dependencies --enable-tests --dry-run -v3)"
   - "(cd twitter-types && cabal install --only-dependencies --enable-tests)"
   - "[ -n \"$USE_COVERALLS\" ] && travis_retry cabal install hpc-coveralls || true"
   - ghc-pkg list
