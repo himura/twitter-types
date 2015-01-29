@@ -16,6 +16,10 @@ source-repository head
   type: git
   location: git://github.com/himura/twitter-types.git
 
+flag time15
+  description: use time >= 1.5.
+  default: True
+
 library
   ghc-options: -Wall
 
@@ -23,9 +27,15 @@ library
       base >= 4 && < 5
     , aeson >= 0.3.2.2
     , text
-    , time <1.5
-    , old-locale
     , unordered-containers
+
+  if flag(time15)
+    build-depends:
+        time >= 1.5 && < 1.6
+  else
+    build-depends:
+        time >= 1.2 && < 1.5
+      , old-locale
 
   if impl(ghc < 7.6)
     build-depends: ghc-prim
