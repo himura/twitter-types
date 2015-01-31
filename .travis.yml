@@ -29,6 +29,7 @@ install:
   - which cabal
   - travis_retry cabal update
   - cabal install happy
+  - ghc-pkg list
   - "(cd twitter-types && cabal install --only-dependencies --enable-tests --dry-run -v3)"
   - "(cd twitter-types && cabal install --only-dependencies --enable-tests)"
   - "[ -n \"$USE_COVERALLS\" ] && travis_retry cabal install hpc-coveralls || true"
@@ -52,8 +53,13 @@ script:
   - cabal install
   - cd ..
   - cd twitter-types-lens
-  - travis_retry cabal install --only-dependencies --enable-tests --allow-newer=twitter-types
-  - cabal configure --enable-tests $CABAL_FLAGS  --allow-newer=twitter-types
+  - |
+    if cabal install --only-dependencies --enable-tests --dry-run | grep twitter-types > /dev/null; then
+      echo "NG: UPDATE DEPENDENCY: twitter-types"
+      exit 1
+    fi
+  - travis_retry cabal install --only-dependencies --enable-tests
+  - cabal configure --enable-tests $CABAL_FLAGS
   - cabal build
 
 after_script:
