@@ -105,7 +105,7 @@ instance FromJSON StreamingAPI where
       where
         js :: FromJSON a => Parser a
         js = parseJSON v
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse StreamingAPI from: " ++ show v
 
 instance ToJSON StreamingAPI where
     toJSON (SStatus          s) = toJSON s
@@ -176,7 +176,7 @@ instance FromJSON Status where
                <*> o .:? "withheld_copyright"
                <*> o .:? "withheld_in_countries"
                <*> o .:? "withheld_scope"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse status from: " ++ show v
 
 instance ToJSON Status where
     toJSON Status{..} = object [ "contributors"             .= statusContributors
@@ -221,7 +221,7 @@ instance FromJSON body =>
     parseJSON (Object o) = checkError o >>
         SearchResult <$> o .:  "statuses"
                      <*> o .:  "search_metadata"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse search result from: " ++ show v
 
 instance ToJSON body =>
          ToJSON (SearchResult body) where
@@ -247,7 +247,7 @@ instance FromJSON SearchStatus where
                      <*> o .:  "source"
                      <*> o .:  "user"
                      <*> o .:? "coordinates"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse status search result from: " ++ show v
 
 instance ToJSON SearchStatus where
     toJSON SearchStatus{..} = object [ "created_at"     .= TwitterTime searchStatusCreatedAt
@@ -282,7 +282,7 @@ instance FromJSON SearchMetadata where
                        <*> o .:  "since_id_str"
                        <*> o .:  "query"
                        <*> o .:  "max_id_str"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse search metadata from: " ++ show v
 
 instance ToJSON SearchMetadata where
     toJSON SearchMetadata{..} = object [ "max_id"       .= searchMetadataMaxId
@@ -320,7 +320,7 @@ instance FromJSON RetweetedStatus where
                         <*> o .:  "user"
                         <*> o .:  "retweeted_status"
                         <*> o .:? "coordinates"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse retweeted status from: " ++ show v
 
 instance ToJSON RetweetedStatus where
     toJSON RetweetedStatus{..} = object [ "created_at"          .= TwitterTime rsCreatedAt
@@ -360,7 +360,7 @@ instance FromJSON DirectMessage where
                       <*> o .:  "recipient_id"
                       <*> o .:  "sender_id"
                       <*> o .:? "coordinates"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse direct message from: " ++ show v
 
 instance ToJSON DirectMessage where
     toJSON DirectMessage{..} = object [ "created_at"            .= TwitterTime dmCreatedAt
@@ -389,7 +389,7 @@ instance FromJSON EventTarget where
         ETStatus <$> parseJSON v <|>
         ETList <$> parseJSON v <|>
         return (ETUnknown v)
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse event target from: " ++ show v
 
 instance ToJSON EventTarget where
     toJSON (ETUser    u) = toJSON u
@@ -413,7 +413,7 @@ instance FromJSON Event where
               <*> o .:  "event"
               <*> o .:  "target"
               <*> o .:  "source"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse event from: " ++ show v
 
 instance ToJSON Event where
     toJSON Event{..} = object [ "created_at"    .= TwitterTime evCreatedAt
@@ -434,7 +434,7 @@ instance FromJSON Delete where
         s <- o .: "delete" >>= (.: "status")
         Delete <$> s .: "id"
                <*> s .: "user_id"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse delete from: " ++ show v
 
 instance ToJSON Delete where
     toJSON Delete{..} = object [ "delete" .= object [ "status" .= object [ "id"      .= delId
@@ -530,7 +530,7 @@ instance FromJSON User where
              <*> o .:  "verified"
              <*> o .:? "withheld_in_countries"
              <*> o .:? "withheld_scope"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse user from: " ++ show v
 
 instance ToJSON User where
     toJSON User{..} = object [ "contributors_enabled"               .= userContributorsEnabled
@@ -595,7 +595,7 @@ instance FromJSON List where
              <*> o .:  "subscriber_count"
              <*> o .:  "mode"
              <*> o .:  "user"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse List from: " ++ show v
 
 instance ToJSON List where
     toJSON List{..} = object [ "id"                 .= listId
@@ -617,7 +617,7 @@ data HashTagEntity =
 instance FromJSON HashTagEntity where
     parseJSON (Object o) =
         HashTagEntity <$> o .: "text"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse hashtag entity from: " ++ show v
 
 instance ToJSON HashTagEntity where
     toJSON HashTagEntity{..} = object [ "text" .= hashTagText ]
@@ -636,7 +636,7 @@ instance FromJSON UserEntity where
         UserEntity <$> o .:  "id"
                    <*> o .:  "name"
                    <*> o .:  "screen_name"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse user entity from: " ++ show v
 
 instance ToJSON UserEntity where
     toJSON UserEntity{..} = object [ "id"           .= userEntityUserId
@@ -658,7 +658,7 @@ instance FromJSON URLEntity where
         URLEntity <$> o .:  "url"
                   <*> o .:  "expanded_url"
                   <*> o .:  "display_url"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse url entity from: " ++ show v
 
 instance ToJSON URLEntity where
     toJSON URLEntity{..} = object [ "url"           .= ueURL
@@ -684,7 +684,7 @@ instance FromJSON MediaEntity where
                     <*> o .: "media_url"
                     <*> o .: "media_url_https"
                     <*> parseJSON v
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse media entity from: " ++ show v
 
 instance ToJSON MediaEntity where
     toJSON MediaEntity{..} = object [ "type"            .= meType
@@ -711,7 +711,7 @@ instance FromJSON MediaSize where
         MediaSize <$> o .: "w"
                   <*> o .: "h"
                   <*> o .: "resize"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse media size from: " ++ show v
 
 instance ToJSON MediaSize where
     toJSON MediaSize{..} = object [ "w"      .= msWidth
@@ -729,7 +729,7 @@ instance FromJSON Coordinates where
     parseJSON (Object o) =
         Coordinates <$> o .: "coordinates"
                     <*> o .: "type"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse coordinates from: " ++ show v
 
 instance ToJSON Coordinates where
     toJSON Coordinates{..} = object [ "coordinates" .= coordinates
@@ -762,7 +762,7 @@ instance FromJSON Place where
               <*> o .: "name"
               <*> o .: "place_type"
               <*> o .: "url"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse place from: " ++ show v
 
 instance ToJSON Place where
     toJSON Place{..} = object [ "attributes"    .= placeAttributes
@@ -788,7 +788,7 @@ instance FromJSON BoundingBox where
     parseJSON (Object o) =
         BoundingBox <$> o .: "coordinates"
                     <*> o .: "type"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse bounding box from: " ++ show v
 
 instance ToJSON BoundingBox where
     toJSON BoundingBox{..} = object [ "coordinates" .= boundingBoxCoordinates
@@ -811,7 +811,7 @@ instance FromJSON Entities where
                  <*> o .:? "user_mentions" .!= []
                  <*> o .:? "urls" .!= []
                  <*> o .:? "media" .!= []
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse entities from: " ++ show v
 
 instance ToJSON Entities where
     toJSON Entities{..} = object [ "hashtags"       .= enHashTags
@@ -836,7 +836,7 @@ instance FromJSON a => FromJSON (Entity a) where
     parseJSON v@(Object o) =
         Entity <$> parseJSON v
                <*> o .: "indices"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse entity wrapper from: " ++ show v
 
 instance ToJSON a => ToJSON (Entity a) where
     toJSON Entity{..} = case toJSON entityBody of
@@ -852,7 +852,7 @@ instance FromJSON Contributor where
     parseJSON (Object o) =
         Contributor <$>  o .:  "id"
                     <*>  o .:  "screen_name"
-    parseJSON _ = mzero
+    parseJSON v = fail $ "couldn't parse contributor from: " ++ show v
 
 instance ToJSON Contributor where
     toJSON Contributor{..} = object [ "id"          .= contributorId
