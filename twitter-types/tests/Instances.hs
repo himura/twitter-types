@@ -66,6 +66,34 @@ instance Arbitrary Status where
                <*> arbitrary
                <*> arbitrary
 
+instance Arbitrary LastStatus where
+    arbitrary = do
+        LastStatus <$> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> pure Nothing
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+
 derive makeArbitrary ''SearchStatus
 derive makeArbitrary ''SearchMetadata
 derive makeArbitrary ''RetweetedStatus

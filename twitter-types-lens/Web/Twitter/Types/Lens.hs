@@ -142,6 +142,7 @@ module Web.Twitter.Types.Lens
        , userProtected
        , userScreenName
        , userShowAllInlineMedia
+       , userStatus
        , userStatusesCount
        , userTimeZone
        , userURL

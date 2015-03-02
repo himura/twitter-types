@@ -8,6 +8,7 @@ module Web.Twitter.Types
        , StatusId
        , LanguageCode
        , StreamingAPI(..)
+       , LastStatus(..)
        , Status(..)
        , SearchResult(..)
        , SearchStatus(..)
@@ -209,6 +210,99 @@ instance ToJSON Status where
                                , "withheld_in_countries"    .= statusWithheldInCountries
                                , "withheld_scope"           .= statusWithheldScope
                                ]
+
+-- | This type represents the "last status" field sometimes present on users.
+-- See for example <https://dev.twitter.com/rest/reference/get/account/verify_credentials>.
+-- This type seems to be almost exactly the same as a 'Status', but
+-- without the 'user' field, probably because it only shows up in the
+-- context of a user.
+data LastStatus = LastStatus
+    { lastStatusContributors:: Maybe [Contributor]
+    , lastStatusCoordinates :: Maybe Coordinates
+    , lastStatusCreatedAt :: UTCTime
+    , lastStatusCurrentUserRetweet :: Maybe UserId
+    , lastStatusEntities :: Maybe Entities
+    , lastStatusExtendedEntities :: Maybe Entities
+    , lastStatusFavoriteCount :: Integer
+    , lastStatusFavorited :: Maybe Bool
+    , lastStatusFilterLevel :: Maybe Text
+    , lastStatusId :: StatusId
+    , lastStatusInReplyToScreenName :: Maybe Text
+    , lastStatusInReplyToStatusId :: Maybe StatusId
+    , lastStatusInReplyToUserId :: Maybe UserId
+    , lastStatusLang :: Maybe LanguageCode
+    , lastStatusPlace :: Maybe Place
+    , lastStatusPossiblySensitive :: Maybe Bool
+    , lastStatusScopes :: Maybe Object
+    , lastStatusRetweetCount :: Integer
+    , lastStatusRetweeted :: Maybe Bool
+    , lastStatusSource :: Text
+    , lastStatusText :: Text
+    , lastStatusTruncated :: Bool
+    , lastStatusWithheldCopyright :: Maybe Bool
+    , lastStatusWithheldInCountries :: Maybe [Text]
+    , lastStatusWithheldScope :: Maybe Text
+    } deriving (Show, Eq, Data, Typeable, Generic)
+
+instance FromJSON LastStatus where
+    parseJSON (Object o) = checkError o >>
+        LastStatus <$> o .:? "contributors"
+                   <*> o .:? "coordinates"
+                   <*> (o .: "created_at" >>= return . fromTwitterTime)
+                   <*> ((o .: "current_user_retweet" >>= (.: "id")) <|> return Nothing)
+                   <*> o .:? "entities"
+                   <*> o .:? "extended_entities"
+                   <*> o .:? "favorite_count" .!= 0
+                   <*> o .:? "favorited"
+                   <*> o .:? "filter_level"
+                   <*> o .: "id"
+                   <*> o .:? "in_reply_to_screen_name"
+                   <*> o .:? "in_reply_to_status_id"
+                   <*> o .:? "in_reply_to_user_id"
+                   <*> o .:? "lang"
+                   <*> o .:? "place"
+                   <*> o .:? "possibly_sensitive"
+                   <*> o .:? "scopes"
+                   <*> o .:? "retweet_count" .!= 0
+                   <*> o .:? "retweeted"
+                   <*> o .: "source"
+                   <*> o .: "text"
+                   <*> o .: "truncated"
+                   <*> o .:? "withheld_copyright"
+                   <*> o .:? "withheld_in_countries"
+                   <*> o .:? "withheld_scope"
+    parseJSON v = fail $ "couldn't parse user's last status from: " ++ show v
+
+instance ToJSON LastStatus where
+    toJSON LastStatus{..} = object
+        [ "contributors"             .= lastStatusContributors
+        , "coordinates"              .= lastStatusCoordinates
+        , "created_at"               .= TwitterTime lastStatusCreatedAt
+        , "current_user_retweet"     .= object [ "id"     .= lastStatusCurrentUserRetweet
+                                               , "id_str" .= show lastStatusCurrentUserRetweet
+                                               ]
+        , "entities"                 .= lastStatusEntities
+        , "extended_entities"        .= lastStatusExtendedEntities
+        , "favorite_count"           .= lastStatusFavoriteCount
+        , "favorited"                .= lastStatusFavorited
+        , "filter_level"             .= lastStatusFilterLevel
+        , "id"                       .= lastStatusId
+        , "in_reply_to_screen_name"  .= lastStatusInReplyToScreenName
+        , "in_reply_to_status_id"    .= lastStatusInReplyToStatusId
+        , "in_reply_to_user_id"      .= lastStatusInReplyToUserId
+        , "lang"                     .= lastStatusLang
+        , "place"                    .= lastStatusPlace
+        , "possibly_sensitive"       .= lastStatusPossiblySensitive
+        , "scopes"                   .= lastStatusScopes
+        , "retweet_count"            .= lastStatusRetweetCount
+        , "retweeted"                .= lastStatusRetweeted
+        , "source"                   .= lastStatusSource
+        , "text"                     .= lastStatusText
+        , "truncated"                .= lastStatusTruncated
+        , "withheld_copyright"       .= lastStatusWithheldCopyright
+        , "withheld_in_countries"    .= lastStatusWithheldInCountries
+        , "withheld_scope"           .= lastStatusWithheldScope
+        ]
 
 data SearchResult body =
     SearchResult
@@ -479,6 +573,7 @@ data User = User
     , userProtected :: Bool
     , userScreenName :: Text
     , userShowAllInlineMedia :: Maybe Bool
+    , userStatus :: Maybe LastStatus
     , userStatusesCount :: Int
     , userTimeZone :: Maybe Text
     , userURL :: Maybe URIString
@@ -523,6 +618,7 @@ instance FromJSON User where
              <*> o .:  "protected"
              <*> o .:  "screen_name"
              <*> o .:? "show_all_inline_media"
+             <*> o .:? "status"
              <*> o .:  "statuses_count"
              <*> o .:? "time_zone"
              <*> o .:? "url"
@@ -566,6 +662,7 @@ instance ToJSON User where
                              , "protected"                          .= userProtected
                              , "screen_name"                        .= userScreenName
                              , "show_all_inline_media"              .= userShowAllInlineMedia
+                             , "status"                             .= userStatus
                              , "statuses_count"                     .= userStatusesCount
                              , "time_zone"                          .= userTimeZone
                              , "url"                                .= userURL
