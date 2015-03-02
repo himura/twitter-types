@@ -252,8 +252,19 @@ case_parseUser = withJSON fixture_user_thimura $ \obj -> do
     userStatusesCount obj @?= 24709
     userLang obj @?= "en"
     userCreatedAt obj @?= "Thu Aug 27 02:48:06 +0000 2009"
-    lastStatusCreatedAt (fromJust $ userStatus obj) @?= "Fri Aug 01 12:59:36 +0000 2014"
     userFavoritesCount obj @?= 17313
+    let lastStatus = userStatus obj
+    assert $ isJust lastStatus
+    let lastSt = fromJust lastStatus
+    lastStatusCreatedAt lastSt @?= "Fri Aug 01 12:59:36 +0000 2014"
+    lastStatusLang lastSt @?= Just "ja"
+    lastStatusRetweeted lastSt @?= Just False
+    lastStatusFavoriteCount lastSt @?= 0
+    lastStatusInReplyToStatusId lastSt @?= Nothing
+    lastStatusInReplyToScreenName lastSt @?= Nothing
+    lastStatusInReplyToUserId lastSt @?= Nothing
+    lastStatusSource lastSt @?= "\x003c\&a href=\"http://twitter.com\" rel=\"nofollow\"\x003eTwitter Web Client\003c/a\x003e"
+    lastStatusCoordinates lastSt @?= Nothing
 
 case_parseList :: Assertion
 case_parseList = withJSON fixture_list_thimura_haskell $ \obj -> do
