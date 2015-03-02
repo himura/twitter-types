@@ -279,6 +279,9 @@ prop_fromToStatus = fromToJSON
 prop_fromToSearchStatus :: SearchStatus -> Bool
 prop_fromToSearchStatus = fromToJSON
 
+prop_fromToLastStatus :: LastStatus -> Bool
+prop_fromToLastStatus = fromToJSON
+
 prop_fromToSearchMetadata :: SearchMetadata -> Bool
 prop_fromToSearchMetadata = fromToJSON
 
