@@ -845,13 +845,15 @@ instance ToJSON a => ToJSON (Entity a) where
 
 data Contributor = Contributor
     { contributorId :: UserId
-    , contributorScreenName :: Text
+    , contributorScreenName :: Maybe Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON Contributor where
     parseJSON (Object o) =
         Contributor <$>  o .:  "id"
-                    <*>  o .:  "screen_name"
+                    <*>  o .:?  "screen_name"
+    parseJSON v@(Number _) =
+        Contributor <$> parseJSON v <*> pure Nothing
     parseJSON _ = mzero
 
 instance ToJSON Contributor where
