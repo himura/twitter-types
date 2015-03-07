@@ -741,7 +741,7 @@ instance ToJSON Coordinates where
 data Place =
     Place
     { placeAttributes   :: HashMap Text Text
-    , placeBoundingBox  :: BoundingBox
+    , placeBoundingBox  :: Maybe BoundingBox
     , placeCountry      :: Text
     , placeCountryCode  :: Text
     , placeFullName     :: Text
@@ -754,7 +754,7 @@ data Place =
 instance FromJSON Place where
     parseJSON (Object o) =
         Place <$> o .: "attributes"
-              <*> o .: "bounding_box"
+              <*> o .:? "bounding_box"
               <*> o .: "country"
               <*> o .: "country_code"
               <*> o .: "full_name"
