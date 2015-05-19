@@ -8,7 +8,7 @@ import Data.String
 import Control.Applicative
 import Data.DeriveTH
 import qualified Data.Text as T
-import Data.Time
+import Data.Time (UTCTime (..), readTime, fromGregorian)
 import Test.QuickCheck
 import Web.Twitter.Types
 import Data.Aeson
