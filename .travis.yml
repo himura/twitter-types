@@ -26,9 +26,9 @@ install:
     HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--only-dependencies $HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS" halcyon install
 
 script:
-  - |
-    eval "$(halcyon paths)"
-    run-cabal-test --cabal-name=cabal --show-details=always
+  - eval "$(halcyon paths)"
+  - cabal configure --enable-tests --enable-library-coverage
+  - run-cabal-test --cabal-name=cabal --show-details=always
 
   - |
     cd ../twitter-types-lens
