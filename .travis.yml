@@ -17,7 +17,7 @@ before_install:
   - |
     eval "$( curl -sL https://github.com/mietek/halcyon/raw/master/setup.sh )"
     export HALCYON_GHC_VERSION=$GHCVER HALCYON_CABAL_VERSION=1.22.4.0
-    export HALCYON_SANDBOX_EXTRA_APPS=hpc-coveralls
+    export HALCYON_SANDBOX_EXTRA_APPS="hpc-coveralls happy"
     export HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests"
 
 install:
