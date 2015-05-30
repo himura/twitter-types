@@ -23,7 +23,7 @@ before_install:
 install:
   - |
     cd twitter-types
-    halcyon install --only-dependencies
+    HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--only-dependencies $HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS" halcyon install
 
 script:
   - |
@@ -32,7 +32,7 @@ script:
 
   - |
     cd ../twitter-types-lens
-    halcyon install --only-dependencies --sandbox-sources=../twitter-types
+    halcyon install --sandbox-sources=../twitter-types
 
 after_script:
   - cd ../twitter-types && hpc-coveralls --exclude-dir=tests tests
