@@ -18,21 +18,21 @@ before_install:
     eval "$( curl -sL https://github.com/mietek/halcyon/raw/master/setup.sh )"
     export HALCYON_GHC_VERSION=$GHCVER HALCYON_CABAL_VERSION=1.22.4.0
     export HALCYON_SANDBOX_EXTRA_APPS="hpc-coveralls happy"
-    export HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests"
+    export HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests --enable-library-coverage"
 
 install:
   - |
     cd twitter-types
-    halcyon install
-  - |
-    cd ../twitter-types-lens
-    halcyon install
+    halcyon install --only-dependencies
 
 script:
   - |
-    cd ../twitter-types
     eval "$(halcyon paths)"
     run-cabal-test --cabal-name=cabal --show-details=always
+
+  - |
+    cd ../twitter-types-lens
+    halcyon install --only-dependencies --sandbox-sources=../twitter-types
 
 after_script:
   - cd ../twitter-types && hpc-coveralls --exclude-dir=tests tests
