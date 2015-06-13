@@ -14,25 +14,20 @@ matrix:
     - env: GHCVER=head
 
 before_install:
-  - |
-    eval "$( curl -sL https://github.com/mietek/halcyon/raw/master/setup.sh )"
-    export HALCYON_GHC_VERSION=$GHCVER HALCYON_CABAL_VERSION=1.22.4.0
-    export HALCYON_SANDBOX_EXTRA_APPS="hpc-coveralls happy"
-    export HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests --enable-library-coverage"
+  - eval "$( curl -sL https://github.com/mietek/halcyon/raw/master/setup.sh )"
+  - export HALCYON_GHC_VERSION=$GHCVER HALCYON_CABAL_VERSION=1.22.4.0
 
 install:
-  - |
-    cd twitter-types
-    HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--only-dependencies $HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS" halcyon install
+  - cd twitter-types
+  - HALCYON_SANDBOX_EXTRA_APPS="hpc-coveralls happy" HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests --only-dependencies" halcyon install
 
 script:
-  - eval "$(halcyon paths)"
+  - cabal sandbox init --sandbox=/app/sandbox/
   - cabal configure --enable-tests --enable-library-coverage
   - run-cabal-test --cabal-name=cabal --show-details=always
 
-  - |
-    cd ../twitter-types-lens
-    halcyon install --sandbox-sources=../twitter-types
+  - cd ../twitter-types-lens
+  - halcyon install --sandbox-sources=../twitter-types
 
 after_script:
   - cd ../twitter-types && hpc-coveralls --exclude-dir=tests tests
