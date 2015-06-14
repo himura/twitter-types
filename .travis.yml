@@ -21,9 +21,9 @@ before_install:
 install:
   - cd twitter-types
   - HALCYON_SANDBOX_EXTRA_APPS="hpc-coveralls happy" HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests --only-dependencies" halcyon install
+  - ln -s /app/sandbox/cabal.sandbox.config .
 
 script:
-  - cabal sandbox init --sandbox=/app/sandbox/
   - cabal configure --enable-tests --enable-library-coverage
   - run-cabal-test --cabal-name=cabal --show-details=always
 
