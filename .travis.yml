@@ -8,6 +8,9 @@ env:
     - GHCVER=7.8.4
     - GHCVER=7.10.1
     - GHCVER=head
+  global:
+    - secure: "XP4CiTXFiE9m0cYYDfP8KwFUoxE95yBpwxfKMSxX9ue5mjzUjwfO+NVAAEeZszdgCtVnZUvfrWo0Yy626hlMUhW7vrvdqTRVZyYwRL1wbDeSVmde45QW7UTuFmkhvMV1lbhBEuyik1OSaX+hfJ1nAs3s2qoSuCFZEPh/k/sA3M4=" # HALCYON_AWS_ACCESS_KEY_ID
+    - secure: "Zflb7SKA4M4JuOnYxBw9Chju2/zXXqfuOm75id9mplc8cJ/hM2YitDLidTrI72zZ8pqffvAIBz4pq3Zz/Dnu2qUfbAFe9uXWeBOYVZ+NDdMqitgyjAZ/F8UDcwFE8Q2/P8qMVXKyoKHWXUDdtBj+kr/HYfArxz8jTQB+gWV6R2k=" # HALCYON_AWS_SECRET_ACCESS_KEY
 
 matrix:
   allow_failures:
@@ -17,6 +20,7 @@ matrix:
 before_install:
   - eval "$( curl -sL https://github.com/mietek/halcyon/raw/master/setup.sh )"
   - export HALCYON_GHC_VERSION=$GHCVER HALCYON_CABAL_VERSION=1.22.4.0
+  - export HALCYON_S3_BUCKET=himura-halcyon
 
 install:
   - cd twitter-types
