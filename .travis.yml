@@ -27,7 +27,7 @@ install:
 
 script:
   - cabal configure --enable-tests --enable-library-coverage
-  - run-cabal-test --cabal-name=cabal --show-details=always
+  - travis_wait run-cabal-test --cabal-name=cabal --show-details=always
 
   - cd ../twitter-types-lens
   - halcyon install --sandbox-sources=../twitter-types
