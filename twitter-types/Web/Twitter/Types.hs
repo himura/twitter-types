@@ -484,7 +484,7 @@ data User = User
     , userURL :: Maybe URIString
     , userUtcOffset :: Maybe Int
     , userVerified :: Bool
-    , userWithheldInCountries :: Maybe Text
+    , userWithheldInCountries :: Maybe [Text]
     , userWithheldScope :: Maybe Text
     } deriving (Show, Eq, Data, Typeable, Generic)
 
