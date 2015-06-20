@@ -22,7 +22,7 @@ before_install:
 
 install:
   - cd twitter-types
-  - HALCYON_SANDBOX_EXTRA_APPS="hpc-coveralls happy" HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests --only-dependencies" halcyon install
+  - HALCYON_SANDBOX_EXTRA_APPS="hpc-coveralls happy" HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests --only-dependencies" halcyon build
   - ln -s /app/sandbox/cabal.sandbox.config .
 
 script:
