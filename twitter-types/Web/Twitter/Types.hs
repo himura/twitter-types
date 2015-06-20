@@ -39,7 +39,6 @@ module Web.Twitter.Types
        where
 
 import Control.Applicative
-import Control.Monad
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Data
