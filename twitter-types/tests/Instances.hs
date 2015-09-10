@@ -38,6 +38,8 @@ instance Arbitrary Value where
 
 instance Arbitrary Status where
     arbitrary = do
+        qt <- frequency [(5, Just <$> arbitrary), (95, pure Nothing)] :: Gen (Maybe Status)
+        rt <- frequency [(5, Just <$> arbitrary), (95, pure Nothing)] :: Gen (Maybe Status)
         Status <$> arbitrary
                <*> arbitrary
                <*> arbitrary
@@ -55,9 +57,11 @@ instance Arbitrary Status where
                <*> arbitrary
                <*> arbitrary
                <*> pure Nothing
+               <*> pure (statusId <$> qt)
+               <*> pure qt
                <*> arbitrary
                <*> arbitrary
-               <*> arbitrary
+               <*> pure rt
                <*> arbitrary
                <*> arbitrary
                <*> arbitrary

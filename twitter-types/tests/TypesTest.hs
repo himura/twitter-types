@@ -44,6 +44,8 @@ case_parseStatus = withJSON fixture_status01 $ \obj -> do
     statusInReplyToStatusId obj @?= Nothing
     statusInReplyToUserId obj @?= Just 783214
     statusFavorited obj @?= Just False
+    statusQuotedStatus obj @?= Nothing
+    statusQuotedStatusId obj @?= Nothing
     statusRetweetCount obj @?= 0
     (userScreenName . statusUser) obj @?= "imeoin"
     statusRetweetedStatus obj @?= Nothing
@@ -52,6 +54,42 @@ case_parseStatus = withJSON fixture_status01 $ \obj -> do
     statusLang obj @?= Nothing
     statusPossiblySensitive obj @?= Just False
     statusCoordinates obj @?= Nothing
+
+case_parseStatusQuoted :: Assertion
+case_parseStatusQuoted = withJSON fixture_status_quoted $ \obj -> do
+    statusId obj @?= 641660763770372100
+    statusText obj @?= "Wow! Congrats! https://t.co/EPMMldEcci"
+    statusQuotedStatusId obj @?= Just 641653574284537900
+
+    let qs = fromJust $ statusQuotedStatus obj
+    statusCreatedAt qs @?= "Wed Sep 09 16:45:08 +0000 2015"
+    statusId qs @?= 641653574284537900
+    statusText qs @?= "Very happy to say that I'm joining @mesosphere as a Distributed Systems Engineer!"
+    statusSource qs @?= "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>"
+
+    let ent = fromJust $ statusEntities qs
+    enURLs ent @?= []
+    enMedia ent @?= []
+    enHashTags ent @?= []
+    map (userEntityUserId . entityBody) (enUserMentions ent) @?= [1872399366]
+    map (userEntityUserScreenName . entityBody) (enUserMentions ent) @?= ["mesosphere"]
+
+    statusExtendedEntities qs @?= Nothing
+    statusInReplyToStatusId qs @?= Nothing
+    statusInReplyToUserId qs @?= Nothing
+    statusFavorited qs @?= Just False
+    statusQuotedStatus qs @?= Nothing
+    statusQuotedStatusId qs @?= Nothing
+    statusRetweetCount qs @?= 7
+    (userScreenName . statusUser) qs @?= "neil_conway"
+    statusRetweeted qs @?= Just False
+    statusRetweetedStatus qs @?= Nothing
+    statusPlace qs @?= Nothing
+    statusFavoriteCount qs @?= 63
+    statusLang qs @?= Just "en"
+    statusPossiblySensitive qs @?= Nothing
+    statusCoordinates qs @?= Nothing
+
 
 case_parseStatusWithPhoto :: Assertion
 case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj -> do

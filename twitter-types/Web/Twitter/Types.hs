@@ -134,6 +134,8 @@ data Status = Status
     , statusPlace :: Maybe Place
     , statusPossiblySensitive :: Maybe Bool
     , statusScopes :: Maybe Object
+    , statusQuotedStatusId :: Maybe StatusId
+    , statusQuotedStatus :: Maybe Status
     , statusRetweetCount :: Integer
     , statusRetweeted :: Maybe Bool
     , statusRetweetedStatus :: Maybe Status
@@ -165,6 +167,8 @@ instance FromJSON Status where
                <*> o .:? "place"
                <*> o .:? "possibly_sensitive"
                <*> o .:? "scopes"
+               <*> o .:? "quoted_status_id"
+               <*> o .:? "quoted_status"
                <*> o .:? "retweet_count" .!= 0
                <*> o .:? "retweeted"
                <*> o .:? "retweeted_status"
@@ -197,6 +201,8 @@ instance ToJSON Status where
                                , "place"                    .= statusPlace
                                , "possibly_sensitive"       .= statusPossiblySensitive
                                , "scopes"                   .= statusScopes
+                               , "quoted_status_id"         .= statusQuotedStatusId
+                               , "quoted_status"            .= statusQuotedStatus
                                , "retweet_count"            .= statusRetweetCount
                                , "retweeted"                .= statusRetweeted
                                , "retweeted_status"         .= statusRetweetedStatus
