@@ -120,7 +120,7 @@ data Status = Status
     { statusContributors :: Maybe [Contributor]
     , statusCoordinates :: Maybe Coordinates
     , statusCreatedAt :: UTCTime
-    , statusCurrentUserRetweet :: Maybe UserId
+    , statusCurrentUserRetweet :: Maybe StatusId
     , statusEntities :: Maybe Entities
     , statusExtendedEntities :: Maybe Entities
     , statusFavoriteCount :: Integer
