@@ -1,0 +1,202 @@
+{
+  "created_at": "Wed Sep 09 17:13:42 +0000 2015",
+  "id": 641660763770372100,
+  "id_str": "641660763770372097",
+  "text": "Wow! Congrats! https://t.co/EPMMldEcci",
+  "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+  "truncated": false,
+  "in_reply_to_status_id": null,
+  "in_reply_to_status_id_str": null,
+  "in_reply_to_user_id": null,
+  "in_reply_to_user_id_str": null,
+  "in_reply_to_screen_name": null,
+  "user":  {
+    "id": 15232432,
+    "id_str": "15232432",
+    "name": "Dean Wampler",
+    "screen_name": "deanwampler",
+    "location": "Chicago",
+    "description": "Minor irritant, major pedant, Big Data, IoT, and Scala poser. Lurks at Typesafe. O'Reilly author. Opinions are my own..",
+    "url": "http://t.co/bzGTwCnmvO",
+    "entities":  {
+      "url":  {
+        "urls":  [
+           {
+            "url": "http://t.co/bzGTwCnmvO",
+            "expanded_url": "http://typesafe.com",
+            "display_url": "typesafe.com",
+            "indices":  [
+              0,
+              22
+            ]
+          }
+        ]
+      },
+      "description":  {
+        "urls":  []
+      }
+    },
+    "protected": false,
+    "followers_count": 7221,
+    "friends_count": 811,
+    "listed_count": 645,
+    "created_at": "Wed Jun 25 15:24:31 +0000 2008",
+    "favourites_count": 2841,
+    "utc_offset": -18000,
+    "time_zone": "Central Time (US & Canada)",
+    "geo_enabled": true,
+    "verified": false,
+    "statuses_count": 13483,
+    "lang": "en",
+    "contributors_enabled": false,
+    "is_translator": false,
+    "is_translation_enabled": false,
+    "profile_background_color": "9AE4E8",
+    "profile_background_image_url": "http://pbs.twimg.com/profile_background_images/670120165/5514a5b016bf4d3d617ece5f117643d0.jpeg",
+    "profile_background_image_url_https": "https://pbs.twimg.com/profile_background_images/670120165/5514a5b016bf4d3d617ece5f117643d0.jpeg",
+    "profile_background_tile": true,
+    "profile_image_url": "http://pbs.twimg.com/profile_images/639619926374748160/QhODNcWz_normal.jpg",
+    "profile_image_url_https": "https://pbs.twimg.com/profile_images/639619926374748160/QhODNcWz_normal.jpg",
+    "profile_banner_url": "https://pbs.twimg.com/profile_banners/15232432/1359038744",
+    "profile_link_color": "0000FF",
+    "profile_sidebar_border_color": "FFFFFF",
+    "profile_sidebar_fill_color": "DFF8A0",
+    "profile_text_color": "070708",
+    "profile_use_background_image": true,
+    "has_extended_profile": false,
+    "default_profile": false,
+    "default_profile_image": false,
+    "following": false,
+    "follow_request_sent": false,
+    "notifications": false
+  },
+  "geo": null,
+  "coordinates": null,
+  "place": null,
+  "contributors": null,
+  "quoted_status_id": 641653574284537900,
+  "quoted_status_id_str": "641653574284537856",
+  "quoted_status":  {
+    "created_at": "Wed Sep 09 16:45:08 +0000 2015",
+    "id": 641653574284537900,
+    "id_str": "641653574284537856",
+    "text": "Very happy to say that I'm joining @mesosphere as a Distributed Systems Engineer!",
+    "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user":  {
+      "id": 54129186,
+      "id_str": "54129186",
+      "name": "Neil Conway",
+      "screen_name": "neil_conway",
+      "location": "Oakland, CA",
+      "description": "Large-scale data management and distributed systems.",
+      "url": "http://t.co/grthxRo5Q1",
+      "entities":  {
+        "url":  {
+          "urls":  [
+             {
+              "url": "http://t.co/grthxRo5Q1",
+              "expanded_url": "http://neilconway.org",
+              "display_url": "neilconway.org",
+              "indices":  [
+                0,
+                22
+              ]
+            }
+          ]
+        },
+        "description":  {
+          "urls":  []
+        }
+      },
+      "protected": false,
+      "followers_count": 3380,
+      "friends_count": 680,
+      "listed_count": 202,
+      "created_at": "Mon Jul 06 05:43:15 +0000 2009",
+      "favourites_count": 611,
+      "utc_offset": -25200,
+      "time_zone": "Pacific Time (US & Canada)",
+      "geo_enabled": true,
+      "verified": false,
+      "statuses_count": 3559,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "is_translation_enabled": false,
+      "profile_background_color": "FFFFFF",
+      "profile_background_image_url": "http://pbs.twimg.com/profile_background_images/204823473/Untitled-2.jpg",
+      "profile_background_image_url_https": "https://pbs.twimg.com/profile_background_images/204823473/Untitled-2.jpg",
+      "profile_background_tile": true,
+      "profile_image_url": "http://pbs.twimg.com/profile_images/299445365/3613789225_66f1cc848f_b_normal.jpg",
+      "profile_image_url_https": "https://pbs.twimg.com/profile_images/299445365/3613789225_66f1cc848f_b_normal.jpg",
+      "profile_link_color": "036E6E",
+      "profile_sidebar_border_color": "B05607",
+      "profile_sidebar_fill_color": "E8F0F0",
+      "profile_text_color": "998308",
+      "profile_use_background_image": true,
+      "has_extended_profile": false,
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": true,
+      "follow_request_sent": false,
+      "notifications": false
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": null,
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 7,
+    "favorite_count": 63,
+    "entities":  {
+      "hashtags":  [],
+      "symbols":  [],
+      "user_mentions":  [
+         {
+          "screen_name": "mesosphere",
+          "name": "Mesosphere",
+          "id": 1872399366,
+          "id_str": "1872399366",
+          "indices":  [
+            35,
+            46
+          ]
+        }
+      ],
+      "urls":  []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "lang": "en"
+  },
+  "is_quote_status": true,
+  "retweet_count": 0,
+  "favorite_count": 1,
+  "entities":  {
+    "hashtags":  [],
+    "symbols":  [],
+    "user_mentions":  [],
+    "urls":  [
+       {
+        "url": "https://t.co/EPMMldEcci",
+        "expanded_url": "https://twitter.com/neil_conway/status/641653574284537856",
+        "display_url": "twitter.com/neil_conway/st…",
+        "indices":  [
+          15,
+          38
+        ]
+      }
+    ]
+  },
+  "favorited": false,
+  "retweeted": false,
+  "possibly_sensitive": false,
+  "possibly_sensitive_appealable": false,
+  "lang": "en"
+}
