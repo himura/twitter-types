@@ -32,6 +32,8 @@ module Web.Twitter.Types.Lens
        , statusPlace
        , statusPossiblySensitive
        , statusScopes
+       , statusQuotedStatusId
+       , statusQuotedStatus
        , statusRetweetCount
        , statusRetweeted
        , statusRetweetedStatus
