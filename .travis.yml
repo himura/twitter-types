@@ -27,6 +27,7 @@ install:
 
 script:
   - cabal configure --enable-tests --enable-library-coverage
+  - cabal build
   - travis_wait run-cabal-test --cabal-name=cabal --show-details=always
 
   - cd ../twitter-types-lens
