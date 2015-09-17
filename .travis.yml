@@ -1,37 +1,32 @@
-language: sh
-sudo: required
-
-env:
-  matrix:
-    - GHCVER=7.4.2
-    - GHCVER=7.6.3
-    - GHCVER=7.8.4
-    - GHCVER=7.10.1
-  global:
-    - secure: "XP4CiTXFiE9m0cYYDfP8KwFUoxE95yBpwxfKMSxX9ue5mjzUjwfO+NVAAEeZszdgCtVnZUvfrWo0Yy626hlMUhW7vrvdqTRVZyYwRL1wbDeSVmde45QW7UTuFmkhvMV1lbhBEuyik1OSaX+hfJ1nAs3s2qoSuCFZEPh/k/sA3M4=" # HALCYON_AWS_ACCESS_KEY_ID
-    - secure: "Zflb7SKA4M4JuOnYxBw9Chju2/zXXqfuOm75id9mplc8cJ/hM2YitDLidTrI72zZ8pqffvAIBz4pq3Zz/Dnu2qUfbAFe9uXWeBOYVZ+NDdMqitgyjAZ/F8UDcwFE8Q2/P8qMVXKyoKHWXUDdtBj+kr/HYfArxz8jTQB+gWV6R2k=" # HALCYON_AWS_SECRET_ACCESS_KEY
+sudo: false
+language: c
 
 matrix:
-  allow_failures:
-    - env: GHCVER=7.4.2
+  include:
+    - env: GHCVER=7.8.4 STACK_YAML=stack-lts-2.yml
+      addons:
+        apt:
+          sources: [ hvr-ghc ]
+          packages: [ ghc-7.8.4 ]
+    - env: GHCVER=7.10.2 STACK_YAML=stack-lts-3.yml
+      addons:
+        apt:
+          sources: [ hvr-ghc ]
+          packages: [ ghc-7.10.2 ]
 
 before_install:
-  - eval "$( curl -sL https://github.com/mietek/halcyon/raw/master/setup.sh )"
-  - export HALCYON_GHC_VERSION=$GHCVER HALCYON_CABAL_VERSION=1.22.4.0
-  - export HALCYON_S3_BUCKET=himura-halcyon
+  - mkdir -p ~/.local/bin
+  - export PATH=~/.local/bin:$PATH
+  - travis_retry curl -L https://github.com/commercialhaskell/stack/releases/download/v0.1.4.0/stack-0.1.4.0-x86_64-linux.tar.gz | tar xz -C ~/.local/bin
+  - export PATH=/opt/ghc/$GHCVER/bin:$PATH
 
 install:
-  - cd twitter-types
-  - HALCYON_SANDBOX_EXTRA_APPS="hpc-coveralls happy" HALCYON_SANDBOX_EXTRA_CONFIGURE_FLAGS="--enable-tests --only-dependencies" halcyon build
-  - ln -s /app/sandbox/cabal.sandbox.config .
+  - travis_wait stack --no-terminal --skip-ghc-check setup
+  - travis_wait stack --no-terminal --skip-ghc-check test --only-snapshot
 
 script:
-  - cabal configure --enable-tests --enable-library-coverage
-  - cabal build
-  - travis_wait run-cabal-test --cabal-name=cabal --show-details=always
+  - travis_wait stack --no-terminal --skip-ghc-check test
 
-  - cd ../twitter-types-lens
-  - halcyon install --sandbox-sources=../twitter-types
-
-after_script:
-  - cd ../twitter-types && hpc-coveralls --exclude-dir=tests tests
+cache:
+  directories:
+    - ~/.stack
