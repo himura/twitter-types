@@ -22,16 +22,10 @@ before_install:
 
 install:
   - travis_wait stack --no-terminal --skip-ghc-check setup
-  - travis_wait stack --no-terminal --skip-ghc-check install hpc-coveralls
   - travis_wait stack --no-terminal --skip-ghc-check test --only-snapshot
 
 script:
-  - travis_wait stack --no-terminal --skip-ghc-check test --coverage
-
-after_script:
-  # for hpc-coveralls
-  - stack --no-terminal --skip-ghc-check exec .travis/copy_stack_dist.sh
-  - cd twitter-types && hpc-coveralls --exclude-dir=tests tests
+  - travis_wait stack --no-terminal --skip-ghc-check test
 
 cache:
   directories:
