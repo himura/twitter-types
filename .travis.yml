@@ -26,6 +26,10 @@ install:
 
 script:
   - travis_wait stack --no-terminal --skip-ghc-check test
+  - stack sdist
+  - chmod 755 ./attic/check-sdist.sh
+  - ./attic/check-sdist.sh twitter-types
+  - ./attic/check-sdist.sh twitter-types-lens
 
 cache:
   directories:
