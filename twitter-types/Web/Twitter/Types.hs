@@ -150,8 +150,8 @@ data Status = Status
 
 instance FromJSON Status where
     parseJSON (Object o) = checkError o >>
-        Status <$> o .:? "contributors"
-               <*> o .:? "coordinates"
+        Status <$> o .:? "contributors" .!= Nothing
+               <*> o .:? "coordinates" .!= Nothing
                <*> (o .:  "created_at" >>= return . fromTwitterTime)
                <*> ((o .: "current_user_retweet" >>= (.: "id")) <|> return Nothing)
                <*> o .:? "entities"
@@ -160,11 +160,11 @@ instance FromJSON Status where
                <*> o .:? "favorited"
                <*> o .:? "filter_level"
                <*> o .:  "id"
-               <*> o .:? "in_reply_to_screen_name"
-               <*> o .:? "in_reply_to_status_id"
-               <*> o .:? "in_reply_to_user_id"
+               <*> o .:? "in_reply_to_screen_name" .!= Nothing
+               <*> o .:? "in_reply_to_status_id" .!= Nothing
+               <*> o .:? "in_reply_to_user_id" .!= Nothing
                <*> o .:? "lang"
-               <*> o .:? "place"
+               <*> o .:? "place" .!= Nothing
                <*> o .:? "possibly_sensitive"
                <*> o .:? "scopes"
                <*> o .:? "quoted_status_id"
@@ -501,8 +501,8 @@ instance FromJSON User where
              <*> o .:  "default_profile_image"
              <*> o .:? "description"
              <*> o .:  "favourites_count"
-             <*> o .:? "follow_request_sent"
-             <*> o .:? "following"
+             <*> o .:? "follow_request_sent" .!= Nothing
+             <*> o .:? "following" .!= Nothing
              <*> o .:  "followers_count"
              <*> o .:  "friends_count"
              <*> o .:  "geo_enabled"
@@ -512,7 +512,7 @@ instance FromJSON User where
              <*> o .:  "listed_count"
              <*> o .:? "location"
              <*> o .:  "name"
-             <*> o .:? "notifications"
+             <*> o .:? "notifications" .!= Nothing
              <*> o .:? "profile_background_color"
              <*> o .:? "profile_background_image_url"
              <*> o .:? "profile_background_image_url_https"
@@ -530,7 +530,7 @@ instance FromJSON User where
              <*> o .:? "show_all_inline_media"
              <*> o .:  "statuses_count"
              <*> o .:? "time_zone"
-             <*> o .:? "url"
+             <*> o .:? "url" .!= Nothing
              <*> o .:? "utc_offset"
              <*> o .:  "verified"
              <*> o .:? "withheld_in_countries"
