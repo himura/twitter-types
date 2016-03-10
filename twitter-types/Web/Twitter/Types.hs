@@ -67,6 +67,7 @@ data StreamingAPI = SStatus Status
                   | SDelete Delete
                   -- | SScrubGeo ScrubGeo
                   | SFriends Friends
+                  | SDirectMessage DirectMessage
                   | SUnknown Value
                   deriving (Show, Eq, Data, Typeable, Generic)
 
@@ -100,6 +101,7 @@ instance FromJSON StreamingAPI where
         SEvent <$> js <|>
         SDelete <$> js <|>
         SFriends <$> (o .: "friends") <|>
+        SDirectMessage <$> (o .: "direct_message") <|>
         return (SUnknown v)
       where
         js :: FromJSON a => Parser a
@@ -112,6 +114,7 @@ instance ToJSON StreamingAPI where
     toJSON (SEvent           e) = toJSON e
     toJSON (SDelete          d) = toJSON d
     toJSON (SFriends         f) = toJSON f
+    toJSON (SDirectMessage   m) = toJSON m
     toJSON (SUnknown         v) = v
 
 -- | This type represents a Twitter tweet structure.
