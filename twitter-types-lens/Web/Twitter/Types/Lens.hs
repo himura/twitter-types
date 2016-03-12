@@ -261,6 +261,7 @@ module Web.Twitter.Types.Lens
        , _SEvent
        , _SDelete
        , _SFriends
+       , _SDirectMessage
        , _SUnknown
 
        -- * 'TT.EventTarget'
