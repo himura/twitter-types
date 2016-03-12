@@ -1,5 +1,5 @@
 name:                twitter-types-lens
-version:             0.7.1
+version:             0.7.2
 synopsis:            Twitter JSON types (lens powered)
 homepage:            https://github.com/himura/twitter-types-lens
 license:             BSD3
