@@ -1,5 +1,7 @@
-resolver: lts-2.9
-flags: {}
+resolver: lts-3.22
+flags:
+  twitter-types:
+    time15: true
 packages:
 - twitter-types/
 - twitter-types-lens/

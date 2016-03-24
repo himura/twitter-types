@@ -1,0 +1,7 @@
+resolver: lts-2.22
+flags: {}
+packages:
+- twitter-types/
+- twitter-types-lens/
+extra-deps:
+- test-framework-th-prime-0.0.8
