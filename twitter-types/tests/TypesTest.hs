@@ -208,11 +208,11 @@ case_parseDelete = withJSON fixture_delete $ \obj -> do
 case_parseErrorMsg :: Assertion
 case_parseErrorMsg =
     case parseStatus fixture_error_not_authorized of
-        Left str -> "Not authorized" @=? str
-        Right _ -> assertFailure "errorMsgJson should be parsed as an error."
+        Aeson.Error str -> "Not authorized" @=? str
+        Aeson.Success _ -> assertFailure "errorMsgJson should be parsed as an error."
   where
-    parseStatus :: Value -> Either String Status
-    parseStatus = parseEither parseJSON
+    parseStatus :: Value -> Aeson.Result Status
+    parseStatus = Aeson.parse parseJSON
 
 case_parseMediaEntity :: Assertion
 case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
