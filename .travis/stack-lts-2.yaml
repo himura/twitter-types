@@ -1,4 +1,4 @@
-resolver: lts-2.22
+resolver: __RESOLVER__
 flags: {}
 packages:
 - twitter-types/

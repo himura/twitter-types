@@ -1,4 +1,4 @@
-resolver: lts-5.18
+resolver: __RESOLVER__
 flags:
   twitter-types:
     time15: true
