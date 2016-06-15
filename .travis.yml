@@ -13,12 +13,12 @@ matrix:
         apt:
           sources: [ hvr-ghc ]
           packages: [ ghc-7.10.2 ]
-    - env: GHCVER=7.10.2 STACK_YAML=stack-lts-5.yaml
+    - env: GHCVER=7.10.3 STACK_YAML=stack-lts-5.yaml
       addons:
         apt:
           sources: [ hvr-ghc ]
           packages: [ ghc-7.10.3 ]
-    - env: GHCVER=7.10.2 STACK_YAML=stack-lts-5-aeson11.yaml
+    - env: GHCVER=7.10.3 STACK_YAML=stack-lts-5-aeson11.yaml
       addons:
         apt:
           sources: [ hvr-ghc ]
