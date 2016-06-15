@@ -1,4 +1,4 @@
-resolver: lts-5.9
+resolver: lts-5.18
 flags:
   twitter-types:
     time15: true
@@ -6,4 +6,4 @@ packages:
 - twitter-types/
 - twitter-types-lens/
 extra-deps:
-- aeson-0.11.1.4
+- aeson-0.11.2.0
