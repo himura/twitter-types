@@ -6,7 +6,7 @@ module Main where
 
 import Web.Twitter.Types
 
-import Test.Framework.TH.Prime
+import Test.Framework
 import Test.Framework.Providers.HUnit
 import Test.Framework.Providers.QuickCheck2
 import Test.HUnit
@@ -22,7 +22,57 @@ import Fixtures
 loadFixturesTH 'parseJSONValue
 
 main :: IO ()
-main = $(defaultMainGenerator)
+main =
+    defaultMain
+    [ testGroup "Unit tests" unittests
+    , testGroup "Property tests" proptests
+    ]
+  where
+    unittests =
+        [ testCase "case_parseStatus" case_parseStatus
+        , testCase "case_parseStatusQuoted" case_parseStatusQuoted
+        , testCase "case_parseStatusWithPhoto" case_parseStatusWithPhoto
+        , testCase "case_parseStatusIncludeEntities" case_parseStatusIncludeEntities
+        , testCase "case_parseSearchStatusMetadata" case_parseSearchStatusMetadata
+        , testCase "case_parseSearchStatusBodyStatus" case_parseSearchStatusBodyStatus
+        , testCase "case_parseSearchStatusBodySearchStatus" case_parseSearchStatusBodySearchStatus
+        , testCase "case_parseDirectMessage" case_parseDirectMessage
+        , testCase "case_parseEventFavorite" case_parseEventFavorite
+        , testCase "case_parseEventUnfavorite" case_parseEventUnfavorite
+        , testCase "case_parseDelete" case_parseDelete
+        , testCase "case_parseErrorMsg" case_parseErrorMsg
+        , testCase "case_parseMediaEntity" case_parseMediaEntity
+        , testCase "case_parseEmptyEntity" case_parseEmptyEntity
+        , testCase "case_parseEntityHashTag" case_parseEntityHashTag
+        , testCase "case_parseExtendedEntities" case_parseExtendedEntities
+        , testCase "case_parseUser" case_parseUser
+        , testCase "case_parseList" case_parseList
+        ]
+
+    proptests =
+        [ testProperty "prop_fromToStatus" prop_fromToStatus
+        , testProperty "prop_fromToSearchStatus" prop_fromToSearchStatus
+        , testProperty "prop_fromToSearchMetadata" prop_fromToSearchMetadata
+        , testProperty "prop_fromToRetweetedStatus" prop_fromToRetweetedStatus
+        , testProperty "prop_fromToDirectMessage" prop_fromToDirectMessage
+        , testProperty "prop_fromToEventTarget" prop_fromToEventTarget
+        , testProperty "prop_fromToEvent" prop_fromToEvent
+        , testProperty "prop_fromToDelete" prop_fromToDelete
+        , testProperty "prop_fromToUser" prop_fromToUser
+        , testProperty "prop_fromToList" prop_fromToList
+        , testProperty "prop_fromToHashTagEntity" prop_fromToHashTagEntity
+        , testProperty "prop_fromToUserEntity" prop_fromToUserEntity
+        , testProperty "prop_fromToURLEntity" prop_fromToURLEntity
+        , testProperty "prop_fromToMediaEntity" prop_fromToMediaEntity
+        , testProperty "prop_fromToMediaSize" prop_fromToMediaSize
+        , testProperty "prop_fromToCoordinates" prop_fromToCoordinates
+        , testProperty "prop_fromToPlace" prop_fromToPlace
+        , testProperty "prop_fromToBoundingBox" prop_fromToBoundingBox
+        , testProperty "prop_fromToEntities" prop_fromToEntities
+        , testProperty "prop_fromToContributor" prop_fromToContributor
+        , testProperty "prop_fromToImageSizeType" prop_fromToImageSizeType
+        , testProperty "prop_fromToUploadedMedia" prop_fromToUploadedMedia
+        ]
 
 withJSON :: FromJSON a
          => Value

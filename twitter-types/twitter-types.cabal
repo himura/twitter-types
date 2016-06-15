@@ -1,5 +1,5 @@
 name:              twitter-types
-version:           0.7.2.1
+version:           0.7.2.2
 license:           BSD3
 license-file:      LICENSE
 author:            Takahiro HIMURA
@@ -55,7 +55,6 @@ test-suite tests
       base >= 4.0 && < 5
     , template-haskell
     , test-framework >= 0.3.3
-    , test-framework-th-prime
     , test-framework-hunit
     , test-framework-quickcheck2
     , HUnit
