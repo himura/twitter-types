@@ -22,7 +22,7 @@ source-repository head
 
 flag time15
   description: use time >= 1.5.
-  default: False
+  default: True
 
 library
   ghc-options: -Wall
