@@ -35,7 +35,7 @@ library
 
   if flag(time15)
     build-depends:
-        time >= 1.5 && < 1.6
+        time >= 1.5
   else
     build-depends:
         time >= 1.2 && < 1.5
