@@ -505,7 +505,7 @@ instance FromJSON User where
              <*> o .:  "default_profile"
              <*> o .:  "default_profile_image"
              <*> o .:? "description"
-             <*> fmap join (o .:? "email") -- The field can occure but be null
+             <*> fmap join (o .:? "email") -- The field can be a null value
              <*> o .:  "favourites_count"
              <*> o .:? "follow_request_sent" .!= Nothing
              <*> o .:? "following" .!= Nothing
