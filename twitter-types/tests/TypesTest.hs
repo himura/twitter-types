@@ -154,11 +154,12 @@ case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj ->
     length (enMedia ent) @?= 1
     map (meMediaURLHttps . entityBody) (enMedia ent) @?= ["https://pbs.twimg.com/media/BtDkUVaCQAIpWBU.jpg"]
 
-    let exent = fromJust $ statusExtendedEntities obj
-    enHashTags exent @?= []
-    enUserMentions exent @?= []
-    enURLs exent @?= []
-    length (enMedia ent) @?= 1
+    let exents = fromJust $ statusExtendedEntities obj
+    let media = exeMedia exents
+    length media @?= 1
+    let exent = entityBody $ head media
+    exeID exent @?= 491143397378244610
+    ueURL (exeURL exent) @?= "http://t.co/FjSOU8dDoD"
 
     statusInReplyToStatusId obj @?= Nothing
     statusInReplyToUserId obj @?= Nothing
@@ -319,11 +320,15 @@ case_parseExtendedEntities = withJSON fixture_media_extended_entity $ \obj -> do
     let entities = statusExtendedEntities obj
     assert $ isJust entities
     let Just ent = entities
-        media = enMedia ent
+        media = exeMedia ent
     length media @?= 4
     let me = entityBody $ head media
-    ueURL (meURL me) @?= "http://t.co/qOjPwmgLKO"
-    meMediaURL me @?= "http://pbs.twimg.com/media/BqgdlpaCQAA5OSu.jpg"
+    ueURL (exeURL me) @?= "https://t.co/Qi316FhOwe"
+    exeMediaUrl me @?= "http://pbs.twimg.com/media/Coju86fUIAEUcRC.jpg"
+    exeExtAltText me @?= Just "A small tabby kitten"
+    exeType me @?= "photo"
+
+
 
 case_parseUser :: Assertion
 case_parseUser = withJSON fixture_user_thimura $ \obj -> do

@@ -169,6 +169,17 @@ module Web.Twitter.Types.Lens
        , enURLs
        , enMedia
 
+       -- * 'TT.ExtendedEntity'
+       , TT.ExtendedEntity
+       , exeID
+       , exeMediaUrl
+       , exeMediaUrlHttps
+       , exeURL
+       , exeSizes
+       , exeType
+       , exeDurationMillis
+       , exeExtAltText
+
        -- * 'TT.Entity'
        , TT.Entity
        , entityBody
@@ -289,6 +300,7 @@ makeLenses ''TT.Delete
 makeLenses ''TT.User
 makeLenses ''TT.List
 makeLenses ''TT.Entities
+makeLenses ''TT.ExtendedEntity
 makeLenses ''TT.Entity
 makeLenses ''TT.HashTagEntity
 makeLenses ''TT.UserEntity

@@ -21,6 +21,8 @@ module Web.Twitter.Types
        , List(..)
        , Entities(..)
        , EntityIndices
+       , ExtendedEntities(..)
+       , ExtendedEntity(..)
        , Entity(..)
        , HashTagEntity(..)
        , UserEntity(..)
@@ -126,7 +128,7 @@ data Status = Status
     , statusCreatedAt :: UTCTime
     , statusCurrentUserRetweet :: Maybe StatusId
     , statusEntities :: Maybe Entities
-    , statusExtendedEntities :: Maybe Entities
+    , statusExtendedEntities :: Maybe ExtendedEntities
     , statusFavoriteCount :: Integer
     , statusFavorited :: Maybe Bool
     , statusFilterLevel :: Maybe Text
@@ -832,6 +834,7 @@ instance ToJSON Entities where
                                  , "media"          .= enMedia
                                  ]
 
+
 -- | The character positions the Entity was extracted from
 --
 --   This is experimental implementation.
@@ -854,6 +857,65 @@ instance ToJSON a => ToJSON (Entity a) where
     toJSON Entity{..} = case toJSON entityBody of
                             (Object o) -> Object $ union o $ fromList [("indices"::Text, toJSON entityIndices)]
                             _          -> error "Entity body must produce an object."
+
+data ExtendedEntities =
+  ExtendedEntities {
+    exeMedia :: [Entity ExtendedEntity]
+  } deriving (Show, Eq, Data, Typeable, Generic)
+
+instance FromJSON ExtendedEntities where
+  parseJSON (Object o) =
+    ExtendedEntities <$> o .:? "media" .!= []
+
+  parseJSON v = fail $ "couldn't parse extended entity from: " ++ show v
+
+instance ToJSON ExtendedEntities where
+    toJSON ExtendedEntities{..} = object [ "media" .= exeMedia ]
+
+
+-- Extended entities are like entities, but contain special media features like
+-- video or multiple photos
+data ExtendedEntity =
+  ExtendedEntity
+  {
+    exeID :: StatusId,
+    exeMediaUrl :: URIString,
+    exeMediaUrlHttps :: URIString,
+    exeSizes :: HashMap Text MediaSize,
+    exeType :: Text,
+    -- exeVideoInfo :: ???
+    exeDurationMillis :: Maybe Double,
+    -- exeVariants :: ??
+    exeExtAltText :: Maybe String,
+    exeURL :: URLEntity
+  } deriving (Show, Eq, Data, Typeable, Generic)
+
+instance FromJSON ExtendedEntity where
+  parseJSON v@(Object o) =
+    ExtendedEntity <$> o .:  "id"
+                   <*> o .:  "media_url"
+                   <*> o .:  "media_url_https"
+                   <*> o .:  "sizes"
+                   <*> o .:  "type"
+                   <*> o .:? "duration_millis"
+                   <*> o .:?  "ext_alt_text"
+                   <*> parseJSON v
+
+  parseJSON v = fail $ "couldn't parse extended entity from:" ++ show v
+
+instance ToJSON ExtendedEntity where
+  toJSON ExtendedEntity{..} = object [ "id"                .= exeID
+                                     , "media_url"       .= exeMediaUrl
+                                     , "media_url_https" .= exeMediaUrlHttps
+                                     , "sizes"           .= exeSizes
+                                     , "type"            .= exeType
+                                     , "duration_millis" .= exeDurationMillis
+                                     , "ext_alt_text"    .= exeExtAltText
+                                     , "url"             .= ueURL exeURL
+                                     , "expanded_url"    .= ueExpanded exeURL
+                                     , "display_url"     .= ueDisplay exeURL
+                                     ]
+
 
 data Contributor = Contributor
     { contributorId :: UserId
