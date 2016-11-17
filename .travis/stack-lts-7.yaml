@@ -1,0 +1,8 @@
+resolver: __RESOLVER__
+flags:
+  twitter-types:
+    time15: true
+packages:
+- twitter-types/
+- twitter-types-lens/
+extra-deps: []
