@@ -5,5 +5,4 @@ flags:
 packages:
 - twitter-types/
 - twitter-types-lens/
-extra-deps:
-- aeson-0.11.2.0
+extra-deps: []
