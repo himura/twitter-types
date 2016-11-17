@@ -1,9 +1,0 @@
-resolver: __RESOLVER__
-flags:
-  twitter-types:
-    time15: true
-packages:
-- twitter-types/
-- twitter-types-lens/
-extra-deps:
-- aeson-0.11.2.0

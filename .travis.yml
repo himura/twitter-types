@@ -18,11 +18,6 @@ matrix:
         apt:
           sources: [ hvr-ghc ]
           packages: [ ghc-7.10.3 ]
-    - env: GHCVER=7.10.3 STACK_LTS=lts-5 STACK_TEMPLATE=stack-lts-5-aeson11.yaml
-      addons:
-        apt:
-          sources: [ hvr-ghc ]
-          packages: [ ghc-7.10.3 ]
     - env: GHCVER=7.10.3 STACK_LTS=lts-6 STACK_TEMPLATE=stack-lts-6.yaml
       addons:
         apt:
