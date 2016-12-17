@@ -39,6 +39,7 @@ module Web.Twitter.Types
        where
 
 import Control.Applicative
+import Control.Monad
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Data
@@ -92,7 +93,7 @@ instance FromJSON TwitterTime where
             Nothing -> fail $ "Could not parse twitter time. Text was: " ++ unpack t
 
 instance ToJSON TwitterTime where
-    toJSON t = String $ pack $ formatTime defaultTimeLocale twitterTimeFormat $ fromTwitterTime t 
+    toJSON t = String $ pack $ formatTime defaultTimeLocale twitterTimeFormat $ fromTwitterTime t
 
 instance FromJSON StreamingAPI where
     parseJSON v@(Object o) =
@@ -459,6 +460,7 @@ data User = User
     , userDefaultProfile :: Bool
     , userDefaultProfileImage :: Bool
     , userDescription :: Maybe Text
+    , userEmail :: Maybe Text
     , userFavoritesCount :: Int
     , userFollowRequestSent :: Maybe Bool
     , userFollowing :: Maybe Bool
@@ -503,6 +505,7 @@ instance FromJSON User where
              <*> o .:  "default_profile"
              <*> o .:  "default_profile_image"
              <*> o .:? "description"
+             <*> fmap join (o .:? "email") -- The field can be a null value
              <*> o .:  "favourites_count"
              <*> o .:? "follow_request_sent" .!= Nothing
              <*> o .:? "following" .!= Nothing
@@ -546,6 +549,7 @@ instance ToJSON User where
                              , "default_profile"                    .= userDefaultProfile
                              , "default_profile_image"              .= userDefaultProfileImage
                              , "description"                        .= userDescription
+                             , "email"                              .= userEmail
                              , "favourites_count"                   .= userFavoritesCount
                              , "follow_request_sent"                .= userFollowRequestSent
                              , "following"                          .= userFollowing
