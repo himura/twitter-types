@@ -1,7 +1,7 @@
 name:                twitter-types-lens
 version:             0.7.2
 synopsis:            Twitter JSON types (lens powered)
-homepage:            https://github.com/himura/twitter-types-lens
+homepage:            https://github.com/himura/twitter-types
 license:             BSD3
 license-file:        LICENSE
 author:              Takahiro HIMURA
@@ -12,7 +12,7 @@ cabal-version:       >=1.10
 
 source-repository head
   type: git
-  location: git://github.com/himura/twitter-types-lens.git
+  location: git://github.com/himura/twitter-types.git
 
 library
   ghc-options: -Wall
