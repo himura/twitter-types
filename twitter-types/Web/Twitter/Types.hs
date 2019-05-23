@@ -469,7 +469,7 @@ data User = User
     , userGeoEnabled :: Bool
     , userId :: UserId
     , userIsTranslator :: Bool
-    , userLang :: LanguageCode
+    , userLang :: Maybe LanguageCode
     , userListedCount :: Int
     , userLocation :: Maybe Text
     , userName :: Text
