@@ -13,7 +13,6 @@ import Data.Maybe
 import System.Directory
 import System.FilePath
 import System.IO.Unsafe (unsafePerformIO)
-import Control.Applicative
 
 parseJSONValue :: S.ByteString -> Value
 parseJSONValue = fromJust . maybeResult . parse json

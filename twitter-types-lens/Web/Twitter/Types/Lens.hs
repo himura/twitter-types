@@ -116,6 +116,7 @@ module Web.Twitter.Types.Lens
        , userDefaultProfile
        , userDefaultProfileImage
        , userDescription
+       , userEmail
        , userFavoritesCount
        , userFollowRequestSent
        , userFollowing
