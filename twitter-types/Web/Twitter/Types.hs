@@ -43,6 +43,7 @@ import Control.Monad
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Data
+import Data.Foldable (forM_)
 import Data.HashMap.Strict (HashMap, fromList, union)
 import Data.Text (Text, unpack, pack)
 import GHC.Generics
@@ -75,9 +76,7 @@ data StreamingAPI = SStatus Status
 checkError :: Object -> Parser ()
 checkError o = do
     err <- o .:? "error"
-    case err of
-        Just msg -> fail msg
-        Nothing -> return ()
+    forM_ err fail
 
 twitterTimeFormat :: String
 twitterTimeFormat = "%a %b %d %T %z %Y"
@@ -156,7 +155,7 @@ instance FromJSON Status where
     parseJSON (Object o) = checkError o >>
         Status <$> o .:? "contributors" .!= Nothing
                <*> o .:? "coordinates" .!= Nothing
-               <*> (o .:  "created_at" >>= return . fromTwitterTime)
+               <*> (fromTwitterTime <$> (o .: "created_at"))
                <*> ((o .: "current_user_retweet" >>= (.: "id")) <|> return Nothing)
                <*> o .:? "entities"
                <*> o .:? "extended_entities"
@@ -250,7 +249,7 @@ data SearchStatus =
 
 instance FromJSON SearchStatus where
     parseJSON (Object o) = checkError o >>
-        SearchStatus <$> (o .:  "created_at" >>= return . fromTwitterTime)
+        SearchStatus <$> (fromTwitterTime <$> (o .: "created_at"))
                      <*> o .:  "id"
                      <*> o .:  "text"
                      <*> o .:  "source"
@@ -320,7 +319,7 @@ data RetweetedStatus =
 
 instance FromJSON RetweetedStatus where
     parseJSON (Object o) = checkError o >>
-        RetweetedStatus <$> (o .:  "created_at" >>= return . fromTwitterTime)
+        RetweetedStatus <$> (fromTwitterTime <$> (o .: "created_at"))
                         <*> o .:  "id"
                         <*> o .:  "text"
                         <*> o .:  "source"
@@ -359,7 +358,7 @@ data DirectMessage =
 
 instance FromJSON DirectMessage where
     parseJSON (Object o) = checkError o >>
-        DirectMessage <$> (o .:  "created_at" >>= return . fromTwitterTime)
+        DirectMessage <$> (fromTwitterTime <$> (o .: "created_at"))
                       <*> o .:  "sender_screen_name"
                       <*> o .:  "sender"
                       <*> o .:  "text"
@@ -417,7 +416,7 @@ data Event =
 
 instance FromJSON Event where
     parseJSON (Object o) = checkError o >>
-        Event <$> (o .:  "created_at" >>= return . fromTwitterTime)
+        Event <$> (fromTwitterTime <$> (o .: "created_at"))
               <*> o .:? "target_object"
               <*> o .:  "event"
               <*> o .:  "target"
@@ -501,7 +500,7 @@ data User = User
 instance FromJSON User where
     parseJSON (Object o) = checkError o >>
         User <$> o .:  "contributors_enabled"
-             <*> (o .:  "created_at" >>= return . fromTwitterTime)
+             <*> (fromTwitterTime <$> (o .: "created_at"))
              <*> o .:  "default_profile"
              <*> o .:  "default_profile_image"
              <*> o .:? "description"
@@ -621,7 +620,7 @@ instance ToJSON List where
 
 -- | Hashtag entity.
 -- See <https://dev.twitter.com/docs/platform-objects/entities#obj-hashtags>.
-data HashTagEntity =
+newtype HashTagEntity =
     HashTagEntity
     { hashTagText :: Text -- ^ The Hashtag text
     } deriving (Show, Eq, Data, Typeable, Generic)

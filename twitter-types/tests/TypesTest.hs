@@ -183,7 +183,7 @@ case_parseStatusIncludeEntities = withJSON fixture_status_with_entity $ \obj -> 
 
 case_parseSearchStatusMetadata :: Assertion
 case_parseSearchStatusMetadata = withJSON fixture_search_haskell $ \obj -> do
-    let status = (searchResultStatuses obj) :: [Status]
+    let status = searchResultStatuses obj :: [Status]
     length status @?= 1
 
     let metadata = searchResultSearchMetadata obj
@@ -199,13 +199,13 @@ case_parseSearchStatusMetadata = withJSON fixture_search_haskell $ \obj -> do
 
 case_parseSearchStatusBodyStatus :: Assertion
 case_parseSearchStatusBodyStatus = withJSON fixture_search_haskell $ \obj -> do
-    let status = (searchResultStatuses obj) :: [Status]
+    let status = searchResultStatuses obj :: [Status]
     length status @?= 1
     statusText (head status) @?= "haskell"
 
 case_parseSearchStatusBodySearchStatus :: Assertion
 case_parseSearchStatusBodySearchStatus = withJSON fixture_search_haskell $ \obj -> do
-    let status = (searchResultStatuses obj) :: [SearchStatus]
+    let status = searchResultStatuses obj :: [SearchStatus]
     length status @?= 1
     searchStatusText (head status) @?= "haskell"
 
@@ -226,20 +226,16 @@ case_parseEventFavorite :: Assertion
 case_parseEventFavorite = withJSON fixture_event_favorite_thimura $ \obj -> do
     evCreatedAt obj @?= "Sat Aug 02 16:32:01 +0000 2014"
     evEvent obj @?= "favorite"
-    let Just (ETStatus targetObj) = evTargetObject obj
-    statusId targetObj @?= 495597326736449536
-    statusText targetObj @?= "haskell"
-
-    let ETUser targetUser = evTarget obj
-    userScreenName targetUser @?= "thimura"
-
-    let ETUser sourceUser = evSource obj
-    userScreenName sourceUser @?= "thimura_shinku"
+    assertEvent obj
 
 case_parseEventUnfavorite :: Assertion
 case_parseEventUnfavorite = withJSON fixture_event_unfavorite_thimura $ \obj -> do
     evCreatedAt obj @?= "Sat Aug 02 16:32:10 +0000 2014"
     evEvent obj @?= "unfavorite"
+    assertEvent obj
+
+assertEvent :: Event -> Assertion
+assertEvent obj = do
     let Just (ETStatus targetObj) = evTargetObject obj
     statusId targetObj @?= 495597326736449536
     statusText targetObj @?= "haskell"

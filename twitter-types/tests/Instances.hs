@@ -103,7 +103,7 @@ derive makeArbitrary ''MediaSize
 derive makeArbitrary ''Coordinates
 
 instance Arbitrary Place where
-    arbitrary = do
+    arbitrary =
         Place HashMap.empty
             <$> arbitrary
             <*> arbitrary
@@ -120,8 +120,7 @@ derive makeArbitrary ''Entities
 instance Arbitrary a => Arbitrary (Entity a) where
     arbitrary = do
         a <- arbitrary
-        ind <- arbitrary
-        return $ Entity a ind
+        Entity a <$> arbitrary
 
 derive makeArbitrary ''Contributor
 derive makeArbitrary ''ImageSizeType

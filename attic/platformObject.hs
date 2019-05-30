@@ -68,7 +68,7 @@ mappedType a = a
 
 main :: IO ()
 main = do
-    (input:output:[]) <- getArgs
+    [input, output] <- getArgs
     content <- L.readFile input
     [tree] <- runX $ parseHTML (L8.unpack content)
     let fields = runLA platformObjects tree

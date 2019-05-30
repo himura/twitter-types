@@ -48,7 +48,7 @@ eachField = atTag "field" >>> proc tree -> do
 
 snakeToLowerCamel :: String -> String
 snakeToLowerCamel [] = []
-snakeToLowerCamel ('_':[]) = []
+snakeToLowerCamel ['_'] = []
 snakeToLowerCamel ('_':x:xs) = toUpper x : snakeToLowerCamel xs
 snakeToLowerCamel str = f ++ snakeToLowerCamel next
   where (f, next) = span (/= '_') str
@@ -76,7 +76,7 @@ genFromJSON prefix Field{..} =
 
 main :: IO ()
 main = do
-    (prefix:input:[]) <- getArgs
+    [prefix, input] <- getArgs
     content <- L.readFile input
     [tree] <- runX $ parseXML (L8.unpack content)
     let fields = runLA parseXMLField tree
@@ -90,6 +90,6 @@ main = do
         , [st|
 instance FromJSON #{typeName} where
     parseJSON (Object o) =|]
-        , T.intercalate "\n" $ map (\(field, cb) -> genFromJSON cb field) (zip fields ((typeName ++ " <$>"):repeat (take (length typeName) (repeat ' ') ++ " <*>")))
+        , T.intercalate "\n" $ map (\(field, cb) -> genFromJSON cb field) (zip fields ((typeName ++ " <$>"):repeat (replicate (length typeName) ' ' ++ " <*>")))
         , "    parseJSON _ = mzero"
         ]
