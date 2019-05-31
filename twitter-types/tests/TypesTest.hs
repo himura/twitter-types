@@ -328,13 +328,12 @@ case_parseUser = withJSON fixture_user_thimura $ \obj -> do
     userScreenName obj @?= "thimura"
     userDescription obj @?= Just "真紅かわいい"
     userLocation obj @?= Just "State# Irotoridori.No.World"
-    userProfileImageURL obj @?= Just "http://pbs.twimg.com/profile_images/414044387346116609/VNMfLpY7_normal.png"
+    userProfileImageURLHttps obj @?= Just "https://pbs.twimg.com/profile_images/414044387346116609/VNMfLpY7_normal.png"
     userURL obj @?= Just "http://t.co/TFUAsAffX0"
     userProtected obj @?= False
     userFollowersCount obj @?= 754
     userFriendsCount obj @?= 780
     userStatusesCount obj @?= 24709
-    userLang obj @?= "en"
     userCreatedAt obj @?= "Thu Aug 27 02:48:06 +0000 2009"
     userFavoritesCount obj @?= 17313
 

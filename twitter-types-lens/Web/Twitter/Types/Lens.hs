@@ -111,44 +111,25 @@ module Web.Twitter.Types.Lens
 
        -- * 'TT.User'
        , TT.User
-       , userContributorsEnabled
        , userCreatedAt
        , userDefaultProfile
        , userDefaultProfileImage
        , userDescription
        , userEmail
        , userFavoritesCount
-       , userFollowRequestSent
-       , userFollowing
        , userFollowersCount
        , userFriendsCount
-       , userGeoEnabled
        , userId
-       , userIsTranslator
-       , userLang
        , userListedCount
        , userLocation
        , userName
-       , userNotifications
-       , userProfileBackgroundColor
-       , userProfileBackgroundImageURL
-       , userProfileBackgroundImageURLHttps
-       , userProfileBackgroundTile
        , userProfileBannerURL
-       , userProfileImageURL
        , userProfileImageURLHttps
-       , userProfileLinkColor
-       , userProfileSidebarBorderColor
-       , userProfileSidebarFillColor
-       , userProfileTextColor
-       , userProfileUseBackgroundImage
        , userProtected
        , userScreenName
        , userShowAllInlineMedia
        , userStatusesCount
-       , userTimeZone
        , userURL
-       , userUtcOffset
        , userVerified
        , userWithheldInCountries
        , userWithheldScope
