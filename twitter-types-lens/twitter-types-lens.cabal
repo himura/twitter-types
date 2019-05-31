@@ -1,5 +1,5 @@
 name:                twitter-types-lens
-version:             0.7.2
+version:             0.8.0
 synopsis:            Twitter JSON types (lens powered)
 homepage:            https://github.com/himura/twitter-types
 license:             BSD3
@@ -28,6 +28,6 @@ library
     , template-haskell
     , text
     , time
-    , twitter-types >= 0.7.2 && < 0.8
+    , twitter-types >= 0.8 && < 0.9
 
   default-language:    Haskell2010
