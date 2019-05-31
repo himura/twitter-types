@@ -448,44 +448,25 @@ instance ToJSON Delete where
 -- | This type represents the Twitter user.
 -- See <https://dev.twitter.com/docs/platform-objects/users>.
 data User = User
-    { userContributorsEnabled :: Bool
-    , userCreatedAt :: UTCTime
+    { userCreatedAt :: UTCTime
     , userDefaultProfile :: Bool
     , userDefaultProfileImage :: Bool
     , userDescription :: Maybe Text
     , userEmail :: Maybe Text
     , userFavoritesCount :: Int
-    , userFollowRequestSent :: Maybe Bool
-    , userFollowing :: Maybe Bool
     , userFollowersCount :: Int
     , userFriendsCount :: Int
-    , userGeoEnabled :: Bool
     , userId :: UserId
-    , userIsTranslator :: Bool
-    , userLang :: Maybe LanguageCode
     , userListedCount :: Int
     , userLocation :: Maybe Text
     , userName :: Text
-    , userNotifications :: Maybe Bool
-    , userProfileBackgroundColor :: Maybe Text
-    , userProfileBackgroundImageURL :: Maybe URIString
-    , userProfileBackgroundImageURLHttps :: Maybe URIString
-    , userProfileBackgroundTile :: Maybe Bool
     , userProfileBannerURL :: Maybe URIString
-    , userProfileImageURL :: Maybe URIString
     , userProfileImageURLHttps :: Maybe URIString
-    , userProfileLinkColor :: Text
-    , userProfileSidebarBorderColor :: Text
-    , userProfileSidebarFillColor :: Text
-    , userProfileTextColor :: Text
-    , userProfileUseBackgroundImage :: Bool
     , userProtected :: Bool
     , userScreenName :: Text
     , userShowAllInlineMedia :: Maybe Bool
     , userStatusesCount :: Int
-    , userTimeZone :: Maybe Text
     , userURL :: Maybe URIString
-    , userUtcOffset :: Maybe Int
     , userVerified :: Bool
     , userWithheldInCountries :: Maybe [Text]
     , userWithheldScope :: Maybe Text
@@ -493,88 +474,50 @@ data User = User
 
 instance FromJSON User where
     parseJSON (Object o) = checkError o >>
-        User <$> o .:  "contributors_enabled"
-             <*> (o .:  "created_at" >>= return . fromTwitterTime)
+        User <$> (fromTwitterTime <$> (o .: "created_at"))
              <*> o .:  "default_profile"
              <*> o .:  "default_profile_image"
              <*> o .:? "description"
              <*> fmap join (o .:? "email") -- The field can be a null value
              <*> o .:  "favourites_count"
-             <*> o .:? "follow_request_sent" .!= Nothing
-             <*> o .:? "following" .!= Nothing
              <*> o .:  "followers_count"
              <*> o .:  "friends_count"
-             <*> o .:  "geo_enabled"
              <*> o .:  "id"
-             <*> o .:  "is_translator"
-             <*> o .:  "lang"
              <*> o .:  "listed_count"
              <*> o .:? "location"
              <*> o .:  "name"
-             <*> o .:? "notifications" .!= Nothing
-             <*> o .:? "profile_background_color"
-             <*> o .:? "profile_background_image_url"
-             <*> o .:? "profile_background_image_url_https"
-             <*> o .:? "profile_background_tile"
              <*> o .:? "profile_banner_url"
-             <*> o .:? "profile_image_url"
              <*> o .:? "profile_image_url_https"
-             <*> o .:  "profile_link_color"
-             <*> o .:  "profile_sidebar_border_color"
-             <*> o .:  "profile_sidebar_fill_color"
-             <*> o .:  "profile_text_color"
-             <*> o .:  "profile_use_background_image"
              <*> o .:  "protected"
              <*> o .:  "screen_name"
              <*> o .:? "show_all_inline_media"
              <*> o .:  "statuses_count"
-             <*> o .:? "time_zone"
              <*> o .:? "url" .!= Nothing
-             <*> o .:? "utc_offset"
              <*> o .:  "verified"
              <*> o .:? "withheld_in_countries"
              <*> o .:? "withheld_scope"
     parseJSON v = fail $ "couldn't parse user from: " ++ show v
 
 instance ToJSON User where
-    toJSON User{..} = object [ "contributors_enabled"               .= userContributorsEnabled
-                             , "created_at"                         .= TwitterTime userCreatedAt
+    toJSON User{..} = object [ "created_at"                         .= TwitterTime userCreatedAt
                              , "default_profile"                    .= userDefaultProfile
                              , "default_profile_image"              .= userDefaultProfileImage
                              , "description"                        .= userDescription
                              , "email"                              .= userEmail
                              , "favourites_count"                   .= userFavoritesCount
-                             , "follow_request_sent"                .= userFollowRequestSent
-                             , "following"                          .= userFollowing
                              , "followers_count"                    .= userFollowersCount
                              , "friends_count"                      .= userFriendsCount
-                             , "geo_enabled"                        .= userGeoEnabled
                              , "id"                                 .= userId
-                             , "is_translator"                      .= userIsTranslator
-                             , "lang"                               .= userLang
                              , "listed_count"                       .= userListedCount
                              , "location"                           .= userLocation
                              , "name"                               .= userName
-                             , "notifications"                      .= userNotifications
-                             , "profile_background_color"           .= userProfileBackgroundColor
-                             , "profile_background_image_url"       .= userProfileBackgroundImageURL
-                             , "profile_background_image_url_https" .= userProfileBackgroundImageURLHttps
-                             , "profile_background_tile"            .= userProfileBackgroundTile
                              , "profile_banner_url"                 .= userProfileBannerURL
-                             , "profile_image_url"                  .= userProfileImageURL
                              , "profile_image_url_https"            .= userProfileImageURLHttps
-                             , "profile_link_color"                 .= userProfileLinkColor
-                             , "profile_sidebar_border_color"       .= userProfileSidebarBorderColor
-                             , "profile_sidebar_fill_color"         .= userProfileSidebarFillColor
-                             , "profile_text_color"                 .= userProfileTextColor
-                             , "profile_use_background_image"       .= userProfileUseBackgroundImage
                              , "protected"                          .= userProtected
                              , "screen_name"                        .= userScreenName
                              , "show_all_inline_media"              .= userShowAllInlineMedia
                              , "statuses_count"                     .= userStatusesCount
-                             , "time_zone"                          .= userTimeZone
                              , "url"                                .= userURL
-                             , "utc_offset"                         .= userUtcOffset
                              , "verified"                           .= userVerified
                              , "withheld_in_countries"              .= userWithheldInCountries
                              , "withheld_scope"                     .= userWithheldScope
