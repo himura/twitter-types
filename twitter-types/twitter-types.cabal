@@ -5,7 +5,7 @@ license-file:      LICENSE
 author:            Takahiro HIMURA
 maintainer:        Takahiro HIMURA <taka@himura.jp>
 synopsis:          Twitter JSON parser and types
-description:       This package uses enumerator package for access Twitter API.
+description:       Please see the README on Github at <https://github.com/himura/twitter-types#readme>
 category:          Web
 stability:         Experimental
 build-type:        Simple
