@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RecordWildCards, DeriveGeneric, CPP #-}
+{-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RecordWildCards, DeriveGeneric #-}
 
 module Web.Twitter.Types
        ( UserId
@@ -48,12 +48,7 @@ import Data.Data
 import Data.HashMap.Strict (HashMap, fromList, union)
 import Data.Text (Text, unpack, pack)
 import GHC.Generics
-#if MIN_VERSION_time(1, 5, 0)
 import Data.Time
-#else
-import Data.Time
-import System.Locale
-#endif
 
 newtype TwitterTime = TwitterTime { fromTwitterTime :: UTCTime }
 
@@ -86,11 +81,7 @@ twitterTimeFormat = "%a %b %d %T %z %Y"
 
 instance FromJSON TwitterTime where
     parseJSON = withText "TwitterTime" $ \t ->
-#if MIN_VERSION_time(1, 5, 0)
         case parseTimeM True defaultTimeLocale twitterTimeFormat (unpack t) of
-#else
-        case parseTime defaultTimeLocale twitterTimeFormat (unpack t) of
-#endif
             Just  d -> pure $ TwitterTime d
             Nothing -> fail $ "Could not parse twitter time. Text was: " ++ unpack t
 
