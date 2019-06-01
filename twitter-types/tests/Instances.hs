@@ -117,6 +117,19 @@ instance Arbitrary Place where
 
 derive makeArbitrary ''BoundingBox
 derive makeArbitrary ''Entities
+derive makeArbitrary ''ExtendedEntities
+instance Arbitrary ExtendedEntity where
+  arbitrary = do
+    ms <- arbitrary
+    ExtendedEntity
+        <$> arbitrary
+        <*> arbitrary
+        <*> arbitrary
+        <*> pure (HashMap.fromList [("medium", ms)])
+        <*> arbitrary
+        <*> arbitrary
+        <*> arbitrary
+        <*> arbitrary
 
 instance Arbitrary a => Arbitrary (Entity a) where
     arbitrary = do
