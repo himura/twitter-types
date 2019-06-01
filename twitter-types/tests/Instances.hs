@@ -1,25 +1,18 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE CPP #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Instances where
 
-import Data.String
 import Control.Applicative
+import Data.Aeson
 import Data.DeriveTH
+import Data.HashMap.Strict as HashMap
+import Data.String
 import qualified Data.Text as T
+import Data.Time (UTCTime (..), readTime, fromGregorian, defaultTimeLocale)
 import Test.QuickCheck
 import Web.Twitter.Types
-import Data.Aeson
-import Data.HashMap.Strict as HashMap
-
-#if MIN_VERSION_time(1,5,0)
-import Data.Time (UTCTime (..), readTime, fromGregorian, defaultTimeLocale)
-#else
-import Data.Time (UTCTime (..), readTime, fromGregorian)
-import System.Locale
-#endif
 
 instance IsString UTCTime where
     fromString = readTime defaultTimeLocale twitterTimeFormat
