@@ -11,7 +11,7 @@ import Data.String
 import qualified Data.Text as T
 import Data.Time (UTCTime (..), readTime, fromGregorian, defaultTimeLocale)
 import Generic.Random
-import Test.QuickCheck
+import Test.Tasty.QuickCheck
 import Web.Twitter.Types
 
 instance IsString UTCTime where
