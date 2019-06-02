@@ -6,11 +6,11 @@ module Instances where
 
 import Control.Applicative
 import Data.Aeson
-import Data.DeriveTH
 import Data.HashMap.Strict as HashMap
 import Data.String
 import qualified Data.Text as T
 import Data.Time (UTCTime (..), readTime, fromGregorian, defaultTimeLocale)
+import Generic.Random
 import Test.QuickCheck
 import Web.Twitter.Types
 
@@ -69,18 +69,30 @@ instance Arbitrary Status where
                <*> arbitrary
                <*> arbitrary
 
-derive makeArbitrary ''SearchStatus
-derive makeArbitrary ''SearchMetadata
-derive makeArbitrary ''RetweetedStatus
-derive makeArbitrary ''DirectMessage
-derive makeArbitrary ''EventTarget
-derive makeArbitrary ''Event
-derive makeArbitrary ''Delete
-derive makeArbitrary ''User
-derive makeArbitrary ''List
-derive makeArbitrary ''HashTagEntity
-derive makeArbitrary ''UserEntity
-derive makeArbitrary ''URLEntity
+instance Arbitrary SearchStatus where
+    arbitrary = genericArbitraryU
+instance Arbitrary SearchMetadata where
+    arbitrary = genericArbitraryU
+instance Arbitrary RetweetedStatus where
+    arbitrary = genericArbitraryU
+instance Arbitrary DirectMessage where
+    arbitrary = genericArbitraryU
+instance Arbitrary EventTarget where
+    arbitrary = genericArbitraryU
+instance Arbitrary Event where
+    arbitrary = genericArbitraryU
+instance Arbitrary Delete where
+    arbitrary = genericArbitraryU
+instance Arbitrary User where
+    arbitrary = genericArbitraryU
+instance Arbitrary List where
+    arbitrary = genericArbitraryU
+instance Arbitrary HashTagEntity where
+    arbitrary = genericArbitraryU
+instance Arbitrary UserEntity where
+    arbitrary = genericArbitraryU
+instance Arbitrary URLEntity where
+    arbitrary = genericArbitraryU
 
 instance Arbitrary MediaEntity where
     arbitrary = do
@@ -93,8 +105,10 @@ instance Arbitrary MediaEntity where
             <*> arbitrary
             <*> arbitrary
 
-derive makeArbitrary ''MediaSize
-derive makeArbitrary ''Coordinates
+instance Arbitrary MediaSize where
+    arbitrary = genericArbitraryU
+instance Arbitrary Coordinates where
+    arbitrary = genericArbitraryU
 
 instance Arbitrary Place where
     arbitrary = do
@@ -108,9 +122,12 @@ instance Arbitrary Place where
             <*> arbitrary
             <*> arbitrary
 
-derive makeArbitrary ''BoundingBox
-derive makeArbitrary ''Entities
-derive makeArbitrary ''ExtendedEntities
+instance Arbitrary BoundingBox where
+    arbitrary = genericArbitraryU
+instance Arbitrary Entities where
+    arbitrary = genericArbitraryU
+instance Arbitrary ExtendedEntities where
+    arbitrary = genericArbitraryU
 instance Arbitrary ExtendedEntity where
   arbitrary = do
     ms <- arbitrary
@@ -130,6 +147,9 @@ instance Arbitrary a => Arbitrary (Entity a) where
         ind <- arbitrary
         return $ Entity a ind
 
-derive makeArbitrary ''Contributor
-derive makeArbitrary ''ImageSizeType
-derive makeArbitrary ''UploadedMedia
+instance Arbitrary Contributor where
+    arbitrary = genericArbitraryU
+instance Arbitrary ImageSizeType where
+    arbitrary = genericArbitraryU
+instance Arbitrary UploadedMedia where
+    arbitrary = genericArbitraryU

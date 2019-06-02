@@ -49,7 +49,7 @@ test-suite tests
     , aeson
     , attoparsec
     , bytestring
-    , derive
+    , generic-random
     , directory
     , filepath
     , template-haskell
