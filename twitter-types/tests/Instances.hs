@@ -68,6 +68,7 @@ instance Arbitrary Status where
                <*> arbitrary
                <*> arbitrary
                <*> arbitrary
+               <*> arbitrary
 
 instance Arbitrary SearchStatus where
     arbitrary = genericArbitraryU
@@ -152,4 +153,6 @@ instance Arbitrary Contributor where
 instance Arbitrary ImageSizeType where
     arbitrary = genericArbitraryU
 instance Arbitrary UploadedMedia where
+    arbitrary = genericArbitraryU
+instance Arbitrary DisplayTextRange where
     arbitrary = genericArbitraryU
