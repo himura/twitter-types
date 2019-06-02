@@ -1,88 +1,21 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Main where
+module TypesTest where
 
-import Web.Twitter.Types
-
-import Test.Framework
-import Test.Framework.Providers.HUnit
-import Test.Framework.Providers.QuickCheck2
-import Test.HUnit
-
-import Data.Aeson hiding (Error)
-import Data.Aeson.Types (parseEither)
+import Data.Aeson
 import qualified Data.Aeson.Types as Aeson
 import qualified Data.HashMap.Strict as M
 import Data.Maybe
-
-import Instances()
 import Fixtures
-loadFixturesTH 'parseJSONValue
-
-main :: IO ()
-main =
-    defaultMain
-    [ testGroup "Unit tests" unittests
-    , testGroup "Property tests" proptests
-    ]
-  where
-    unittests =
-        [ testCase "case_parseStatus" case_parseStatus
-        , testCase "case_parseStatusQuoted" case_parseStatusQuoted
-        , testCase "case_parseStatusWithPhoto" case_parseStatusWithPhoto
-        , testCase "case_parseStatusIncludeEntities" case_parseStatusIncludeEntities
-        , testCase "case_parseSearchStatusMetadata" case_parseSearchStatusMetadata
-        , testCase "case_parseSearchStatusBodyStatus" case_parseSearchStatusBodyStatus
-        , testCase "case_parseSearchStatusBodySearchStatus" case_parseSearchStatusBodySearchStatus
-        , testCase "case_parseDirectMessage" case_parseDirectMessage
-        , testCase "case_parseEventFavorite" case_parseEventFavorite
-        , testCase "case_parseEventUnfavorite" case_parseEventUnfavorite
-        , testCase "case_parseDelete" case_parseDelete
-        , testCase "case_parseErrorMsg" case_parseErrorMsg
-        , testCase "case_parseMediaEntity" case_parseMediaEntity
-        , testCase "case_parseEmptyEntity" case_parseEmptyEntity
-        , testCase "case_parseEntityHashTag" case_parseEntityHashTag
-        , testCase "case_parseExtendedEntities" case_parseExtendedEntities
-        , testCase "case_parseUser" case_parseUser
-        , testCase "case_parseList" case_parseList
-        ]
-
-    proptests =
-        [ testProperty "prop_fromToStatus" prop_fromToStatus
-        , testProperty "prop_fromToSearchStatus" prop_fromToSearchStatus
-        , testProperty "prop_fromToSearchMetadata" prop_fromToSearchMetadata
-        , testProperty "prop_fromToRetweetedStatus" prop_fromToRetweetedStatus
-        , testProperty "prop_fromToDirectMessage" prop_fromToDirectMessage
-        , testProperty "prop_fromToEventTarget" prop_fromToEventTarget
-        , testProperty "prop_fromToEvent" prop_fromToEvent
-        , testProperty "prop_fromToDelete" prop_fromToDelete
-        , testProperty "prop_fromToUser" prop_fromToUser
-        , testProperty "prop_fromToList" prop_fromToList
-        , testProperty "prop_fromToHashTagEntity" prop_fromToHashTagEntity
-        , testProperty "prop_fromToUserEntity" prop_fromToUserEntity
-        , testProperty "prop_fromToURLEntity" prop_fromToURLEntity
-        , testProperty "prop_fromToMediaEntity" prop_fromToMediaEntity
-        , testProperty "prop_fromToMediaSize" prop_fromToMediaSize
-        , testProperty "prop_fromToCoordinates" prop_fromToCoordinates
-        , testProperty "prop_fromToPlace" prop_fromToPlace
-        , testProperty "prop_fromToBoundingBox" prop_fromToBoundingBox
-        , testProperty "prop_fromToEntities" prop_fromToEntities
-        , testProperty "prop_fromToContributor" prop_fromToContributor
-        , testProperty "prop_fromToImageSizeType" prop_fromToImageSizeType
-        , testProperty "prop_fromToUploadedMedia" prop_fromToUploadedMedia
-        ]
-
-withJSON :: FromJSON a
-         => Value
-         -> (a -> Assertion)
-         -> Assertion
-withJSON js f = either assertFailure id $ do
-    o <- parseEither parseJSON js
-    return $ f o
+import Instances()
+import Test.Tasty
+import Test.Tasty.HUnit
+import Test.Tasty.TH
+import Web.Twitter.Types
 
 case_parseStatus :: Assertion
-case_parseStatus = withJSON fixture_status01 $ \obj -> do
+case_parseStatus = withFixtureJSON "status01.json" $ \obj -> do
     statusCreatedAt obj @?= "Sat Sep 10 22:23:38 +0000 2011"
     statusId obj @?= 112652479837110273
     statusText obj @?= "@twitter meets @seepicturely at #tcdisrupt cc.@boscomonkey @episod http://t.co/6J2EgYM"
@@ -105,7 +38,7 @@ case_parseStatus = withJSON fixture_status01 $ \obj -> do
     statusCoordinates obj @?= Nothing
 
 case_parseStatusQuoted :: Assertion
-case_parseStatusQuoted = withJSON fixture_status_quoted $ \obj -> do
+case_parseStatusQuoted = withFixtureJSON "status_quoted.json" $ \obj -> do
     statusId obj @?= 641660763770372100
     statusText obj @?= "Wow! Congrats! https://t.co/EPMMldEcci"
     statusQuotedStatusId obj @?= Just 641653574284537900
@@ -141,7 +74,7 @@ case_parseStatusQuoted = withJSON fixture_status_quoted $ \obj -> do
 
 
 case_parseStatusWithPhoto :: Assertion
-case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj -> do
+case_parseStatusWithPhoto = withFixtureJSON "status_thimura_with_photo.json" $ \obj -> do
     statusId obj @?= 491143410770657280
     statusText obj @?= "近所の海です http://t.co/FjSOU8dDoD"
     statusTruncated obj @?= False
@@ -173,7 +106,7 @@ case_parseStatusWithPhoto = withJSON fixture_status_thimura_with_photo $ \obj ->
     statusCoordinates obj @?= Nothing
 
 case_parseStatusIncludeEntities :: Assertion
-case_parseStatusIncludeEntities = withJSON fixture_status_with_entity $ \obj -> do
+case_parseStatusIncludeEntities = withFixtureJSON "status_with_entity.json" $ \obj -> do
     statusId obj @?= 112652479837110273
     statusRetweetCount obj @?= 0
     (userScreenName . statusUser) obj @?= "imeoin"
@@ -182,7 +115,7 @@ case_parseStatusIncludeEntities = withJSON fixture_status_with_entity $ \obj -> 
     (hashTagText . entityBody . head . enHashTags) ent @?= "tcdisrupt"
 
 case_parseSearchStatusMetadata :: Assertion
-case_parseSearchStatusMetadata = withJSON fixture_search_haskell $ \obj -> do
+case_parseSearchStatusMetadata = withFixtureJSON "search_haskell.json" $ \obj -> do
     let status = (searchResultStatuses obj) :: [Status]
     length status @?= 1
 
@@ -198,19 +131,19 @@ case_parseSearchStatusMetadata = withJSON fixture_search_haskell $ \obj -> do
     searchMetadataMaxIdStr metadata @?= "495597397733433345"
 
 case_parseSearchStatusBodyStatus :: Assertion
-case_parseSearchStatusBodyStatus = withJSON fixture_search_haskell $ \obj -> do
+case_parseSearchStatusBodyStatus = withFixtureJSON "search_haskell.json" $ \obj -> do
     let status = (searchResultStatuses obj) :: [Status]
     length status @?= 1
     statusText (head status) @?= "haskell"
 
 case_parseSearchStatusBodySearchStatus :: Assertion
-case_parseSearchStatusBodySearchStatus = withJSON fixture_search_haskell $ \obj -> do
+case_parseSearchStatusBodySearchStatus = withFixtureJSON "search_haskell.json" $ \obj -> do
     let status = (searchResultStatuses obj) :: [SearchStatus]
     length status @?= 1
     searchStatusText (head status) @?= "haskell"
 
 case_parseDirectMessage :: Assertion
-case_parseDirectMessage = withJSON fixture_direct_message_thimura $ \obj -> do
+case_parseDirectMessage = withFixtureJSON "direct_message_thimura.json" $ \obj -> do
     dmCreatedAt obj @?= "Sat Aug 02 16:10:04 +0000 2014"
     dmSenderScreenName obj @?= "thimura_shinku"
     (userScreenName . dmSender) obj @?= "thimura_shinku"
@@ -223,7 +156,7 @@ case_parseDirectMessage = withJSON fixture_direct_message_thimura $ \obj -> do
     dmCoordinates obj @?= Nothing
 
 case_parseEventFavorite :: Assertion
-case_parseEventFavorite = withJSON fixture_event_favorite_thimura $ \obj -> do
+case_parseEventFavorite = withFixtureJSON "event_favorite_thimura.json" $ \obj -> do
     evCreatedAt obj @?= "Sat Aug 02 16:32:01 +0000 2014"
     evEvent obj @?= "favorite"
     let Just (ETStatus targetObj) = evTargetObject obj
@@ -237,7 +170,7 @@ case_parseEventFavorite = withJSON fixture_event_favorite_thimura $ \obj -> do
     userScreenName sourceUser @?= "thimura_shinku"
 
 case_parseEventUnfavorite :: Assertion
-case_parseEventUnfavorite = withJSON fixture_event_unfavorite_thimura $ \obj -> do
+case_parseEventUnfavorite = withFixtureJSON "event_unfavorite_thimura.json" $ \obj -> do
     evCreatedAt obj @?= "Sat Aug 02 16:32:10 +0000 2014"
     evEvent obj @?= "unfavorite"
     let Just (ETStatus targetObj) = evTargetObject obj
@@ -251,13 +184,13 @@ case_parseEventUnfavorite = withJSON fixture_event_unfavorite_thimura $ \obj -> 
     userScreenName sourceUser @?= "thimura_shinku"
 
 case_parseDelete :: Assertion
-case_parseDelete = withJSON fixture_delete $ \obj -> do
+case_parseDelete = withFixtureJSON "delete.json" $ \obj -> do
     delId obj @?= 495607981833064448
     delUserId obj @?= 2566877347
 
 case_parseErrorMsg :: Assertion
-case_parseErrorMsg =
-    case parseStatus fixture_error_not_authorized of
+case_parseErrorMsg = withFixtureJSON "error_not_authorized.json" $ \value ->
+    case parseStatus value of
         Aeson.Error str -> "Not authorized" @=? str
         Aeson.Success _ -> assertFailure "errorMsgJson should be parsed as an error."
   where
@@ -265,9 +198,9 @@ case_parseErrorMsg =
     parseStatus = Aeson.parse parseJSON
 
 case_parseMediaEntity :: Assertion
-case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
+case_parseMediaEntity = withFixtureJSON "media_entity.json" $ \obj -> do
     let entities = statusEntities obj
-    assert $ isJust entities
+    assertBool "entities should not empty" $ isJust entities
     let Just ent = entities
         media = enMedia ent
     length media @?= 1
@@ -275,8 +208,8 @@ case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
     meType me @?= "photo"
     meId me @?= 114080493040967680
     let sizes = meSizes me
-    assert $ M.member "thumb" sizes
-    assert $ M.member "large" sizes
+    assertBool "sizes must contains \"thumb\"" $ M.member "thumb" sizes
+    assertBool "sizes must contains \"large\"" $ M.member "large" sizes
 
     let Just mediaSize = M.lookup "large" sizes
 
@@ -288,14 +221,14 @@ case_parseMediaEntity = withJSON fixture_media_entity $ \obj -> do
     meMediaURLHttps me @?= "https://pbs.twimg.com/media/AZVLmp-CIAAbkyy.jpg"
 
 case_parseEmptyEntity :: Assertion
-case_parseEmptyEntity = withJSON (parseJSONValue "{}") $ \entity -> do
+case_parseEmptyEntity = withJSON "{}" $ \entity -> do
     length (enHashTags entity) @?= 0
     length (enUserMentions entity) @?= 0
     length (enURLs entity) @?= 0
     length (enMedia entity) @?= 0
 
 case_parseEntityHashTag :: Assertion
-case_parseEntityHashTag = withJSON fixture_entity01 $ \entity -> do
+case_parseEntityHashTag = withFixtureJSON "entity01.json" $ \entity -> do
     length (enHashTags entity) @?= 1
     length (enUserMentions entity) @?= 1
     length (enURLs entity) @?= 1
@@ -315,9 +248,9 @@ case_parseEntityHashTag = withJSON fixture_entity01 $ \entity -> do
     hashtag @?= "lol"
 
 case_parseExtendedEntities :: Assertion
-case_parseExtendedEntities = withJSON fixture_media_extended_entity $ \obj -> do
+case_parseExtendedEntities = withFixtureJSON "media_extended_entity.json" $ \obj -> do
     let entities = statusExtendedEntities obj
-    assert $ isJust entities
+    assertBool "entities should not empty" $ isJust entities
     let Just ent = entities
         media = exeMedia ent
     length media @?= 4
@@ -327,10 +260,8 @@ case_parseExtendedEntities = withJSON fixture_media_extended_entity $ \obj -> do
     exeExtAltText me @?= Just "A small tabby kitten"
     exeType me @?= "photo"
 
-
-
 case_parseUser :: Assertion
-case_parseUser = withJSON fixture_user_thimura $ \obj -> do
+case_parseUser = withFixtureJSON "user_thimura.json" $ \obj -> do
     userId obj @?= 69179963
     userName obj @?= "ちむら"
     userScreenName obj @?= "thimura"
@@ -347,7 +278,7 @@ case_parseUser = withJSON fixture_user_thimura $ \obj -> do
     userFavoritesCount obj @?= 17313
 
 case_parseUserLangNull :: Assertion
-case_parseUserLangNull = withJSON fixture_user_thimura_lang_null $ \obj -> do
+case_parseUserLangNull = withFixtureJSON "user_thimura_lang_null.json" $ \obj -> do
     userId obj @?= 69179963
     userName obj @?= "ちむら"
     userScreenName obj @?= "thimura"
@@ -365,7 +296,7 @@ case_parseUserLangNull = withJSON fixture_user_thimura_lang_null $ \obj -> do
     userFavoritesCount obj @?= 17313
 
 case_parseList :: Assertion
-case_parseList = withJSON fixture_list_thimura_haskell $ \obj -> do
+case_parseList = withFixtureJSON "list_thimura_haskell.json" $ \obj -> do
     listId obj @?= 20849097
     listName obj @?= "haskell"
     listFullName obj @?= "@thimura/haskell"
@@ -374,76 +305,5 @@ case_parseList = withJSON fixture_list_thimura_haskell $ \obj -> do
     listMode obj @?= "public"
     (userScreenName . listUser) obj @?= "thimura"
 
-fromToJSON :: (Eq a, FromJSON a, ToJSON a) => a -> Bool
-fromToJSON obj = case fromJSON . toJSON $ obj of
-    Aeson.Error _ -> False
-    Aeson.Success a -> a == obj
-
--- prop_fromToStreamingAPI :: StreamingAPI -> Bool
--- prop_fromToStreamingAPI = fromToJSON
-
-prop_fromToStatus :: Status -> Bool
-prop_fromToStatus = fromToJSON
-
-prop_fromToSearchStatus :: SearchStatus -> Bool
-prop_fromToSearchStatus = fromToJSON
-
-prop_fromToSearchMetadata :: SearchMetadata -> Bool
-prop_fromToSearchMetadata = fromToJSON
-
-prop_fromToRetweetedStatus :: RetweetedStatus -> Bool
-prop_fromToRetweetedStatus = fromToJSON
-
-prop_fromToDirectMessage :: DirectMessage -> Bool
-prop_fromToDirectMessage = fromToJSON
-
-prop_fromToEventTarget :: EventTarget -> Bool
-prop_fromToEventTarget = fromToJSON
-
-prop_fromToEvent :: Event -> Bool
-prop_fromToEvent = fromToJSON
-
-prop_fromToDelete :: Delete -> Bool
-prop_fromToDelete = fromToJSON
-
-prop_fromToUser :: User -> Bool
-prop_fromToUser = fromToJSON
-
-prop_fromToList :: List -> Bool
-prop_fromToList = fromToJSON
-
-prop_fromToHashTagEntity :: HashTagEntity -> Bool
-prop_fromToHashTagEntity = fromToJSON
-
-prop_fromToUserEntity :: UserEntity -> Bool
-prop_fromToUserEntity = fromToJSON
-
-prop_fromToURLEntity :: URLEntity -> Bool
-prop_fromToURLEntity = fromToJSON
-
-prop_fromToMediaEntity :: MediaEntity -> Bool
-prop_fromToMediaEntity = fromToJSON
-
-prop_fromToMediaSize :: MediaSize -> Bool
-prop_fromToMediaSize = fromToJSON
-
-prop_fromToCoordinates :: Coordinates -> Bool
-prop_fromToCoordinates = fromToJSON
-
-prop_fromToPlace :: Place -> Bool
-prop_fromToPlace = fromToJSON
-
-prop_fromToBoundingBox :: BoundingBox -> Bool
-prop_fromToBoundingBox = fromToJSON
-
-prop_fromToEntities :: Entities -> Bool
-prop_fromToEntities = fromToJSON
-
-prop_fromToContributor :: Contributor -> Bool
-prop_fromToContributor = fromToJSON
-
-prop_fromToImageSizeType :: ImageSizeType -> Bool
-prop_fromToImageSizeType = fromToJSON
-
-prop_fromToUploadedMedia :: UploadedMedia -> Bool
-prop_fromToUploadedMedia = fromToJSON
+tests :: TestTree
+tests = $(testGroupGenerator)
