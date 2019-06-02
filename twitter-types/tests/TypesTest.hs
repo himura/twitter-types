@@ -363,6 +363,25 @@ case_parseUserLangNull = withJSON fixture_user_thimura_lang_null $ \obj -> do
     userLang obj @?= Nothing
     userCreatedAt obj @?= "Thu Aug 27 02:48:06 +0000 2009"
     userFavoritesCount obj @?= 17313
+    let lastStatus = userStatus obj
+    assert $ isJust lastStatus
+    let lastSt = fromJust lastStatus
+    lastStatusCreatedAt lastSt @?= "Fri Aug 01 12:59:36 +0000 2014"
+    lastStatusLang lastSt @?= Just "ja"
+    lastStatusRetweeted lastSt @?= Just False
+    lastStatusRetweetCount lastSt @?= 0
+    lastStatusFavoriteCount lastSt @?= 0
+    lastStatusInReplyToStatusId lastSt @?= Nothing
+    lastStatusInReplyToScreenName lastSt @?= Nothing
+    lastStatusInReplyToUserId lastSt @?= Nothing
+    lastStatusSource lastSt @?= "\x003c\&a href=\"http://twitter.com\" rel=\"nofollow\"\x003eTwitter Web Client\003c/a\x003e"
+    lastStatusCoordinates lastSt @?= Nothing
+    lastStatusContributors lastSt @?= Nothing
+    lastStatusPlace lastSt @?= Nothing
+    lastStatusText lastSt @?= "くそあつい"
+    lastStatusId lastSt @?= 495192122836783104
+    lastStatusTruncated lastSt @?= False
+    lastStatusEntities lastSt @?= Just (Entities [] [] [] [])
 
 case_parseList :: Assertion
 case_parseList = withJSON fixture_list_thimura_haskell $ \obj -> do
@@ -387,6 +406,9 @@ prop_fromToStatus = fromToJSON
 
 prop_fromToSearchStatus :: SearchStatus -> Bool
 prop_fromToSearchStatus = fromToJSON
+
+prop_fromToLastStatus :: LastStatus -> Bool
+prop_fromToLastStatus = fromToJSON
 
 prop_fromToSearchMetadata :: SearchMetadata -> Bool
 prop_fromToSearchMetadata = fromToJSON
