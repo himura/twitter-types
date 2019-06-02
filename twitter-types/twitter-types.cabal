@@ -60,6 +60,7 @@ test-suite tests
   other-modules:
     Fixtures
     Instances
+    PropFromToJSONTest
     TypesTest
 
   ghc-options:       -Wall
