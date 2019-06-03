@@ -452,7 +452,6 @@ data User = User
     , userDefaultProfile :: Bool
     , userDefaultProfileImage :: Bool
     , userDescription :: Maybe Text
-    , userEmail :: Maybe Text
     , userFavoritesCount :: Int
     , userFollowersCount :: Int
     , userFriendsCount :: Int
@@ -478,7 +477,6 @@ instance FromJSON User where
              <*> o .:  "default_profile"
              <*> o .:  "default_profile_image"
              <*> o .:? "description"
-             <*> fmap join (o .:? "email") -- The field can be a null value
              <*> o .:  "favourites_count"
              <*> o .:  "followers_count"
              <*> o .:  "friends_count"
@@ -503,7 +501,6 @@ instance ToJSON User where
                              , "default_profile"                    .= userDefaultProfile
                              , "default_profile_image"              .= userDefaultProfileImage
                              , "description"                        .= userDescription
-                             , "email"                              .= userEmail
                              , "favourites_count"                   .= userFavoritesCount
                              , "followers_count"                    .= userFollowersCount
                              , "friends_count"                      .= userFriendsCount
