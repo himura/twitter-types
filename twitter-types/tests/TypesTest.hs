@@ -7,6 +7,7 @@ import Data.Aeson
 import qualified Data.Aeson.Types as Aeson
 import qualified Data.HashMap.Strict as M
 import Data.Maybe
+import Data.Time.Clock.POSIX
 import Fixtures
 import Instances()
 import Test.Tasty
@@ -142,18 +143,49 @@ case_parseSearchStatusBodySearchStatus = withFixtureJSON "search_haskell.json" $
     length status @?= 1
     searchStatusText (head status) @?= "haskell"
 
-case_parseDirectMessage :: Assertion
-case_parseDirectMessage = withFixtureJSON "direct_message_thimura.json" $ \obj -> do
-    dmCreatedAt obj @?= "Sat Aug 02 16:10:04 +0000 2014"
-    dmSenderScreenName obj @?= "thimura_shinku"
-    (userScreenName . dmSender) obj @?= "thimura_shinku"
-    dmText obj @?= "おまえの明日が、今日よりもずっと、楽しい事で溢れているようにと、祈っているよ"
-    dmRecipientScreeName obj @?= "thimura"
-    dmId obj @?= 495602442466123776
-    (userScreenName . dmRecipient) obj @?= "thimura"
-    dmRecipientId obj @?= 69179963
-    dmSenderId obj @?= 2566877347
-    dmCoordinates obj @?= Nothing
+data DMList = DMList
+    { dmList :: [DirectMessage]
+    } deriving (Show, Eq)
+instance FromJSON DMList where
+    parseJSON = withObject "DMList" $ \obj -> DMList <$> obj .: "events"
+
+case_parseDirectMessageList :: Assertion
+case_parseDirectMessageList =
+    withFixtureJSON "direct_message_event_list.json" $ \obj -> do
+        dmList obj @?=
+            [ DirectMessage
+                  { dmId = 123123123123123123
+                  , dmCreatedTimestamp = read "2019-10-13 18:15:48.951 UTC"
+                  , dmTargetRecipientId = 186712193
+                  , dmSenderId = 69179963
+                  , dmText = "hello @thimura"
+                  , dmEntities =
+                        Entities
+                        { enHashTags = []
+                        , enUserMentions =
+                              [ Entity
+                                { entityBody =
+                                      UserEntity
+                                      { userEntityUserId = 69179963
+                                      , userEntityUserName = "ちむら"
+                                      , userEntityUserScreenName = "thimura"
+                                      }
+                                , entityIndices = [6, 14]
+                                }
+                              ]
+                        , enURLs = []
+                        , enMedia = []
+                        }
+                  }
+            , DirectMessage
+                  { dmId = 25252525252525
+                  , dmCreatedTimestamp = read "2019-10-13 18:06:46.14 UTC"
+                  , dmTargetRecipientId = 186712193
+                  , dmSenderId = 69179963
+                  , dmText = "hello"
+                  , dmEntities = Entities {enHashTags = [], enUserMentions = [], enURLs = [], enMedia = []}
+                  }
+            ]
 
 case_parseEventFavorite :: Assertion
 case_parseEventFavorite = withFixtureJSON "event_favorite_thimura.json" $ \obj -> do

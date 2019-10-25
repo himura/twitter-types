@@ -1,5 +1,6 @@
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Instances where
@@ -75,8 +76,14 @@ instance Arbitrary SearchMetadata where
     arbitrary = genericArbitraryU
 instance Arbitrary RetweetedStatus where
     arbitrary = genericArbitraryU
+
 instance Arbitrary DirectMessage where
-    arbitrary = genericArbitraryU
+    arbitrary = genericArbitrarySingleG customGens
+      where
+        customGens :: Gen Integer :+ ()
+        customGens =
+            (getNonNegative <$> arbitrary) :+ ()
+
 instance Arbitrary EventTarget where
     arbitrary = genericArbitraryU
 instance Arbitrary Event where
