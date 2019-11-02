@@ -51,8 +51,12 @@ import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Data
 import Data.HashMap.Strict (HashMap, fromList, union)
+import Data.Int
+import Data.Ratio
 import Data.Text (Text, unpack, pack)
+import Data.Text.Read (decimal)
 import Data.Time
+import Data.Time.Clock.POSIX
 import GHC.Generics
 
 newtype TwitterTime = TwitterTime { fromTwitterTime :: UTCTime }
@@ -344,46 +348,54 @@ instance ToJSON RetweetedStatus where
                                         , "coordinates"         .= rsCoordinates
                                         ]
 
-data DirectMessage =
-    DirectMessage
-    { dmCreatedAt          :: UTCTime
-    , dmSenderScreenName   :: Text
-    , dmSender             :: User
-    , dmText               :: Text
-    , dmRecipientScreeName :: Text
-    , dmId                 :: StatusId
-    , dmRecipient          :: User
-    , dmRecipientId        :: UserId
-    , dmSenderId           :: UserId
-    , dmCoordinates        :: Maybe Coordinates
+type EventId = Integer
+
+data DirectMessage = DirectMessage
+    { dmId :: EventId
+    , dmCreatedTimestamp :: UTCTime
+    , dmTargetRecipientId :: UserId
+    , dmSenderId :: UserId
+    , dmText :: Text
+    , dmEntities :: Entities
     } deriving (Show, Eq, Data, Typeable, Generic)
 
+parseIntegral :: Integral a => Text -> Parser a
+parseIntegral v = either (fail $ "couldn't parse stringized int: " ++ show v) (return . fst) $ decimal v
+
+epochMsToUTCTime :: Int64 -> UTCTime
+epochMsToUTCTime = posixSecondsToUTCTime . fromRational . (% 1000) . fromIntegral
+
+parseUnixTimeString :: Text -> Parser UTCTime
+parseUnixTimeString = fmap epochMsToUTCTime <$> parseIntegral
+
+unixTimeToEpochInt :: UTCTime -> Int
+unixTimeToEpochInt = floor . (* 1000) . utcTimeToPOSIXSeconds
+
 instance FromJSON DirectMessage where
-    parseJSON (Object o) = checkError o >>
-        DirectMessage <$> (o .:  "created_at" >>= return . fromTwitterTime)
-                      <*> o .:  "sender_screen_name"
-                      <*> o .:  "sender"
-                      <*> o .:  "text"
-                      <*> o .:  "recipient_screen_name"
-                      <*> o .:  "id"
-                      <*> o .:  "recipient"
-                      <*> o .:  "recipient_id"
-                      <*> o .:  "sender_id"
-                      <*> o .:? "coordinates"
-    parseJSON v = fail $ "couldn't parse direct message from: " ++ show v
+    parseJSON (Object o) = do
+        _ <- checkError o
+        messageCreate <- o .: "message_create"
+        messageData <- messageCreate .: "message_data"
+
+        DirectMessage
+            <$> (o .: "id" >>= parseIntegral)
+            <*> (o .: "created_timestamp" >>= parseUnixTimeString)
+            <*> (messageCreate .: "target" >>= (.: "recipient_id") >>= parseIntegral)
+            <*> (messageCreate .: "sender_id" >>= parseIntegral)
+            <*> messageData .: "text"
+            <*> messageData .: "entities"
+    parseJSON v = fail $ "couldn't parse direct message create event from: " ++ show v
 
 instance ToJSON DirectMessage where
-    toJSON DirectMessage{..} = object [ "created_at"            .= TwitterTime dmCreatedAt
-                                      , "sender_screen_name"    .= dmSenderScreenName
-                                      , "sender"                .= dmSender
-                                      , "text"                  .= dmText
-                                      , "recipient_screen_name" .= dmRecipientScreeName
-                                      , "id"                    .= dmId
-                                      , "recipient"             .= dmRecipient
-                                      , "recipient_id"          .= dmRecipientId
-                                      , "sender_id"             .= dmSenderId
-                                      , "coordinates"           .= dmCoordinates
-                                      ]
+    toJSON DirectMessage {..} =
+        object
+            [ "id" .= show dmId
+            , "created_timestamp" .= show (unixTimeToEpochInt dmCreatedTimestamp)
+            , "message_create" .= object ["message_data" .= object ["text" .= dmText, "entities" .= dmEntities]
+                                         , "target" .= object ["recipient_id" .= show dmTargetRecipientId]
+                                         , "sender_id" .= show dmSenderId
+                                         ]
+            ]
 
 data EventType = Favorite | Unfavorite
                | ListCreated | ListUpdated | ListMemberAdded

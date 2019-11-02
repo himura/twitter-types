@@ -86,16 +86,12 @@ module Web.Twitter.Types.Lens
 
        -- * 'TT.DirectMessage'
        , TT.DirectMessage
-       , dmCreatedAt
-       , dmSenderScreenName
-       , dmSender
-       , dmText
-       , dmRecipientScreeName
        , dmId
-       , dmRecipient
-       , dmRecipientId
+       , dmCreatedTimestamp
+       , dmTargetRecipientId
        , dmSenderId
-       , dmCoordinates
+       , dmText
+       , dmEntities
 
        -- * 'TT.Event'
        , TT.Event
@@ -350,12 +346,6 @@ instance AsStatus TT.RetweetedStatus where
     user = rsUser
     geolocation = rsCoordinates
 
-instance AsStatus TT.DirectMessage where
-    status_id = dmId
-    text = dmText
-    user = dmSender
-    geolocation = dmCoordinates
-
 class AsUser u where
     user_id :: Lens' u TT.UserId
     name :: Lens' u TT.UserName
@@ -385,7 +375,7 @@ instance HasCreatedAt TT.SearchStatus where
 instance HasCreatedAt TT.RetweetedStatus where
     created_at = rsCreatedAt
 instance HasCreatedAt TT.DirectMessage where
-    created_at = dmCreatedAt
+    created_at = dmCreatedTimestamp
 instance HasCreatedAt TT.User where
     created_at = userCreatedAt
 

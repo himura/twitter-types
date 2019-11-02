@@ -1,0 +1,69 @@
+{
+  "apps": {
+    "258901": {
+      "url": "http://twitter.com/download/android",
+      "name": "Twitter for Android",
+      "id": "258901"
+    },
+    "3033300": {
+      "url": "https://mobile.twitter.com",
+      "name": "Twitter Web App",
+      "id": "3033300"
+    }
+  },
+  "events": [
+    {
+      "message_create": {
+        "source_app_id": "3033300",
+        "message_data": {
+          "entities": {
+            "symbols": [],
+            "urls": [],
+            "user_mentions": [
+              {
+                "screen_name": "thimura",
+                "id_str": "69179963",
+                "name": "ちむら",
+                "indices": [
+                  6,
+                  14
+                ],
+                "id": 69179963
+              }
+            ],
+            "hashtags": []
+          },
+          "text": "hello @thimura"
+        },
+        "target": {
+          "recipient_id": "186712193"
+        },
+        "sender_id": "69179963"
+      },
+      "created_timestamp": "1570990548951",
+      "id": "123123123123123123",
+      "type": "message_create"
+    },
+    {
+      "message_create": {
+        "source_app_id": "4237790",
+        "message_data": {
+          "entities": {
+            "symbols": [],
+            "urls": [],
+            "user_mentions": [],
+            "hashtags": []
+          },
+          "text": "hello"
+        },
+        "target": {
+          "recipient_id": "186712193"
+        },
+        "sender_id": "69179963"
+      },
+      "created_timestamp": "1570990006140",
+      "id": "25252525252525",
+      "type": "message_create"
+    }
+  ]
+}
