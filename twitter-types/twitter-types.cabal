@@ -17,6 +17,7 @@ tested-with:       GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.5
 extra-source-files:
   README.md
   tests/fixtures/*.json
+  tests/fixtures/tweet-updates/*.json
 
 source-repository head
   type: git
@@ -61,6 +62,7 @@ test-suite tests
     Fixtures
     Instances
     PropFromToJSONTest
+    StatusTest
     TypesTest
 
   ghc-options:       -Wall

@@ -1,14 +1,15 @@
 module Main where
 
+import qualified PropFromToJSONTest
+import qualified StatusTest
 import Test.Tasty
 import qualified TypesTest
-import qualified PropFromToJSONTest
 
 tests :: TestTree
 tests =
     testGroup
         "Tests"
-        [ testGroup "Unit Test" [TypesTest.tests]
+        [ testGroup "Unit Test" [TypesTest.tests, StatusTest.tests]
         , testGroup "Property Test" [PropFromToJSONTest.tests]
         ]
 

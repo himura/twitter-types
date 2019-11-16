@@ -44,6 +44,7 @@ module Web.Twitter.Types.Lens
        , statusWithheldCopyright
        , statusWithheldInCountries
        , statusWithheldScope
+       , statusDisplayTextRange
 
        -- * 'TT.SearchResult'
        , TT.SearchResult
@@ -256,6 +257,10 @@ module Web.Twitter.Types.Lens
        , imageSizeTypeHeight
        , imageSizeTypeType
 
+       , TT.DisplayTextRange
+       , displayTextRangeStart
+       , displayTextRangeEnd
+
        -- * Type aliases and sum types
        , TT.UserId
        , TT.Friends
@@ -315,6 +320,7 @@ makeLenses ''TT.BoundingBox
 makeLenses ''TT.Contributor
 makeLenses ''TT.ImageSizeType
 makeLenses ''TT.UploadedMedia
+makeLenses ''TT.DisplayTextRange
 
 class AsStatus s where
     status_id :: Lens' s TT.StatusId

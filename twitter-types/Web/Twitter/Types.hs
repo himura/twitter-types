@@ -1,4 +1,8 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable, RecordWildCards, DeriveGeneric #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Web.Twitter.Types
        ( UserId
@@ -35,6 +39,7 @@ module Web.Twitter.Types
        , Contributor(..)
        , UploadedMedia (..)
        , ImageSizeType (..)
+       , DisplayTextRange (..)
        , checkError
        , twitterTimeFormat
        )
@@ -147,6 +152,7 @@ data Status = Status
     , statusWithheldCopyright :: Maybe Bool
     , statusWithheldInCountries :: Maybe [Text]
     , statusWithheldScope :: Maybe Text
+    , statusDisplayTextRange :: Maybe DisplayTextRange
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 instance FromJSON Status where
@@ -174,12 +180,13 @@ instance FromJSON Status where
                <*> o .:? "retweeted"
                <*> o .:? "retweeted_status"
                <*> o .:  "source"
-               <*> o .:  "text"
+               <*> (o .: "full_text" <|> o .: "text")
                <*> o .:  "truncated"
                <*> o .:  "user"
                <*> o .:? "withheld_copyright"
                <*> o .:? "withheld_in_countries"
                <*> o .:? "withheld_scope"
+               <*> o .:? "display_text_range"
     parseJSON v = fail $ "couldn't parse status from: " ++ show v
 
 instance ToJSON Status where
@@ -214,6 +221,7 @@ instance ToJSON Status where
                                , "withheld_copyright"       .= statusWithheldCopyright
                                , "withheld_in_countries"    .= statusWithheldInCountries
                                , "withheld_scope"           .= statusWithheldScope
+                               , "display_text_range"       .= statusDisplayTextRange
                                ]
 
 data SearchResult body =
@@ -978,3 +986,18 @@ instance ToJSON UploadedMedia where
                                       , "size"      .= uploadedMediaSize
                                       , "image"     .= uploadedMediaImage
                                       ]
+
+-- | unicode code point indices, identifying the inclusive start and exclusive end of the displayable content of the Tweet.
+data DisplayTextRange = DisplayTextRange
+    { displayTextRangeStart :: Int
+    , displayTextRangeEnd :: Int -- ^ exclusive
+    } deriving (Show, Eq, Ord, Data, Typeable, Generic)
+
+instance FromJSON DisplayTextRange where
+    parseJSON v = do
+        parseJSON v >>= \case
+            [s, e] -> pure $ DisplayTextRange s e
+            unexpected ->
+                fail $ "parsing DisplayTextRange failed, expected [Int, Int], but got: " ++ show unexpected
+instance ToJSON DisplayTextRange where
+    toJSON (DisplayTextRange s e) = toJSON [s, e]
