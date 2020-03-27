@@ -360,7 +360,7 @@ data DirectMessage = DirectMessage
     } deriving (Show, Eq, Data, Typeable, Generic)
 
 parseIntegral :: Integral a => Text -> Parser a
-parseIntegral v = either (fail $ "couldn't parse stringized int: " ++ show v) (return . fst) $ decimal v
+parseIntegral v = either (\_ -> fail $ "couldn't parse stringized int: " ++ show v) (return . fst) $ decimal v
 
 epochMsToUTCTime :: Int64 -> UTCTime
 epochMsToUTCTime = posixSecondsToUTCTime . fromRational . (% 1000) . fromIntegral
