@@ -28,7 +28,7 @@ library
 
   build-depends:
       base >= 4 && < 5
-    , lens >= 4.0 && < 5
+    , lens >= 4.0
     , template-haskell
     , text
     , time
