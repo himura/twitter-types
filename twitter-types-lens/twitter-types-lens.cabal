@@ -1,5 +1,5 @@
 name:                twitter-types-lens
-version:             0.10.0
+version:             0.10.1
 synopsis:            Twitter JSON types (lens powered)
 description:         Please see the README on Github at <https://github.com/himura/twitter-types#readme>
 homepage:            https://github.com/himura/twitter-types
