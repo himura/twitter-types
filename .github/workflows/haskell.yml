@@ -9,10 +9,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.allow-failure }}
     strategy:
+      fail-fast: false
       matrix:
-        ghc: [ '8.8.3', '8.10.3', '9.0.1', 'latest' ]
+        ghc: [ '8.8.4', '8.10.4', '9.0.1' ]
         cabal: [ 'latest' ]
+        allow-failure: [ false ]
+
+        include:
+          - ghc: 'latest'
+            cabal: 'latest'
+            allow-failure: true
+
     steps:
     - uses: actions/checkout@v2
     - uses: haskell/actions/setup@v1
