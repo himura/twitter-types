@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeOperators #-}
@@ -7,6 +8,11 @@ module Instances where
 
 import Control.Applicative
 import Data.Aeson
+#if MIN_VERSION_aeson(2, 0, 0)
+import Data.Aeson.KeyMap as KeyMap
+#else
+import Data.HashMap.Strict as KeyMap
+#endif
 import Data.HashMap.Strict as HashMap
 import Data.String
 import qualified Data.Text as T
@@ -30,8 +36,8 @@ instance Arbitrary T.Text where
     arbitrary = T.pack <$> arbitrary
 
 instance Arbitrary Value where
-    arbitrary = elements [ Object HashMap.empty
-                         , Object (HashMap.fromList [("test", Number 2), ("value", String "non empty")])
+    arbitrary = elements [ Object KeyMap.empty
+                         , Object (KeyMap.fromList [("test", Number 2), ("value", String "non empty")])
                          ]
 
 -- derive makeArbitrary ''StreamingAPI
