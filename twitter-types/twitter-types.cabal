@@ -12,7 +12,7 @@ build-type:        Simple
 cabal-version:     >= 1.10
 homepage:          https://github.com/himura/twitter-types
 
-tested-with:       GHC == 8.8.3, GHC == 8.10.4, GHC == 9.0.1
+tested-with:       GHC == 8.8.4, GHC == 8.10.4, GHC == 9.0.1
 
 extra-source-files:
   README.md
@@ -28,7 +28,7 @@ library
 
   build-depends:
       base >= 4.9 && < 5
-    , aeson >= 0.3.2.2
+    , aeson >= 0.3.2.2 && < 2
     , text
     , time >= 1.5
     , unordered-containers
