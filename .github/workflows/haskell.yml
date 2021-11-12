@@ -17,10 +17,10 @@ jobs:
         cabal: [ 'latest' ]
         allow-failure: [ false ]
 
-        include:
-          - ghc: 'latest'
-            cabal: 'latest'
-            allow-failure: true
+        # include:
+        #   - ghc: 'latest'
+        #     cabal: 'latest'
+        #     allow-failure: true
 
     steps:
     - uses: actions/checkout@v2
