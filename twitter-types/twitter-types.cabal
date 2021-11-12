@@ -28,7 +28,7 @@ library
 
   build-depends:
       base >= 4.9 && < 5
-    , aeson >= 0.3.2.2
+    , aeson >= 0.3.2.2 && < 2
     , text
     , time >= 1.5
     , unordered-containers
