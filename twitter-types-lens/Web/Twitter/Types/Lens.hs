@@ -179,6 +179,7 @@ module Web.Twitter.Types.Lens
        , exeURL
        , exeSizes
        , exeType
+       , exeVideoInfo
        , exeDurationMillis
        , exeExtAltText
 
