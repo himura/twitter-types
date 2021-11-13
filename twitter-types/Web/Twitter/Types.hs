@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE LambdaCase #-}
@@ -50,7 +51,12 @@ import Control.Monad
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Data
-import Data.HashMap.Strict (HashMap, fromList, union)
+import Data.HashMap.Strict (HashMap)
+#if MIN_VERSION_aeson(2, 0, 0)
+import qualified Data.Aeson.KeyMap as KeyMap
+#else
+import qualified Data.HashMap.Strict as KeyMap
+#endif
 import Data.Int
 import Data.Ratio
 import Data.Text (Text, unpack, pack)
@@ -856,7 +862,7 @@ data Entity a =
     Entity
     { entityBody    :: a             -- ^ The detail information of the specific entity types (HashTag, URL, User)
     , entityIndices :: EntityIndices -- ^ The character positions the Entity was extracted from
-    } deriving (Show, Eq, Data, Typeable, Generic)
+    } deriving (Show, Eq, Data, Typeable, Generic, Generic1)
 
 instance FromJSON a => FromJSON (Entity a) where
     parseJSON v@(Object o) =
@@ -865,9 +871,10 @@ instance FromJSON a => FromJSON (Entity a) where
     parseJSON v = fail $ "couldn't parse entity wrapper from: " ++ show v
 
 instance ToJSON a => ToJSON (Entity a) where
-    toJSON Entity{..} = case toJSON entityBody of
-                            (Object o) -> Object $ union o $ fromList [("indices"::Text, toJSON entityIndices)]
-                            _          -> error "Entity body must produce an object."
+    toJSON Entity {..} =
+        case toJSON entityBody of
+            (Object o) -> Object $ KeyMap.insert "indices" (toJSON entityIndices) o
+            _ -> error "Entity body must produce an object."
 
 data ExtendedEntities =
   ExtendedEntities {
