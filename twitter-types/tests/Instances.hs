@@ -142,6 +142,10 @@ instance Arbitrary Entities where
     arbitrary = genericArbitraryU
 instance Arbitrary ExtendedEntities where
     arbitrary = genericArbitraryU
+instance Arbitrary Variant where
+    arbitrary = genericArbitraryU
+instance Arbitrary VideoInfo where
+    arbitrary = genericArbitraryU
 instance Arbitrary ExtendedEntity where
   arbitrary = do
     ms <- arbitrary
@@ -150,6 +154,7 @@ instance Arbitrary ExtendedEntity where
         <*> arbitrary
         <*> arbitrary
         <*> pure (HashMap.fromList [("medium", ms)])
+        <*> arbitrary
         <*> arbitrary
         <*> arbitrary
         <*> arbitrary

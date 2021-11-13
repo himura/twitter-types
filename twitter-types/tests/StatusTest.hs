@@ -111,6 +111,7 @@ example_compatibility_classic_13995 obj = do
                                          })
                                      ]
                            , exeType = "photo"
+                           , exeVideoInfo = Nothing
                            , exeDurationMillis = Nothing
                            , exeExtAltText = Nothing
                            , exeURL =
@@ -155,8 +156,65 @@ case_compatibility_classic_13995 = do
 -- case_compatibilityplus_extended_13997 = withFixtureJSON "tweet-updates/compatibilityplus_extended_13997" $ \obj -> do
 -- case_extended_classic_14002 :: Assertion
 -- case_extended_classic_14002 = withFixtureJSON "tweet-updates/extended_classic_14002" $ \obj -> do
--- case_extended_classic_hidden_13761 :: Assertion
--- case_extended_classic_hidden_13761 = withFixtureJSON "tweet-updates/extended_classic_hidden_13761" $ \obj -> do
+
+case_extended_classic_hidden_13761 :: Assertion
+case_extended_classic_hidden_13761 = withFixtureJSON "tweet-updates/extended_classic_hidden_13761.json" $ \obj -> do
+    statusTruncated obj @?= False
+    statusExtendedEntities obj @?=
+        Just
+            (ExtendedEntities {
+                  exeMedia = [
+                      Entity {
+                          entityBody = ExtendedEntity {
+                              exeID = 743479379079004160,
+                              exeMediaUrl = "http://pbs.twimg.com/tweet_video_thumb/ClFejl_VAAAo9Xk.jpg",
+                              exeMediaUrlHttps = "https://pbs.twimg.com/tweet_video_thumb/ClFejl_VAAAo9Xk.jpg",
+                              exeSizes = M.fromList
+                                  [
+                                    (
+                                      "small",
+                                      MediaSize {
+                                          msWidth = 340,
+                                          msHeight = 190,
+                                          msResize = "fit"
+                                        }
+                                    ),
+                                    (
+                                      "large",
+                                      MediaSize {
+                                          msWidth = 480,
+                                          msHeight = 268,
+                                          msResize = "fit"
+                                        }
+                                    ),
+                                    (
+                                      "medium",
+                                      MediaSize {
+                                          msWidth = 480,
+                                          msHeight = 268,
+                                          msResize = "fit"
+                                        }
+                                    ),
+                                    (
+                                      "thumb",
+                                      MediaSize {
+                                          msWidth = 150,
+                                          msHeight = 150,
+                                          msResize = "crop"
+                                        }
+                                    )
+                                  ],
+                              exeType = "animated_gif",
+                              exeVideoInfo = Just (VideoInfo {vsAspectRatio = [120,67], vsDurationMillis = Nothing, vsVariants = [Variant {vBitrate = Just 0, vContentType = "video/mp4", vUrl = "https://pbs.twimg.com/tweet_video/ClFejl_VAAAo9Xk.mp4"}]}),
+                              exeDurationMillis = Nothing,
+                              exeExtAltText = Nothing,
+                              exeURL = URLEntity {ueURL = "https://t.co/VnJMDg3cbS", ueExpanded = "http://twitter.com/beyond_oneforty/status/743479431658758145/photo/1", ueDisplay = "pic.twitter.com/VnJMDg3cbS"}
+                          },
+                          entityIndices = [48,71]
+                        }
+                      ]
+                    }
+                  )
 
 case_extended_extended_14001 :: Assertion
 case_extended_extended_14001 = withFixtureJSON "tweet-updates/extended_extended_14001.json" $ \obj -> do

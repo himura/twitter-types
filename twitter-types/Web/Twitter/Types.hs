@@ -27,6 +27,8 @@ module Web.Twitter.Types
        , Entities(..)
        , EntityIndices
        , ExtendedEntities(..)
+       , Variant(..)
+       , VideoInfo(..)
        , ExtendedEntity(..)
        , Entity(..)
        , HashTagEntity(..)
@@ -891,6 +893,77 @@ instance ToJSON ExtendedEntities where
     toJSON ExtendedEntities{..} = object [ "media" .= exeMedia ]
 
 
+-- "video_info": {
+--   "aspect_ratio": [
+--     9,
+--     16
+--   ],
+--   "duration_millis": 10704,
+--   "variants": [
+--     {
+--       "bitrate": 320000,
+--       "content_type": "video/mp4",
+--       "url": "https://video.twimg.com/ext_tw_video/869317980307415040/pu/vid/180x320/FMei8yCw7yc_Z7e-.mp4"
+--     },
+--     {
+--       "bitrate": 2176000,
+--       "content_type": "video/mp4",
+--       "url": "https://video.twimg.com/ext_tw_video/869317980307415040/pu/vid/720x1280/octt5pFbISkef8RB.mp4"
+--     },
+--     {
+--       "bitrate": 832000,
+--       "content_type": "video/mp4",
+--       "url": "https://video.twimg.com/ext_tw_video/869317980307415040/pu/vid/360x640/2OmqK74SQ9jNX8mZ.mp4"
+--     },
+--     {
+--       "content_type": "application/x-mpegURL",
+--       "url": "https://video.twimg.com/ext_tw_video/869317980307415040/pu/pl/wcJQJ2nxiFU4ZZng.m3u8"
+--     }
+--   ]
+-- }
+
+data Variant =
+    Variant
+    {
+      vBitrate :: Maybe Int,
+      vContentType :: Text,
+      vUrl :: URIString
+    } deriving (Show, Eq, Data, Typeable, Generic)
+
+instance FromJSON Variant where
+  parseJSON (Object o) =
+    Variant <$> o .:? "bitrate"
+            <*> o .:  "content_type"
+            <*> o .:  "url"
+  parseJSON v = fail $ "couldn't parse variant from:" ++ show v
+
+instance ToJSON Variant where
+  toJSON Variant{..} = object [ "bitrate"      .= vBitrate
+                              , "content_type" .= vContentType
+                              , "url"          .= vUrl
+                              ]
+
+data VideoInfo =
+    VideoInfo
+    {
+      vsAspectRatio :: [Int],
+      vsDurationMillis :: Maybe Int,
+      vsVariants :: [Variant]
+    } deriving (Show, Eq, Data, Typeable, Generic)
+
+instance FromJSON VideoInfo where
+  parseJSON (Object o) =
+    VideoInfo <$> o .:  "aspect_ratio"    .!= []
+              <*> o .:? "duration_millis"
+              <*> o .:  "variants"        .!= []
+  parseJSON v = fail $ "couldn't parse video info from:" ++ show v
+
+instance ToJSON VideoInfo where
+  toJSON VideoInfo{..} = object [ "aspect_ratio"    .= vsAspectRatio
+                                , "duration_millis" .= vsDurationMillis
+                                , "variants"        .= vsVariants
+                                ]
+
 -- Extended entities are like entities, but contain special media features like
 -- video or multiple photos
 data ExtendedEntity =
@@ -901,9 +974,8 @@ data ExtendedEntity =
     exeMediaUrlHttps :: URIString,
     exeSizes :: HashMap Text MediaSize,
     exeType :: Text,
-    -- exeVideoInfo :: ???
+    exeVideoInfo :: Maybe VideoInfo,
     exeDurationMillis :: Maybe Double,
-    -- exeVariants :: ??
     exeExtAltText :: Maybe String,
     exeURL :: URLEntity
   } deriving (Show, Eq, Data, Typeable, Generic)
@@ -915,8 +987,9 @@ instance FromJSON ExtendedEntity where
                    <*> o .:  "media_url_https"
                    <*> o .:  "sizes"
                    <*> o .:  "type"
+                   <*> o .:? "video_info"
                    <*> o .:? "duration_millis"
-                   <*> o .:?  "ext_alt_text"
+                   <*> o .:? "ext_alt_text"
                    <*> parseJSON v
 
   parseJSON v = fail $ "couldn't parse extended entity from:" ++ show v
@@ -927,6 +1000,7 @@ instance ToJSON ExtendedEntity where
                                      , "media_url_https" .= exeMediaUrlHttps
                                      , "sizes"           .= exeSizes
                                      , "type"            .= exeType
+                                     , "video_info"      .= exeVideoInfo
                                      , "duration_millis" .= exeDurationMillis
                                      , "ext_alt_text"    .= exeExtAltText
                                      , "url"             .= ueURL exeURL
