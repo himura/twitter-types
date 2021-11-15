@@ -1,69 +1,65 @@
-name:              twitter-types
-version:           0.10.1
-license:           BSD3
-license-file:      LICENSE
-author:            Takahiro HIMURA
-maintainer:        Takahiro HIMURA <taka@himura.jp>
-synopsis:          Twitter JSON parser and types
-description:       Please see the README on Github at <https://github.com/himura/twitter-types#readme>
-category:          Web
-stability:         Experimental
-build-type:        Simple
-cabal-version:     >= 1.10
-homepage:          https://github.com/himura/twitter-types
+cabal-version:      >=1.10
+name:               twitter-types
+version:            0.10.1
+license:            BSD3
+license-file:       LICENSE
+maintainer:         Takahiro HIMURA <taka@himura.jp>
+author:             Takahiro HIMURA
+stability:          Experimental
+tested-with:        ghc ==8.8.4 ghc ==8.10.4 ghc ==9.0.1
+homepage:           https://github.com/himura/twitter-types
+synopsis:           Twitter JSON parser and types
+description:
+    Please see the README on Github at <https://github.com/himura/twitter-types#readme>
 
-tested-with:       GHC == 8.8.4, GHC == 8.10.4, GHC == 9.0.1
-
+category:           Web
+build-type:         Simple
 extra-source-files:
-  README.md
-  tests/fixtures/*.json
-  tests/fixtures/tweet-updates/*.json
+    README.md
+    tests/fixtures/*.json
+    tests/fixtures/tweet-updates/*.json
 
 source-repository head
-  type: git
-  location: git://github.com/himura/twitter-types.git
+    type:     git
+    location: git://github.com/himura/twitter-types.git
 
 library
-  ghc-options: -Wall
-
-  build-depends:
-      base >= 4.9 && < 5
-    , aeson >= 0.3.2.2
-    , text
-    , time >= 1.5
-    , unordered-containers
-
-  exposed-modules:
-    Web.Twitter.Types
-
-  default-language:    Haskell2010
+    exposed-modules:  Web.Twitter.Types
+    default-language: Haskell2010
+    ghc-options:      -Wall
+    build-depends:
+        base >=4.9 && <5,
+        aeson >=0.3.2.2,
+        text,
+        time >=1.5,
+        unordered-containers
 
 test-suite tests
-  type:              exitcode-stdio-1.0
-  hs-source-dirs:    tests
-  main-is:           spec_main.hs
-  build-depends:
-      base >= 4.9 && < 5
-    , twitter-types
-    , aeson
-    , attoparsec
-    , bytestring
-    , generic-random
-    , directory
-    , filepath
-    , tasty >= 0.7
-    , tasty-hunit
-    , tasty-quickcheck
-    , tasty-th
-    , text
-    , time
-    , unordered-containers
-  other-modules:
-    Fixtures
-    Instances
-    PropFromToJSONTest
-    StatusTest
-    TypesTest
+    type:             exitcode-stdio-1.0
+    main-is:          spec_main.hs
+    hs-source-dirs:   tests
+    other-modules:
+        Fixtures
+        Instances
+        PropFromToJSONTest
+        StatusTest
+        TypesTest
 
-  ghc-options:       -Wall
-  default-language:    Haskell2010
+    default-language: Haskell2010
+    ghc-options:      -Wall
+    build-depends:
+        base >=4.9 && <5,
+        twitter-types,
+        aeson,
+        attoparsec,
+        bytestring,
+        generic-random,
+        directory,
+        filepath,
+        tasty >=0.7,
+        tasty-hunit,
+        tasty-quickcheck,
+        tasty-th,
+        text,
+        time,
+        unordered-containers
