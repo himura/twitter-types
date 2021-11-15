@@ -4,7 +4,7 @@ module PropFromToJSONTest where
 
 import Data.Aeson
 import qualified Data.Aeson.Types as Aeson
-import Instances()
+import Instances ()
 import Test.Tasty
 import Test.Tasty.QuickCheck
 import Test.Tasty.TH
