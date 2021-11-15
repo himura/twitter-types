@@ -1,5 +1,5 @@
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module TypesTest where
 
@@ -9,7 +9,7 @@ import qualified Data.HashMap.Strict as M
 import Data.Maybe
 import Data.Time.Clock.POSIX
 import Fixtures
-import Instances()
+import Instances ()
 import Test.Tasty
 import Test.Tasty.HUnit
 import Test.Tasty.TH
@@ -73,7 +73,6 @@ case_parseStatusQuoted = withFixtureJSON "status_quoted.json" $ \obj -> do
     statusPossiblySensitive qs @?= Nothing
     statusCoordinates qs @?= Nothing
 
-
 case_parseStatusWithPhoto :: Assertion
 case_parseStatusWithPhoto = withFixtureJSON "status_thimura_with_photo.json" $ \obj -> do
     statusId obj @?= 491143410770657280
@@ -112,7 +111,7 @@ case_parseStatusIncludeEntities = withFixtureJSON "status_with_entity.json" $ \o
     statusRetweetCount obj @?= 0
     (userScreenName . statusUser) obj @?= "imeoin"
     let ent = fromMaybe (Entities [] [] [] []) $ statusEntities obj
-    (map entityIndices . enHashTags) ent @?= [[32,42]]
+    (map entityIndices . enHashTags) ent @?= [[32, 42]]
     (hashTagText . entityBody . head . enHashTags) ent @?= "tcdisrupt"
 
 case_parseSearchStatusMetadata :: Assertion
@@ -145,47 +144,48 @@ case_parseSearchStatusBodySearchStatus = withFixtureJSON "search_haskell.json" $
 
 data DMList = DMList
     { dmList :: [DirectMessage]
-    } deriving (Show, Eq)
+    }
+    deriving (Show, Eq)
 instance FromJSON DMList where
     parseJSON = withObject "DMList" $ \obj -> DMList <$> obj .: "events"
 
 case_parseDirectMessageList :: Assertion
 case_parseDirectMessageList =
     withFixtureJSON "direct_message_event_list.json" $ \obj -> do
-        dmList obj @?=
-            [ DirectMessage
-                  { dmId = 123123123123123123
-                  , dmCreatedTimestamp = read "2019-10-13 18:15:48.951 UTC"
-                  , dmTargetRecipientId = 186712193
-                  , dmSenderId = 69179963
-                  , dmText = "hello @thimura"
-                  , dmEntities =
+        dmList obj
+            @?= [ DirectMessage
+                    { dmId = 123123123123123123
+                    , dmCreatedTimestamp = read "2019-10-13 18:15:48.951 UTC"
+                    , dmTargetRecipientId = 186712193
+                    , dmSenderId = 69179963
+                    , dmText = "hello @thimura"
+                    , dmEntities =
                         Entities
-                        { enHashTags = []
-                        , enUserMentions =
-                              [ Entity
-                                { entityBody =
-                                      UserEntity
-                                      { userEntityUserId = 69179963
-                                      , userEntityUserName = "ちむら"
-                                      , userEntityUserScreenName = "thimura"
-                                      }
-                                , entityIndices = [6, 14]
-                                }
-                              ]
-                        , enURLs = []
-                        , enMedia = []
-                        }
-                  }
-            , DirectMessage
-                  { dmId = 25252525252525
-                  , dmCreatedTimestamp = read "2019-10-13 18:06:46.14 UTC"
-                  , dmTargetRecipientId = 186712193
-                  , dmSenderId = 69179963
-                  , dmText = "hello"
-                  , dmEntities = Entities {enHashTags = [], enUserMentions = [], enURLs = [], enMedia = []}
-                  }
-            ]
+                            { enHashTags = []
+                            , enUserMentions =
+                                [ Entity
+                                    { entityBody =
+                                        UserEntity
+                                            { userEntityUserId = 69179963
+                                            , userEntityUserName = "ちむら"
+                                            , userEntityUserScreenName = "thimura"
+                                            }
+                                    , entityIndices = [6, 14]
+                                    }
+                                ]
+                            , enURLs = []
+                            , enMedia = []
+                            }
+                    }
+                , DirectMessage
+                    { dmId = 25252525252525
+                    , dmCreatedTimestamp = read "2019-10-13 18:06:46.14 UTC"
+                    , dmTargetRecipientId = 186712193
+                    , dmSenderId = 69179963
+                    , dmText = "hello"
+                    , dmEntities = Entities {enHashTags = [], enUserMentions = [], enURLs = [], enMedia = []}
+                    }
+                ]
 
 case_parseEventFavorite :: Assertion
 case_parseEventFavorite = withFixtureJSON "event_favorite_thimura.json" $ \obj -> do

@@ -1,5 +1,5 @@
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module StatusTest where
 
@@ -8,7 +8,7 @@ import qualified Data.Aeson.Types as Aeson
 import qualified Data.HashMap.Strict as M
 import Data.Maybe
 import Fixtures
-import Instances()
+import Instances ()
 import Test.Tasty
 import Test.Tasty.HUnit
 import Test.Tasty.TH
@@ -21,110 +21,128 @@ example_compatibility_classic_13995 obj = do
     statusText obj @?= "Peek-a-boo! https://t.co/R3P6waHxRa"
     statusSource obj @?= "<a href=\"http://www.apple.com/\" rel=\"nofollow\">OS X</a>"
     statusTruncated obj @?= False
-    statusEntities obj @?=
-        Just
-            (Entities
-             { enHashTags = []
-             , enUserMentions = []
-             , enURLs = []
-             , enMedia =
-                   [ Entity
-                     { entityBody =
-                           MediaEntity
-                           { meType = "photo"
-                           , meId = 706860403746181121
-                           , meSizes =
-                                 M.fromList
-                                     [ ( "small"
-                                       , MediaSize
-                                         { msWidth = 340
-                                         , msHeight = 226
-                                         , msResize = "fit"
-                                         })
-                                     , ( "large"
-                                       , MediaSize
-                                         { msWidth = 1024
-                                         , msHeight = 680
-                                         , msResize = "fit"
-                                         })
-                                     , ( "medium"
-                                       , MediaSize
-                                         { msWidth = 600
-                                         , msHeight = 398
-                                         , msResize = "fit"
-                                         })
-                                     , ( "thumb"
-                                       , MediaSize
-                                         { msWidth = 150
-                                         , msHeight = 150
-                                         , msResize = "crop"
-                                         })
-                                     ]
-                           , meMediaURL = "http://pbs.twimg.com/media/Cc9FyscUkAEQaOw.jpg"
-                           , meMediaURLHttps = "https://pbs.twimg.com/media/Cc9FyscUkAEQaOw.jpg"
-                           , meURL =
-                                 URLEntity
-                                 { ueURL = "https://t.co/R3P6waHxRa"
-                                 , ueExpanded = "http://twitter.com/jeremycloud/status/706860403981099008/photo/1"
-                                 , ueDisplay = "pic.twitter.com/R3P6waHxRa"
-                                 }
-                           }
-                     , entityIndices = [12, 35]
-                     }
-                   ]
-             })
-    statusExtendedEntities obj @?=
-        Just
-            (ExtendedEntities
-             { exeMedia =
-                   [ Entity
-                     { entityBody =
-                           ExtendedEntity
-                           { exeID = 706860403746181121
-                           , exeMediaUrl = "http://pbs.twimg.com/media/Cc9FyscUkAEQaOw.jpg"
-                           , exeMediaUrlHttps = "https://pbs.twimg.com/media/Cc9FyscUkAEQaOw.jpg"
-                           , exeSizes =
-                                 M.fromList
-                                     [ ( "small"
-                                       , MediaSize
-                                         { msWidth = 340
-                                         , msHeight = 226
-                                         , msResize = "fit"
-                                         })
-                                     , ( "large"
-                                       , MediaSize
-                                         { msWidth = 1024
-                                         , msHeight = 680
-                                         , msResize = "fit"
-                                         })
-                                     , ( "medium"
-                                       , MediaSize
-                                         { msWidth = 600
-                                         , msHeight = 398
-                                         , msResize = "fit"
-                                         })
-                                     , ( "thumb"
-                                       , MediaSize
-                                         { msWidth = 150
-                                         , msHeight = 150
-                                         , msResize = "crop"
-                                         })
-                                     ]
-                           , exeType = "photo"
-                           , exeVideoInfo = Nothing
-                           , exeDurationMillis = Nothing
-                           , exeExtAltText = Nothing
-                           , exeURL =
-                                 URLEntity
-                                 { ueURL = "https://t.co/R3P6waHxRa"
-                                 , ueExpanded = "http://twitter.com/jeremycloud/status/706860403981099008/photo/1"
-                                 , ueDisplay = "pic.twitter.com/R3P6waHxRa"
-                                 }
-                           }
-                     , entityIndices = [12, 35]
-                     }
-                   ]
-             })
+    statusEntities obj
+        @?= Just
+            ( Entities
+                { enHashTags = []
+                , enUserMentions = []
+                , enURLs = []
+                , enMedia =
+                    [ Entity
+                        { entityBody =
+                            MediaEntity
+                                { meType = "photo"
+                                , meId = 706860403746181121
+                                , meSizes =
+                                    M.fromList
+                                        [
+                                            ( "small"
+                                            , MediaSize
+                                                { msWidth = 340
+                                                , msHeight = 226
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "large"
+                                            , MediaSize
+                                                { msWidth = 1024
+                                                , msHeight = 680
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "medium"
+                                            , MediaSize
+                                                { msWidth = 600
+                                                , msHeight = 398
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "thumb"
+                                            , MediaSize
+                                                { msWidth = 150
+                                                , msHeight = 150
+                                                , msResize = "crop"
+                                                }
+                                            )
+                                        ]
+                                , meMediaURL = "http://pbs.twimg.com/media/Cc9FyscUkAEQaOw.jpg"
+                                , meMediaURLHttps = "https://pbs.twimg.com/media/Cc9FyscUkAEQaOw.jpg"
+                                , meURL =
+                                    URLEntity
+                                        { ueURL = "https://t.co/R3P6waHxRa"
+                                        , ueExpanded = "http://twitter.com/jeremycloud/status/706860403981099008/photo/1"
+                                        , ueDisplay = "pic.twitter.com/R3P6waHxRa"
+                                        }
+                                }
+                        , entityIndices = [12, 35]
+                        }
+                    ]
+                }
+            )
+    statusExtendedEntities obj
+        @?= Just
+            ( ExtendedEntities
+                { exeMedia =
+                    [ Entity
+                        { entityBody =
+                            ExtendedEntity
+                                { exeID = 706860403746181121
+                                , exeMediaUrl = "http://pbs.twimg.com/media/Cc9FyscUkAEQaOw.jpg"
+                                , exeMediaUrlHttps = "https://pbs.twimg.com/media/Cc9FyscUkAEQaOw.jpg"
+                                , exeSizes =
+                                    M.fromList
+                                        [
+                                            ( "small"
+                                            , MediaSize
+                                                { msWidth = 340
+                                                , msHeight = 226
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "large"
+                                            , MediaSize
+                                                { msWidth = 1024
+                                                , msHeight = 680
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "medium"
+                                            , MediaSize
+                                                { msWidth = 600
+                                                , msHeight = 398
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "thumb"
+                                            , MediaSize
+                                                { msWidth = 150
+                                                , msHeight = 150
+                                                , msResize = "crop"
+                                                }
+                                            )
+                                        ]
+                                , exeType = "photo"
+                                , exeVideoInfo = Nothing
+                                , exeDurationMillis = Nothing
+                                , exeExtAltText = Nothing
+                                , exeURL =
+                                    URLEntity
+                                        { ueURL = "https://t.co/R3P6waHxRa"
+                                        , ueExpanded = "http://twitter.com/jeremycloud/status/706860403981099008/photo/1"
+                                        , ueDisplay = "pic.twitter.com/R3P6waHxRa"
+                                        }
+                                }
+                        , entityIndices = [12, 35]
+                        }
+                    ]
+                }
+            )
     statusInReplyToStatusId obj @?= Nothing
     statusInReplyToUserId obj @?= Nothing
     statusFavorited obj @?= Just False
@@ -160,61 +178,62 @@ case_compatibility_classic_13995 = do
 case_extended_classic_hidden_13761 :: Assertion
 case_extended_classic_hidden_13761 = withFixtureJSON "tweet-updates/extended_classic_hidden_13761.json" $ \obj -> do
     statusTruncated obj @?= False
-    statusExtendedEntities obj @?=
-        Just
-            (ExtendedEntities {
-                  exeMedia = [
-                      Entity {
-                          entityBody = ExtendedEntity {
-                              exeID = 743479379079004160,
-                              exeMediaUrl = "http://pbs.twimg.com/tweet_video_thumb/ClFejl_VAAAo9Xk.jpg",
-                              exeMediaUrlHttps = "https://pbs.twimg.com/tweet_video_thumb/ClFejl_VAAAo9Xk.jpg",
-                              exeSizes = M.fromList
-                                  [
-                                    (
-                                      "small",
-                                      MediaSize {
-                                          msWidth = 340,
-                                          msHeight = 190,
-                                          msResize = "fit"
-                                        }
-                                    ),
-                                    (
-                                      "large",
-                                      MediaSize {
-                                          msWidth = 480,
-                                          msHeight = 268,
-                                          msResize = "fit"
-                                        }
-                                    ),
-                                    (
-                                      "medium",
-                                      MediaSize {
-                                          msWidth = 480,
-                                          msHeight = 268,
-                                          msResize = "fit"
-                                        }
-                                    ),
-                                    (
-                                      "thumb",
-                                      MediaSize {
-                                          msWidth = 150,
-                                          msHeight = 150,
-                                          msResize = "crop"
-                                        }
-                                    )
-                                  ],
-                              exeType = "animated_gif",
-                              exeVideoInfo = Just (VideoInfo {vsAspectRatio = [120,67], vsDurationMillis = Nothing, vsVariants = [Variant {vBitrate = Just 0, vContentType = "video/mp4", vUrl = "https://pbs.twimg.com/tweet_video/ClFejl_VAAAo9Xk.mp4"}]}),
-                              exeDurationMillis = Nothing,
-                              exeExtAltText = Nothing,
-                              exeURL = URLEntity {ueURL = "https://t.co/VnJMDg3cbS", ueExpanded = "http://twitter.com/beyond_oneforty/status/743479431658758145/photo/1", ueDisplay = "pic.twitter.com/VnJMDg3cbS"}
-                          },
-                          entityIndices = [48,71]
+    statusExtendedEntities obj
+        @?= Just
+            ( ExtendedEntities
+                { exeMedia =
+                    [ Entity
+                        { entityBody =
+                            ExtendedEntity
+                                { exeID = 743479379079004160
+                                , exeMediaUrl = "http://pbs.twimg.com/tweet_video_thumb/ClFejl_VAAAo9Xk.jpg"
+                                , exeMediaUrlHttps = "https://pbs.twimg.com/tweet_video_thumb/ClFejl_VAAAo9Xk.jpg"
+                                , exeSizes =
+                                    M.fromList
+                                        [
+                                            ( "small"
+                                            , MediaSize
+                                                { msWidth = 340
+                                                , msHeight = 190
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "large"
+                                            , MediaSize
+                                                { msWidth = 480
+                                                , msHeight = 268
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "medium"
+                                            , MediaSize
+                                                { msWidth = 480
+                                                , msHeight = 268
+                                                , msResize = "fit"
+                                                }
+                                            )
+                                        ,
+                                            ( "thumb"
+                                            , MediaSize
+                                                { msWidth = 150
+                                                , msHeight = 150
+                                                , msResize = "crop"
+                                                }
+                                            )
+                                        ]
+                                , exeType = "animated_gif"
+                                , exeVideoInfo = Just (VideoInfo {vsAspectRatio = [120, 67], vsDurationMillis = Nothing, vsVariants = [Variant {vBitrate = Just 0, vContentType = "video/mp4", vUrl = "https://pbs.twimg.com/tweet_video/ClFejl_VAAAo9Xk.mp4"}]})
+                                , exeDurationMillis = Nothing
+                                , exeExtAltText = Nothing
+                                , exeURL = URLEntity {ueURL = "https://t.co/VnJMDg3cbS", ueExpanded = "http://twitter.com/beyond_oneforty/status/743479431658758145/photo/1", ueDisplay = "pic.twitter.com/VnJMDg3cbS"}
+                                }
+                        , entityIndices = [48, 71]
                         }
-                      ]
-                    }
-                  )
+                    ]
+                }
+            )
 
 case_extended_extended_14001 :: Assertion
 case_extended_extended_14001 = withFixtureJSON "tweet-updates/extended_extended_14001.json" $ \obj -> do
@@ -224,4 +243,3 @@ case_extended_extended_14001 = withFixtureJSON "tweet-updates/extended_extended_
 
 tests :: TestTree
 tests = $(testGroupGenerator)
-
