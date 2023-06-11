@@ -170,14 +170,14 @@ instance FromJSON Status where
         checkError o
             >> Status <$> o .:? "contributors" .!= Nothing
             <*> o .:? "coordinates" .!= Nothing
-            <*> (o .: "created_at" >>= return . fromTwitterTime)
+            <*> (fromTwitterTime <$> o .: "created_at")
             <*> ((o .: "current_user_retweet" >>= (.: "id")) <|> return Nothing)
             <*> o .:? "entities"
             <*> o .:? "extended_entities"
             <*> o .:? "favorite_count" .!= 0
             <*> o .:? "favorited"
             <*> o .:? "filter_level"
-            <*> o .: "id"
+            <*> parseIdStr o
             <*> o .:? "in_reply_to_screen_name" .!= Nothing
             <*> o .:? "in_reply_to_status_id" .!= Nothing
             <*> o .:? "in_reply_to_user_id" .!= Nothing
@@ -278,8 +278,8 @@ data SearchStatus = SearchStatus
 instance FromJSON SearchStatus where
     parseJSON (Object o) =
         checkError o
-            >> SearchStatus <$> (o .: "created_at" >>= return . fromTwitterTime)
-            <*> o .: "id"
+            >> SearchStatus <$> (fromTwitterTime <$> o .: "created_at")
+            <*> parseIdStr o
             <*> o .: "text"
             <*> o .: "source"
             <*> o .: "user"
@@ -354,8 +354,8 @@ data RetweetedStatus = RetweetedStatus
 instance FromJSON RetweetedStatus where
     parseJSON (Object o) =
         checkError o
-            >> RetweetedStatus <$> (o .: "created_at" >>= return . fromTwitterTime)
-            <*> o .: "id"
+            >> RetweetedStatus <$> (fromTwitterTime <$> o .: "created_at")
+            <*> parseIdStr o
             <*> o .: "text"
             <*> o .: "source"
             <*> o .: "truncated"
@@ -473,7 +473,7 @@ data Event = Event
 instance FromJSON Event where
     parseJSON (Object o) =
         checkError o
-            >> Event <$> (o .: "created_at" >>= return . fromTwitterTime)
+            >> Event <$> (fromTwitterTime <$> o .: "created_at")
             <*> o .:? "target_object"
             <*> o .: "event"
             <*> o .: "target"
@@ -568,7 +568,7 @@ instance FromJSON User where
     parseJSON (Object o) =
         checkError o
             >> User <$> o .: "contributors_enabled"
-            <*> (o .: "created_at" >>= return . fromTwitterTime)
+            <*> (fromTwitterTime <$> o .: "created_at")
             <*> o .: "default_profile"
             <*> o .: "default_profile_image"
             <*> o .:? "description"
@@ -579,7 +579,7 @@ instance FromJSON User where
             <*> o .: "followers_count"
             <*> o .: "friends_count"
             <*> o .: "geo_enabled"
-            <*> o .: "id"
+            <*> parseIdStr o
             <*> o .: "is_translator"
             <*> o .: "lang"
             <*> o .: "listed_count"
@@ -693,7 +693,7 @@ instance ToJSON List where
 
 -- | Hashtag entity.
 -- See <https://dev.twitter.com/docs/platform-objects/entities#obj-hashtags>.
-data HashTagEntity = HashTagEntity
+newtype HashTagEntity = HashTagEntity
     { -- | The Hashtag text
       hashTagText :: Text
     }
@@ -718,7 +718,7 @@ data UserEntity = UserEntity
 
 instance FromJSON UserEntity where
     parseJSON (Object o) =
-        UserEntity <$> o .: "id"
+        UserEntity <$> parseIdStr o
             <*> o .: "name"
             <*> o .: "screen_name"
     parseJSON v = fail $ "couldn't parse user entity from: " ++ show v
@@ -771,7 +771,7 @@ data MediaEntity = MediaEntity
 instance FromJSON MediaEntity where
     parseJSON v@(Object o) =
         MediaEntity <$> o .: "type"
-            <*> o .: "id"
+            <*> parseIdStr o
             <*> o .: "sizes"
             <*> o .: "media_url"
             <*> o .: "media_url_https"
@@ -950,7 +950,7 @@ instance ToJSON a => ToJSON (Entity a) where
             (Object o) -> Object $ KeyMap.insert "indices" (toJSON entityIndices) o
             _ -> error "Entity body must produce an object."
 
-data ExtendedEntities = ExtendedEntities
+newtype ExtendedEntities = ExtendedEntities
     { exeMedia :: [Entity ExtendedEntity]
     }
     deriving (Show, Eq, Data, Typeable, Generic)
@@ -1053,7 +1053,7 @@ data ExtendedEntity = ExtendedEntity
 
 instance FromJSON ExtendedEntity where
     parseJSON v@(Object o) =
-        ExtendedEntity <$> o .: "id"
+        ExtendedEntity <$> parseIdStr o
             <*> o .: "media_url"
             <*> o .: "media_url_https"
             <*> o .: "sizes"
@@ -1088,7 +1088,7 @@ data Contributor = Contributor
 
 instance FromJSON Contributor where
     parseJSON (Object o) =
-        Contributor <$> o .: "id"
+        Contributor <$> parseIdStr o
             <*> o .:? "screen_name"
     parseJSON v@(Number _) =
         Contributor <$> parseJSON v <*> pure Nothing
@@ -1164,3 +1164,7 @@ instance FromJSON DisplayTextRange where
                 fail $ "parsing DisplayTextRange failed, expected [Int, Int], but got: " ++ show unexpected
 instance ToJSON DisplayTextRange where
     toJSON (DisplayTextRange s e) = toJSON [s, e]
+
+parseIdStr :: Object -> Parser Integer
+parseIdStr o =
+    (o .: "id_str" >>= parseIntegral) <|> o .: "id"
