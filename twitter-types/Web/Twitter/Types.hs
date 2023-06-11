@@ -154,9 +154,9 @@ data Status = Status
     , statusRetweetCount :: Integer
     , statusRetweeted :: Maybe Bool
     , statusRetweetedStatus :: Maybe Status
-    , statusSource :: Text
+    , statusSource :: Maybe Text
     , statusText :: Text
-    , statusTruncated :: Bool
+    , statusTruncated :: Maybe Bool
     , statusUser :: User
     , statusWithheldCopyright :: Maybe Bool
     , statusWithheldInCountries :: Maybe [Text]
@@ -190,9 +190,9 @@ instance FromJSON Status where
             <*> o .:? "retweet_count" .!= 0
             <*> o .:? "retweeted"
             <*> o .:? "retweeted_status"
-            <*> o .: "source"
+            <*> o .:? "source"
             <*> (o .: "full_text" <|> o .: "text")
-            <*> o .: "truncated"
+            <*> o .:? "truncated"
             <*> o .: "user"
             <*> o .:? "withheld_copyright"
             <*> o .:? "withheld_in_countries"
