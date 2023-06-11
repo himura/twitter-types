@@ -762,7 +762,7 @@ data MediaEntity = MediaEntity
     { meType :: Text
     , meId :: StatusId
     , meSizes :: HashMap Text MediaSize
-    , meMediaURL :: URIString
+    , meMediaURL :: Maybe URIString
     , meMediaURLHttps :: URIString
     , meURL :: URLEntity
     }
@@ -773,7 +773,7 @@ instance FromJSON MediaEntity where
         MediaEntity <$> o .: "type"
             <*> parseIdStr o
             <*> o .: "sizes"
-            <*> o .: "media_url"
+            <*> o .:? "media_url"
             <*> o .: "media_url_https"
             <*> parseJSON v
     parseJSON v = fail $ "couldn't parse media entity from: " ++ show v
@@ -1040,7 +1040,7 @@ instance ToJSON VideoInfo where
 -- video or multiple photos
 data ExtendedEntity = ExtendedEntity
     { exeID :: StatusId
-    , exeMediaUrl :: URIString
+    , exeMediaUrl :: Maybe URIString
     , exeMediaUrlHttps :: URIString
     , exeSizes :: HashMap Text MediaSize
     , exeType :: Text
@@ -1054,7 +1054,7 @@ data ExtendedEntity = ExtendedEntity
 instance FromJSON ExtendedEntity where
     parseJSON v@(Object o) =
         ExtendedEntity <$> parseIdStr o
-            <*> o .: "media_url"
+            <*> o .:? "media_url"
             <*> o .: "media_url_https"
             <*> o .: "sizes"
             <*> o .: "type"
